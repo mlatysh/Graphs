@@ -1,7 +1,4 @@
-const {handlers} = require('./menuHandlers')
-
-console.log(handlers.openFileHandler)
-
+const {handlers} = require('./menuHandlers');
 
 const menu = [
     {
@@ -32,6 +29,6 @@ const menu = [
             }
         ]
     }
-]
+];
 
-exports.menu = menu
+exports.menu = menu;

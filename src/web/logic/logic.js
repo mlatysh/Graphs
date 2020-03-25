@@ -15,7 +15,7 @@ let edges = new vis.DataSet([
     {from: 2, to: 5}
 ]);
 
-// create a network
+const containerID = 'network';
 let container = document.getElementById("network");
 let data = {
     nodes: nodes,
