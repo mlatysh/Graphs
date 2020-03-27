@@ -1,39 +1,47 @@
 import {Network} from './../../../libs/vis-network'
-import {getNetworkRepresentationObject} from "./networkRepresentationObject";
+import {NetworkExporter} from "./networkExporter"
+import {consts as rendererActionConsts} from "../../main/eventConsts/rendererActionConsts";
+import {consts as mainActionConsts} from "../../main/eventConsts/mainActionConsts";
 
-
-const objectToArray = object => {
-    return Object.keys(object).map(function (key) {
-        object[key].id = key;
-        return object[key]
-    });
-};
+const {ipcRenderer: ipc} = window.require('electron');
 
 export class NetworkController {
     constructor(networkCreationObject) {
-        this.networks = [];
+        this.networkExporter = NetworkExporter;
+        this.network = undefined;
         if (networkCreationObject) {
-            let network = new Network(networkCreationObject.container, networkCreationObject.data, networkCreationObject.options);
-            let networkRepresentationObject = getNetworkRepresentationObject(networkCreationObject, network, true);
-            this.networks.push(networkRepresentationObject)
+            this.network = new Network(networkCreationObject.container,
+                networkCreationObject.data,
+                networkCreationObject.options);
         }
+        this.addEventListeners()
     }
 
     destroyCurrentNetwork() {
-        let activeNetwork = undefined;
-        this.networks.forEach((network) => {
-            if (network.active) {
-                activeNetwork = network
-            }
-        });
-        activeNetwork.destroy();
-        const activeNetworkIndex = this.networks.indexOf(activeNetwork);
-        this.networks.slice(activeNetworkIndex, 1)
+        try {
+            this.network.destroy();
+        } catch (e) {
+            // It's ok
+        } finally {
+            this.network = undefined;
+        }
     }
 
-    addAndSetCurrentNetwork(networkCreationObject) {
-        let network = new Network(networkCreationObject.container, networkCreationObject.data, networkCreationObject.options);
-        let networkRepresentationObject = getNetworkRepresentationObject(networkCreationObject, network, true);
-        this.networks.push(networkRepresentationObject)
+    setCurrentNetwork(networkCreationObject) {
+        this.destroyCurrentNetwork();
+        this.network = new Network(networkCreationObject.container,
+            networkCreationObject.data,
+            networkCreationObject.options);
+    }
+
+    addEventListeners() {
+
+        ipc.on(rendererActionConsts.GET_CURRENT_ACTIVE_NETWORK, (event, filePath) => {
+            event.sender.send(mainActionConsts.SAVE_CURRENT_NETWORK,
+                [this.networkExporter.getSerializedNetwork(this.network), filePath])
+        })
+
+
+
     }
 }

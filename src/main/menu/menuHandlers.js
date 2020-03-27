@@ -1,5 +1,6 @@
 import {dialog} from 'electron';
 import {ipcMain as ipc} from 'electron';
+import {consts as mainActionConsts} from "../eventConsts/mainActionConsts";
 
 const createOptionsObject = (title, type) => {
     let rez = {
@@ -40,13 +41,12 @@ const saveFileHandler = () => {
 
 const saveAsFileHandler = () => {
     const locationChosenHandler = (args) => {
-        if (!args.canceled) {
-
-        }
+        if (!args.canceled)
+            ipc.emit(mainActionConsts.MENU_HANDLERS_REQUESTS.SAVE_CURRENT_NETWORK_REQUEST,
+                args.filePath)
     };
-
     dialog.showSaveDialog(
-        createOptionsObject('Save as...')
+        createOptionsObject('Save graph as...')
     ).then(locationChosenHandler)
 };
 

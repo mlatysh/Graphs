@@ -1,13 +1,13 @@
 {
   "name": "Graphs",
   "version": "1.0.0",
-  "main": "src/main/main.js",
+  "main": "dist/main/main.js",
   "license": "MIT",
   "dependencies": {
     "ipc": "^0.0.1"
   },
   "scripts": {
-    "start": "yarn build && yarn bundle_renderer && electron ./dist/main/*",
+    "start": "yarn build && yarn bundle_renderer && electron ./dist/main/main.js",
     "build": "babel ./src -d ./dist --presets=env",
     "bundle_renderer": "webpack ./dist/renderer/index.js -o ./dist/renderer/bundle.js"
   },
@@ -18,5 +18,6 @@
     "electron": "^8.2.0",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11"
-  }
+  },
+  "type": "module"
 }

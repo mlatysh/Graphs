@@ -24,3 +24,5 @@ const OPTIONS = {
 };
 const network = getNetworkCreationObject(containerID, NODES, EDGES, OPTIONS);
 const controller = new NetworkController(network);
+
+
