@@ -1,13 +1,11 @@
-const getNetworkCreationObject = require('./networkCreationObject').getNetworkCreationObject;
+import {getNetworkCreationObject} from "./networkCreationObject";
 
 class NetworkController {
-
     constructor(containerID, networkCreationObject) {
         this.container = document.getElementById(containerID);
-        network ?
+        networkCreationObject ?
             this.network = new vis.Network(container, networkCreationObject.data, networkCreationObject.options) :
             this.network = null;
-
     }
 
     static objectToArray(object) {

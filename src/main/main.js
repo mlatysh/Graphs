@@ -1,5 +1,5 @@
-const {app, BrowserWindow} = require('electron');
-const ipc = require('electron').ipcMain;
+import {app, BrowserWindow} from 'electron'
+import {ipcMain as ipc} from 'electron'
 
 function createWindow() {
     const win = new BrowserWindow({
@@ -9,7 +9,7 @@ function createWindow() {
             nodeIntegration: true
         }
     });
-    win.loadFile(`${__dirname}/web/index.html`);
+    win.loadFile(`${__dirname}/../../static/index.html`);
     addEventListeners();
     win.webContents.openDevTools()
 }

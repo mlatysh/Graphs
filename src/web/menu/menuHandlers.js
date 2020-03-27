@@ -19,18 +19,6 @@ const createOptionsObject = (title, type) => {
 };
 
 
-const createPortableGraphObject = () => {
-    //????
-};
-
-const recreateGraph = portableGraphObject => {
-    // network.clear();
-    // network = new vis.Network(document.getElementById(portableGraphObject.containerID),
-    //     portableGraphObject.data,
-    //     portableGraphObject.options)
-};
-
-
 function getUserHome() {
     return process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'];
 }
@@ -67,6 +55,4 @@ const appQuitHandler = () => {
     ipc.send('total-exit')
 };
 
-exports.handlers = {
-    openFileHandler, saveAsFileHandler, appQuitHandler, saveFileHandler
-};
+export {appQuitHandler, saveAsFileHandler, saveFileHandler, openFileHandler}

@@ -19,7 +19,6 @@ const EDGES = [
 const OPTIONS = {
     autoResize: true,
     clickToUse: false
-
 };
 
 let nodes = new vis.DataSet(NODES);

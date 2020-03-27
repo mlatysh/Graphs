@@ -6299,28 +6299,28 @@
 	    icurve: 'inv_curve',
 	    normal: 'triangle',
 	    inv: 'inv_triangle',
-	    diamond: 'diamond',
-	    tee: 'bar',
-	    vee: 'vee'
-	  };
-	  /**
-	   * 'attr_list' contains attributes for checking if some of them are affected
-	   * later. For instance, both of 'arrowhead' and 'dir' (edge style defined
-	   * in DOT) make changes to 'arrows' attribute in vis.
-	   */
+          diamond: 'diamond',
+          tee: 'bar',
+          vee: 'vee'
+      };
+        /**
+         * 'attr_list' contains attributes for checking if some of them are affected
+         * later. For instance, both of 'arrowhead' and 'dir' (edge style defined
+         * in DOT) make changes to 'arrows' attribute in vis.
+         */
 
-	  var attr_list = new Array();
-	  var attr_names = new Array(); // used for checking the case.
-	  // parse attributes
+        var attr_list = [];
+        var attr_names = []; // used for checking the case.
+        // parse attributes
 
-	  while (token === '[') {
-	    getToken();
-	    attr = {};
+        while (token === '[') {
+            getToken();
+            attr = {};
 
-	    while (token !== '' && token != ']') {
-	      if (tokenType != TOKENTYPE.IDENTIFIER) {
-	        throw newSyntaxError('Attribute name expected');
-	      }
+            while (token !== '' && token != ']') {
+                if (tokenType != TOKENTYPE.IDENTIFIER) {
+                    throw newSyntaxError('Attribute name expected');
+                }
 
 	      var name = token;
 	      getToken();

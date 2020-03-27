@@ -1,22 +1,23 @@
-const {handlers} = require('./menuHandlers');
+import {openFileHandler, saveFileHandler, saveAsFileHandler, appQuitHandler} from './menuHandlers'
 
-const menu = [
+
+export const menu = [
     {
         label: "File",
         submenu: [
             {
                 label: 'Open...',
                 accelerator: 'CmdOrCtrl+O',
-                click: handlers.openFileHandler
+                click: openFileHandler
             },
             {
                 label: 'Save',
                 accelerator: 'CmdOrCtrl+S',
-                click: handlers.saveFileHandler
+                click: saveFileHandler
             },
             {
                 label: 'Save as...',
-                click: handlers.saveAsFileHandler
+                click: saveAsFileHandler
 
             },
             {
@@ -25,10 +26,9 @@ const menu = [
             {
                 label: 'Quit',
                 accelerator: 'CmdOrCtrl+Q',
-                click: handlers.appQuitHandler
+                click: appQuitHandler
             }
         ]
     }
 ];
 
-exports.menu = menu;
