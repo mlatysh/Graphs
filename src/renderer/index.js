@@ -1,6 +1,5 @@
-// create an array with nodes
-import {NetworkController} from "./networkController";
-import {getNetworkCreationObject} from "./networkCreationObject";
+import {NetworkController} from "./network/networkController";
+import {getNetworkCreationObject} from "./network/networkCreationObject";
 
 const containerID = 'network';
 

@@ -19,7 +19,6 @@ export class NetworkController {
         }
     }
 
-
     destroyCurrentNetwork() {
         let activeNetwork = undefined;
         this.networks.forEach((network) => {

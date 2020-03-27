@@ -7,9 +7,9 @@
     "ipc": "^0.0.1"
   },
   "scripts": {
-    "start": "yarn bundle_renderer && yarn build && electron ./dist/main/*",
+    "start": "yarn build && yarn bundle_renderer && electron ./dist/main/*",
     "build": "babel ./src -d ./dist --presets=env",
-    "bundle_renderer": "webpack ./dist/renderer/logic/index.js -o ./dist/renderer/bundle.js"
+    "bundle_renderer": "webpack ./dist/renderer/index.js -o ./dist/renderer/bundle.js"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

@@ -4862,27 +4862,27 @@
 	  }
 
 	  if (!isObject(options)) {
-	    throw new Error("Parameter options must be an object");
-	  }
+          throw new Error("Parameter options must be an object");
+      }
 
-	  if (!isPresent(option)) {
-	    throw new Error("Parameter option must have a value");
-	  }
+        if (!isPresent(option)) {
+            throw new Error("Parameter option must have a value");
+        }
 
-	  if (!isObject(globalOptions)) {
-	    throw new Error("Parameter globalOptions must be an object");
-	  } //
-	  // Actual merge routine, separated from main logic
-	  // Only a single level of options is merged. Deeper levels are ref'd. This may actually be an issue.
-	  //
+        if (!isObject(globalOptions)) {
+            throw new Error("Parameter globalOptions must be an object");
+        } //
+        // Actual merge routine, separated from main network
+        // Only a single level of options is merged. Deeper levels are ref'd. This may actually be an issue.
+        //
 
 
-	  var doMerge = function doMerge(target, options, option) {
-	    if (!isObject(target[option])) {
-	      target[option] = {};
-	    }
+        var doMerge = function doMerge(target, options, option) {
+            if (!isObject(target[option])) {
+                target[option] = {};
+            }
 
-	    var src = options[option];
+            var src = options[option];
 	    var dst = target[option];
 
 	    for (var prop in src) {
@@ -25538,11 +25538,11 @@
 	    key: "needsRefresh",
 	    value: function needsRefresh(selected, hover) {
 	      if (this.refreshNeeded === true) {
-	        // This is probably not the best location to reset this member.
-	        // However, in the current logic, it is the most convenient one.
-	        this.refreshNeeded = false;
-	        return true;
-	      }
+              // This is probably not the best location to reset this member.
+              // However, in the current network, it is the most convenient one.
+              this.refreshNeeded = false;
+              return true;
+          }
 
 	      return this.width === undefined || this.labelModule.differentState(selected, hover);
 	    }
@@ -32504,27 +32504,27 @@
 	                  dataChanged = true;
 	                }
 	              }
-	            }
-	          }
-	        }
+                }
+              }
+            }
 
-	        if (emit === true && dataChanged === true) {
-	          _this2.body.emitter.emit("_dataChanged");
-	        }
-	      }); // this is called when options of EXISTING nodes or edges have changed.
-	      //
-	      // NOTE: Not true, called when options have NOT changed, for both existing as well as new nodes.
-	      //       See update() for logic.
-	      // TODO: Verify and examine the consequences of this. It might still trigger when
-	      //       non-option fields have changed, but then reconnecting edges is still useless.
-	      //       Alternatively, it might also be called when edges are removed.
-	      //
+              if (emit === true && dataChanged === true) {
+                  _this2.body.emitter.emit("_dataChanged");
+              }
+          }); // this is called when options of EXISTING nodes or edges have changed.
+            //
+            // NOTE: Not true, called when options have NOT changed, for both existing as well as new nodes.
+            //       See update() for network.
+            // TODO: Verify and examine the consequences of this. It might still trigger when
+            //       non-option fields have changed, but then reconnecting edges is still useless.
+            //       Alternatively, it might also be called when edges are removed.
+            //
 
-	      this.body.emitter.on("_dataUpdated", function () {
-	        _this2.reconnectEdges();
-	      }); // refresh the edges. Used when reverting from hierarchical layout
+            this.body.emitter.on("_dataUpdated", function () {
+                _this2.reconnectEdges();
+            }); // refresh the edges. Used when reverting from hierarchical layout
 
-	      this.body.emitter.on("refreshEdges", bind$2(_context2 = this.refresh).call(_context2, this));
+            this.body.emitter.on("refreshEdges", bind$2(_context2 = this.refresh).call(_context2, this));
 	      this.body.emitter.on("refresh", bind$2(_context3 = this.refresh).call(_context3, this));
 	      this.body.emitter.on("destroy", function () {
 	        forEach$3(_this2.edgesListeners, function (callback, event) {
@@ -43055,14 +43055,14 @@
 
 	          if (levelNodes.length > 1) {
 	            for (var j = 0; j < levelNodes.length - 1; j++) {
-	              var node1 = levelNodes[j];
-	              var node2 = levelNodes[j + 1]; // NOTE: logic maintained as it was; if nodes have same ancestor,
-	              //       then of course they are in the same sub-network.
+                    var node1 = levelNodes[j];
+                    var node2 = levelNodes[j + 1]; // NOTE: network maintained as it was; if nodes have same ancestor,
+                    //       then of course they are in the same sub-network.
 
-	              if (hier.hasSameParent(node1, node2) && hier.inSameSubNetwork(node1, node2)) {
-	                callback(node1, node2, centerParents);
-	              }
-	            }
+                    if (hier.hasSameParent(node1, node2) && hier.inSameSubNetwork(node1, node2)) {
+                        callback(node1, node2, centerParents);
+                    }
+                }
 	          }
 	        }
 	      }; // callback for shifting branches
