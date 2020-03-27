@@ -1,6 +1,7 @@
 import {ipcMain as ipc} from 'electron';
 import {consts as mainActionConsts} from './../eventConsts/mainActionConsts'
 import {consts as rendererConsts} from './../eventConsts/rendererActionConsts'
+
 export class MenuEventsEmitter {
 
     constructor(mainWindow) {
@@ -13,14 +14,15 @@ export class MenuEventsEmitter {
     }
 
     setMenuHandlers() {
-        ipc.on(mainActionConsts.MENU_HANDLERS_REQUESTS.SAVE_CURRENT_NETWORK_REQUEST,(filePath) => {
+        ipc.on(mainActionConsts.MENU_HANDLERS_REQUESTS.SAVE_CURRENT_NETWORK_REQUEST, (filePath) => {
             this.send(rendererConsts.GET_CURRENT_ACTIVE_NETWORK, filePath)
         });
 
 
         ipc.on(mainActionConsts.MENU_HANDLERS_REQUESTS.OPEN_FILE_REQUEST, (network) => {
-            // WORKING
             this.send(rendererConsts.CHANGE_ACTIVE_NETWORK, network)
-        })
+        });
+
+        ipc.on(mainActionConsts.MENU_HANDLERS_REQUESTS.NEW_FILE_CREATION_REQUEST, () => this.send(rendererConsts.CREATE_NEW_ACTIVE_NETWORK))
     }
 }

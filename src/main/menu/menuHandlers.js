@@ -1,5 +1,4 @@
-import {dialog} from 'electron';
-import {ipcMain as ipc} from 'electron';
+import {dialog, ipcMain as ipc} from 'electron';
 import {consts as mainActionConsts} from "../eventConsts/mainActionConsts";
 
 const createOptionsObject = (title, type) => {
@@ -37,7 +36,7 @@ const openFileHandler = () => {
 
 
 const saveFileHandler = () => {
-    alert('SAVE')
+    ipc.emit(mainActionConsts.CLEAR_SAVE_CURRENT_NETWORK);
 };
 
 const saveAsFileHandler = () => {
@@ -51,8 +50,12 @@ const saveAsFileHandler = () => {
     ).then(locationChosenHandler)
 };
 
+const newFileCreationHandler = () => {
+    ipc.emit(mainActionConsts.MENU_HANDLERS_REQUESTS.NEW_FILE_CREATION_REQUEST)
+};
+
 const appQuitHandler = () => {
     ipc.emit('total-exit')
 };
 
-export {appQuitHandler, saveAsFileHandler, saveFileHandler, openFileHandler}
+export {appQuitHandler, saveAsFileHandler, saveFileHandler, openFileHandler, newFileCreationHandler}

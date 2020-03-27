@@ -4,12 +4,15 @@ import {FileWorker} from "./fileWorker/fileWorker";
 import {consts as builtinConsts} from "./eventConsts/buitinConsts";
 import {consts as mainActionConsts} from "./eventConsts/mainActionConsts";
 import {MenuEventsEmitter} from "./menu/menuEventsEmitter";
+import {saveAsFileHandler} from "./menu/menuHandlers";
 
 class Main {
     init() {
+        this.basicWindowTitle = 'Graphs [New File]';
         this.mainWindow = undefined;
         this.ipc = ipc;
         this.menuEventsEmitter = undefined;
+        this.openedFile = undefined;
         app.allowRendererProcessReuse = true;
         app.on(builtinConsts.READY, this.onReady.bind(this));
         app.on(builtinConsts.WINDOW_ALL_CLOSED, this.onWindowAllClosed.bind(this));
@@ -21,20 +24,35 @@ class Main {
     setMainIpcHandlers() {
         ipc.on(mainActionConsts.TOTAL_EXIT, this.onTotalExit.bind(this));
         ipc.on(mainActionConsts.SAVE_CURRENT_NETWORK, this.onSaveCurrentNetwork.bind(this));
-        ipc.on(mainActionConsts.OPEN_FILE, this.onOpenFile.bind(this))
+        ipc.on(mainActionConsts.OPEN_FILE, this.onOpenFile.bind(this));
+        ipc.on(mainActionConsts.CLEAR_SAVE_CURRENT_NETWORK, this.onClearSaveNetwork.bind(this));
+        ipc.on(mainActionConsts.NEW_FILE_CREATION, this.onNewFileCreation.bind(this))
+    }
+
+    onNewFileCreation() {
+        this.setOpenedFile()
+    }
+
+    onClearSaveNetwork() {
+        if (this.openedFile) {
+            ipc.emit(mainActionConsts.MENU_HANDLERS_REQUESTS.SAVE_CURRENT_NETWORK_REQUEST, this.openedFile)
+        } else {
+            saveAsFileHandler()
+        }
     }
 
     onSaveCurrentNetwork(event, args) {
-        FileWorker.saveJsonToFile(args[0], args[1])
+        FileWorker.saveJsonToFile(args[0], args[1]);
+        this.setOpenedFile(args[1])
     };
 
-    onWindowAllClosed(event, args) {
+    onWindowAllClosed() {
         if (process.platform !== 'darwin') {
             app.quit();
         }
     }
 
-    onActivate(event, args) {
+    onActivate() {
         if (BrowserWindow.getAllWindows().length === 0) {
             this.onReady()
         }
@@ -42,16 +60,18 @@ class Main {
 
     onOpenFile(filePath) {
         let network = FileWorker.getJsonFromFile(filePath);
-        this.ipc.emit(mainActionConsts.MENU_HANDLERS_REQUESTS.OPEN_FILE_REQUEST, network)
+        ipc.emit(mainActionConsts.MENU_HANDLERS_REQUESTS.OPEN_FILE_REQUEST, network);
+        this.setOpenedFile(filePath)
     }
 
-    onReady(event, args) {
+    onReady() {
         this.mainWindow = new BrowserWindow({
             width: 800,
             height: 600,
             webPreferences: {
                 nodeIntegration: true
-            }
+            },
+            title: 'Graphs [New File]'
         });
         this.menuEventsEmitter = new MenuEventsEmitter(this.mainWindow);
         setApplicationMenu();
@@ -59,7 +79,17 @@ class Main {
         this.mainWindow.webContents.openDevTools()
     }
 
-    onTotalExit(event, args) {
+    setOpenedFile(fileName) {
+        if (fileName) {
+            this.openedFile = fileName;
+            this.mainWindow.setTitle('Graphs' + ' ' + '[ ' + this.openedFile + ' ]')
+        } else {
+            this.openedFile = undefined;
+            this.mainWindow.setTitle(this.basicWindowTitle)
+        }
+    }
+
+    onTotalExit() {
         app.quit()
     }
 }

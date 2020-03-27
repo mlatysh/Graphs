@@ -1,10 +1,21 @@
-import {openFileHandler, saveFileHandler, saveAsFileHandler, appQuitHandler} from './menuHandlers'
+import {
+    appQuitHandler,
+    newFileCreationHandler,
+    openFileHandler,
+    saveAsFileHandler,
+    saveFileHandler,
+} from './menuHandlers'
 
 
 export const menu = [
     {
         label: "File",
         submenu: [
+            {
+                label: "New File",
+                accelerator: "CmdOrCtrl+N",
+                click: newFileCreationHandler
+            },
             {
                 label: 'Open...',
                 accelerator: 'CmdOrCtrl+O',

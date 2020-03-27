@@ -7,11 +7,16 @@ const objectToArray = object => {
 
 
 export class NetworkExporter {
-    static getSerializedNetwork(network) {
-        const serializedNetwork = objectToArray(network.getPositions());
-        serializedNetwork.forEach((node, index) => {
-            node.connections = network.getConnectedNodes(index);
-        });
+    static getSerializedNetwork(saveData) {
+        const serializedNetwork = {
+            nodes: saveData.nodes,
+            edges: saveData.edges
+        };
+
+        //     objectToArray(network.getPositions());
+        // serializedNetwork.forEach((node) => {
+        //     node.connections = network.getConnectedNodes(node.id);
+        // });
         return serializedNetwork
     }
 }
