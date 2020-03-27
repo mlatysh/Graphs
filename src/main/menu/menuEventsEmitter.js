@@ -15,6 +15,12 @@ export class MenuEventsEmitter {
     setMenuHandlers() {
         ipc.on(mainActionConsts.MENU_HANDLERS_REQUESTS.SAVE_CURRENT_NETWORK_REQUEST,(filePath) => {
             this.send(rendererConsts.GET_CURRENT_ACTIVE_NETWORK, filePath)
+        });
+
+
+        ipc.on(mainActionConsts.MENU_HANDLERS_REQUESTS.OPEN_FILE_REQUEST, (network) => {
+            // WORKING
+            this.send(rendererConsts.CHANGE_ACTIVE_NETWORK, network)
         })
     }
 }

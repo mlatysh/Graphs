@@ -8,10 +8,10 @@ const objectToArray = object => {
 
 export class NetworkExporter {
     static getSerializedNetwork(network) {
-        const nodes = objectToArray(network.getPositions());
-        nodes.forEach((node, index) => {
+        const serializedNetwork = objectToArray(network.getPositions());
+        serializedNetwork.forEach((node, index) => {
             node.connections = network.getConnectedNodes(index);
         });
-        return nodes
+        return serializedNetwork
     }
 }

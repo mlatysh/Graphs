@@ -25,9 +25,10 @@ function getUserHome() {
 
 const openFileHandler = () => {
     const fileChosenHandler = (args) => {
-        if (!args.canceled) {
-            //????
-        }
+        if (!args.canceled){
+            // WORKING
+            ipc.emit(mainActionConsts.OPEN_FILE,
+                args.filePaths[0])}
     };
     dialog.showOpenDialog(
         createOptionsObject('Open file...', 'openFile')

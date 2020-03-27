@@ -1,20 +1,22 @@
 import {Network} from './../../../libs/vis-network'
 import {NetworkExporter} from "./networkExporter"
-import {consts as rendererActionConsts} from "../../main/eventConsts/rendererActionConsts";
-import {consts as mainActionConsts} from "../../main/eventConsts/mainActionConsts";
+import {RendererEventListener} from "./rendererEventListener";
+import {NetworkImporter} from "./networkImporter";
 
 const {ipcRenderer: ipc} = window.require('electron');
 
 export class NetworkController {
     constructor(networkCreationObject) {
+        this.ipc = ipc;
         this.networkExporter = NetworkExporter;
+        this.networkImporter = NetworkImporter;
         this.network = undefined;
         if (networkCreationObject) {
             this.network = new Network(networkCreationObject.container,
                 networkCreationObject.data,
                 networkCreationObject.options);
         }
-        this.addEventListeners()
+        this.eventListener = new RendererEventListener(this);
     }
 
     destroyCurrentNetwork() {
@@ -28,20 +30,10 @@ export class NetworkController {
     }
 
     setCurrentNetwork(networkCreationObject) {
+        console.log(networkCreationObject);
         this.destroyCurrentNetwork();
         this.network = new Network(networkCreationObject.container,
             networkCreationObject.data,
             networkCreationObject.options);
-    }
-
-    addEventListeners() {
-
-        ipc.on(rendererActionConsts.GET_CURRENT_ACTIVE_NETWORK, (event, filePath) => {
-            event.sender.send(mainActionConsts.SAVE_CURRENT_NETWORK,
-                [this.networkExporter.getSerializedNetwork(this.network), filePath])
-        })
-
-
-
     }
 }

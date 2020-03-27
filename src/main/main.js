@@ -21,25 +21,31 @@ class Main {
     setMainIpcHandlers() {
         ipc.on(mainActionConsts.TOTAL_EXIT, this.onTotalExit.bind(this));
         ipc.on(mainActionConsts.SAVE_CURRENT_NETWORK, this.onSaveCurrentNetwork.bind(this));
+        ipc.on(mainActionConsts.OPEN_FILE, this.onOpenFile.bind(this))
     }
 
     onSaveCurrentNetwork(event, args) {
         FileWorker.saveJsonToFile(args[0], args[1])
     };
 
-    onWindowAllClosed() {
+    onWindowAllClosed(event, args) {
         if (process.platform !== 'darwin') {
             app.quit();
         }
     }
 
-    onActivate() {
+    onActivate(event, args) {
         if (BrowserWindow.getAllWindows().length === 0) {
             this.onReady()
         }
     }
 
-    onReady() {
+    onOpenFile(filePath) {
+        let network = FileWorker.getJsonFromFile(filePath);
+        this.ipc.emit(mainActionConsts.MENU_HANDLERS_REQUESTS.OPEN_FILE_REQUEST, network)
+    }
+
+    onReady(event, args) {
         this.mainWindow = new BrowserWindow({
             width: 800,
             height: 600,
@@ -53,7 +59,7 @@ class Main {
         this.mainWindow.webContents.openDevTools()
     }
 
-    onTotalExit() {
+    onTotalExit(event, args) {
         app.quit()
     }
 }
