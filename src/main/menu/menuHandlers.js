@@ -1,6 +1,5 @@
-const {showOpenDialog, showSaveDialog} = require('electron').remote.dialog;
-const ipc = require('electron').ipcRenderer;
-const fs = require('fs');
+import {dialog} from 'electron';
+import {ipcMain as ipc} from 'electron';
 
 const createOptionsObject = (title, type) => {
     let rez = {
@@ -29,7 +28,7 @@ const openFileHandler = () => {
             //????
         }
     };
-    showOpenDialog(
+    dialog.showOpenDialog(
         createOptionsObject('Open file...', 'openFile')
     ).then(fileChosenHandler)
 };
@@ -46,13 +45,13 @@ const saveAsFileHandler = () => {
         }
     };
 
-    showSaveDialog(
+    dialog.showSaveDialog(
         createOptionsObject('Save as...')
     ).then(locationChosenHandler)
 };
 
 const appQuitHandler = () => {
-    ipc.send('total-exit')
+    ipc.emit('total-exit')
 };
 
 export {appQuitHandler, saveAsFileHandler, saveFileHandler, openFileHandler}

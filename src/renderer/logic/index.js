@@ -1,4 +1,7 @@
 // create an array with nodes
+import {NetworkController} from "./networkController";
+import {getNetworkCreationObject} from "./networkCreationObject";
+
 const containerID = 'network';
 
 const NODES = [
@@ -20,14 +23,5 @@ const OPTIONS = {
     autoResize: true,
     clickToUse: false
 };
-
-let nodes = new vis.DataSet(NODES);
-let edges = new vis.DataSet(EDGES);
-
-
-let container = document.getElementById("network");
-let data = {
-    nodes: NODES,
-    edges: EDGES
-};
-let network = new vis.Network(container, data, OPTIONS);
+const network = getNetworkCreationObject(containerID, NODES, EDGES, OPTIONS);
+const controller = new NetworkController(network);

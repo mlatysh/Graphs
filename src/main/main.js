@@ -1,5 +1,6 @@
 import {app, BrowserWindow} from 'electron'
 import {ipcMain as ipc} from 'electron'
+import {setApplicationMenu} from "./menu/envSetting";
 
 function createWindow() {
     const win = new BrowserWindow({
@@ -9,6 +10,7 @@ function createWindow() {
             nodeIntegration: true
         }
     });
+    setApplicationMenu();
     win.loadFile(`${__dirname}/../../static/index.html`);
     addEventListeners();
     win.webContents.openDevTools()
