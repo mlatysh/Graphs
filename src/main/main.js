@@ -75,7 +75,7 @@ class Main {
         });
         this.menuEventsEmitter = new MenuEventsEmitter(this.mainWindow);
         setApplicationMenu();
-        this.mainWindow.loadFile(`${__dirname}/../../static/index.html`);
+        this.mainWindow.loadFile('index.html');
         this.mainWindow.webContents.openDevTools()
     }
 

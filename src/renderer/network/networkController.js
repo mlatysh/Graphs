@@ -11,7 +11,18 @@ const OPTIONS = {
         hover: true
     },
     manipulation: {
-        enabled: true
+        enabled: true,
+        addNode: function (node, callback) {
+            node.label = 'Hi!';
+            callback(node)
+        },
+        editNode: function (node, callback) {
+            node.label = 'hi';
+            callback(node)
+        },
+        addEdge: function (edge, callback) {
+            callback(edge)
+        }
     }
 };
 
@@ -40,6 +51,10 @@ export class NetworkController {
         }
     }
 
+    setBasicNetworkHandlers() {
+        this.network.editNodeMode()
+    }
+
     setCurrentNetwork(networkCreationObject) {
         this.destroyCurrentNetwork();
         this.network = new Network(networkCreationObject.container,
@@ -49,13 +64,21 @@ export class NetworkController {
 
     setInteractionEventListeners() {
         this.network.on("doubleClick", params => {
-            if (params.nodes.length === 0 && params.edges.length === 0) {
-                this.network.addNodeMode();
+            if (params.nodes.length !== 0) {
+                this.network.editNode(params.nodes[0])
             }
         });
 
         this.network.on('click', params => {
-            console.log(this.network.body.nodes, this.network.body.edges)
+            if (params.nodes.length === 0 && params.edges.length === 0) {
+                this.network.addNodeMode();
+                // this.network
+                document.elementFromPoint(params.pointer.DOM.x, params.pointer.DOM.y).click()
+            }
+        });
+
+        this.network.on('oncontext', params => {
+            this.network.addEdgeMode()
         })
     }
 }
