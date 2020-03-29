@@ -1,9 +1,8 @@
 import {DataSet} from "../../../libs/vis-network";
 
-export const getNetworkCreationObject = (containerId, nodesArray, edgesArray) => {
+export const getNetworkCreationObject = (nodesArray, edgesArray) => {
     return {
-        container: document.getElementById(containerId),
+        container: document.getElementById('network'),
         data: {nodes: new DataSet(nodesArray), edges: new DataSet(edgesArray)},
-        saveData: {nodes: nodesArray, edges: edgesArray}
     }
 };

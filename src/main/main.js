@@ -59,8 +59,8 @@ class Main {
     }
 
     onOpenFile(filePath) {
-        let network = FileWorker.getJsonFromFile(filePath);
-        ipc.emit(mainActionConsts.MENU_HANDLERS_REQUESTS.OPEN_FILE_REQUEST, network);
+        let serializedNetwork = FileWorker.getJsonFromFile(filePath);
+        ipc.emit(mainActionConsts.MENU_HANDLERS_REQUESTS.OPEN_FILE_REQUEST, serializedNetwork);
         this.setOpenedFile(filePath)
     }
 

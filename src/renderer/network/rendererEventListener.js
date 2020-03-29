@@ -7,26 +7,32 @@ export class RendererEventListener {
         this.setRendererEventListeners()
     }
 
+    addActionOnEvent(event, action) {
+        this.controller.ipc.on(event, action)
+    }
+
     setRendererEventListeners() {
-
-        this.controller.ipc.on(rendererActionConsts.GET_CURRENT_ACTIVE_NETWORK,
-            (event, filePath) => {
-                event.sender.send(mainActionConsts.SAVE_CURRENT_NETWORK,
-                    [this.controller.networkExporter.getSerializedNetwork(this.controller.network), filePath])
-            });
-
-
-        this.controller.ipc.on(rendererActionConsts.CHANGE_ACTIVE_NETWORK,
-            (event, network) => {
-                this.controller.setCurrentNetwork(this.controller.networkImporter.getNetworkCreationObject(network))
-            });
+        this.addActionOnEvent(rendererActionConsts.GET_CURRENT_ACTIVE_NETWORK,
+            this.onGetCurrentActiveNetworkHandler.bind(this));
+        this.addActionOnEvent(rendererActionConsts.CHANGE_ACTIVE_NETWORK,
+            this.onChangeActiveNetworkHandler.bind(this));
+        this.addActionOnEvent(rendererActionConsts.CREATE_NEW_ACTIVE_NETWORK,
+            this.onCreateNewActiveNetworkHandler.bind(this))
+    }
 
 
-        this.controller.ipc.on(rendererActionConsts.CREATE_NEW_ACTIVE_NETWORK,
-            (event) => {
-                this.controller.destroyCurrentNetwork();
-                event.sender.send(mainActionConsts.NEW_FILE_CREATION)
-            })
+    onGetCurrentActiveNetworkHandler(event, filePath) {
+        event.sender.send(mainActionConsts.SAVE_CURRENT_NETWORK,
+            [this.controller.networkExporter.getSerializedNetwork(this.controller.network), filePath])
+    }
+
+    onChangeActiveNetworkHandler(event, serializedNetwork) {
+        this.controller.setCurrentNetwork(this.controller.networkImporter.NetworkCreationObject(serializedNetwork))
+    }
+
+    onCreateNewActiveNetworkHandler(event) {
+        this.controller.destroyCurrentNetwork();
+        event.sender.send(mainActionConsts.NEW_FILE_CREATION)
     }
 
 

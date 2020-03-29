@@ -11,7 +11,7 @@ const EDGES = [
     {from: 1, to: 1},
 ];
 
-const network = getNetworkCreationObject(containerID, NODES, EDGES);
+const network = getNetworkCreationObject(NODES, EDGES);
 const controller = new NetworkController(network);
 
 

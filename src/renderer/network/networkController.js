@@ -21,7 +21,6 @@ export class NetworkController {
         this.networkExporter = NetworkExporter;
         this.networkImporter = NetworkImporter;
         this.network = undefined;
-        this.networkCreationObject = networkCreationObject.saveData;
         if (networkCreationObject) {
             this.network = new Network(networkCreationObject.container,
                 networkCreationObject.data,
@@ -38,7 +37,6 @@ export class NetworkController {
             // It's ok
         } finally {
             this.network = undefined;
-            this.networkCreationObject = undefined
         }
     }
 
@@ -46,14 +44,18 @@ export class NetworkController {
         this.destroyCurrentNetwork();
         this.network = new Network(networkCreationObject.container,
             networkCreationObject.data, OPTIONS);
-        this.networkCreationObject = networkCreationObject.saveData;
+        this.setInteractionEventListeners()
     }
 
     setInteractionEventListeners() {
         this.network.on("doubleClick", params => {
             if (params.nodes.length === 0 && params.edges.length === 0) {
-                this.network.addNodeMode()
+                this.network.addNodeMode();
             }
         });
+
+        this.network.on('click', params => {
+            console.log(this.network.body.nodes, this.network.body.edges)
+        })
     }
 }
