@@ -2,8 +2,8 @@ import {Network} from './../../../libs/vis-network'
 import {NetworkExporter} from "./networkExporter"
 import {RendererEventListener} from "./rendererEventListener";
 import {NetworkImporter} from "./networkImporter";
+import {ipcRenderer as ipc} from 'electron';
 
-const {ipcRenderer: ipc} = window.require('electron');
 const OPTIONS = {
     autoResize: true,
     clickToUse: false,
@@ -17,7 +17,8 @@ const OPTIONS = {
             callback(node)
         },
         editNode: function (node, callback) {
-            node.label = 'hi';
+            // SYNC PROMPT HERE!!!
+            node.label = '';
             callback(node)
         },
         addEdge: function (edge, callback) {
@@ -38,7 +39,8 @@ export class NetworkController {
                 OPTIONS);
         }
         this.eventListener = new RendererEventListener(this);
-        this.setInteractionEventListeners()
+        this.setInteractionEventListeners();
+        this.eventListener.startMonitoring()
     }
 
     destroyCurrentNetwork() {

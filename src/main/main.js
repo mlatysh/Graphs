@@ -14,20 +14,23 @@ class Main {
         this.menuEventsEmitter = undefined;
         this.openedFile = undefined;
         app.allowRendererProcessReuse = true;
-        app.on(builtinConsts.READY, this.onReady.bind(this));
-        app.on(builtinConsts.WINDOW_ALL_CLOSED, this.onWindowAllClosed.bind(this));
-        app.on(builtinConsts.ACTIVATE, this.onActivate.bind(this));
+
 
         this.setMainIpcHandlers()
     }
 
     setMainIpcHandlers() {
+        app.on(builtinConsts.READY, this.onReady.bind(this));
+        app.on(builtinConsts.WINDOW_ALL_CLOSED, this.onWindowAllClosed.bind(this));
+        app.on(builtinConsts.ACTIVATE, this.onActivate.bind(this));
+
         ipc.on(mainActionConsts.TOTAL_EXIT, this.onTotalExit.bind(this));
         ipc.on(mainActionConsts.SAVE_CURRENT_NETWORK, this.onSaveCurrentNetwork.bind(this));
         ipc.on(mainActionConsts.OPEN_FILE, this.onOpenFile.bind(this));
         ipc.on(mainActionConsts.CLEAR_SAVE_CURRENT_NETWORK, this.onClearSaveNetwork.bind(this));
         ipc.on(mainActionConsts.NEW_FILE_CREATION, this.onNewFileCreation.bind(this))
     }
+
 
     onNewFileCreation() {
         this.setOpenedFile()
@@ -66,8 +69,8 @@ class Main {
 
     onReady() {
         this.mainWindow = new BrowserWindow({
-            width: 800,
-            height: 600,
+            minWidth: 800,
+            minHeight: 600,
             webPreferences: {
                 nodeIntegration: true
             },

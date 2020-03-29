@@ -1,11 +1,9 @@
 {
   "name": "Graphs",
   "version": "1.0.0",
-  "main": "dist/main/main.js",
+  "main": "dist/main/main-dist.js",
   "license": "MIT",
-  "dependencies": {
-    "ipc": "^0.0.1"
-  },
+  "dependencies": {},
   "scripts": {
     "bstart": "yarn build && yarn start",
     "start": "electron ./dist/main-dist.js",
@@ -14,10 +12,7 @@
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.0",
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
     "babel-loader": "^8.1.0",
-    "babel-preset-env": "^1.7.0",
     "css-loader": "^3.4.2",
     "electron": "^8.2.0",
     "file-loader": "^6.0.0",

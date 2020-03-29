@@ -4,6 +4,9 @@ import {consts as mainActionConsts} from "../../main/eventConsts/mainActionConst
 export class RendererEventListener {
     constructor(controller) {
         this.controller = controller;
+    }
+
+    startMonitoring() {
         this.setRendererEventListeners()
     }
 
