@@ -3936,7 +3936,7 @@
 	 *
 	 * @param elem - A dom element, for example a div.
 	 *
-	 * @returns The absolute left position of this element in the browser page.
+	 * @returns The absolute left position of this element in the browser prompt.
 	 */
 
 
@@ -3948,7 +3948,7 @@
 	 *
 	 * @param elem - A dom element, for example a div.
 	 *
-	 * @returns The absolute right position of this element in the browser page.
+	 * @returns The absolute right position of this element in the browser prompt.
 	 */
 
 
@@ -3960,7 +3960,7 @@
 	 *
 	 * @param elem - A dom element, for example a div.
 	 *
-	 * @returns The absolute top position of this element in the browser page.
+	 * @returns The absolute top position of this element in the browser prompt.
 	 */
 
 
@@ -44319,7 +44319,6 @@
 
 	        this._bindHammerToDiv(this.closeDiv, bind$2(_context5 = this.toggleEditMode).call(_context5, this));
 	      }
-
 	      this._temporaryBindEvent('click', bind$2(_context6 = this._performAddNode).call(_context6, this));
 	    }
 	    /**

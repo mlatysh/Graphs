@@ -3,16 +3,23 @@
   "version": "1.0.0",
   "main": "dist/main/main-dist.js",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "dialogs": "^2.0.1",
+    "electron-prompt": "^1.5.1",
+    "smalltalk": "^4.0.6"
+  },
   "scripts": {
     "bstart": "yarn build && yarn start",
-    "start": "electron ./dist/main-dist.js",
-    "build": "webpack"
+    "start": "electron ./dist/main/main.js",
+    "build": "babel src -d dist --presets=babel-preset-env && electron ./dist/main/main.js"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.0",
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
     "babel-loader": "^8.1.0",
+    "babel-preset-env": "^1.7.0",
     "css-loader": "^3.4.2",
     "electron": "^8.2.0",
     "file-loader": "^6.0.0",

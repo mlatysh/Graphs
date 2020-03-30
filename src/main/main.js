@@ -74,10 +74,14 @@ class Main {
             webPreferences: {
                 nodeIntegration: true
             },
-            title: 'Graphs [New File]'
+            title: 'Graphs [New File]',
+            show: false
         });
         this.menuEventsEmitter = new MenuEventsEmitter(this.mainWindow);
         setApplicationMenu();
+        this.mainWindow.on('ready-to-show', () => {
+            this.mainWindow.show()
+        });
         this.mainWindow.loadFile('index.html');
         this.mainWindow.webContents.openDevTools()
     }
