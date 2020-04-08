@@ -9,11 +9,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _visNetwork = require("./../../../libs/vis-network");
 
-var _networkExporter = require("./networkExporter");
+var _networkExporter = require("./IO operator/networkExporter");
 
 var _rendererEventListener = require("./rendererEventListener");
 
-var _networkImporter = require("./networkImporter");
+var _networkImporter = require("./IO operator/networkImporter");
 
 var _electron = require("electron");
 
@@ -106,6 +106,36 @@ var NetworkController = exports.NetworkController = function () {
             document.addEventListener('keydown', function (params) {
                 if (params.key === 'Backspace') {
                     _this2.initDeleteNode(_this2.network.getSelectedNodes()[0]);
+                }
+            });
+
+            document.addEventListener('keydown', function (params) {
+                if (params.code === 'KeyT') {
+                    var selected = _this2.network.getSelectedEdges();
+                    if (selected.length) {
+                        selected.forEach(function (edge) {
+                            var to = _this2.network.body.edges[edge].options.arrows.to;
+                            to.enabled = !to.enabled;
+                        });
+                    }
+                    _this2.network.redraw();
+                }
+            });
+
+            document.addEventListener('keydown', function (params) {
+                if (params.code === 'KeyS' && !params.metaKey) {
+                    var selected = _this2.network.getSelectedEdges();
+                    if (selected.length) {
+                        selected.forEach(function (edge) {
+                            var fullEdge = _this2.network.body.data.edges.get(edge);
+                            _this2.network.body.data.edges.update({
+                                id: edge,
+                                from: fullEdge.to,
+                                to: fullEdge.from
+                            });
+                        });
+                    }
+                    _this2.network.redraw();
                 }
             });
         }

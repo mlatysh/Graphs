@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -15,5 +15,8 @@ var OPTIONS = exports.OPTIONS = {
     },
     manipulation: {
         enabled: false
+    },
+    edges: {
+        arrows: 'to'
     }
 };

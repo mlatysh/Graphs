@@ -10,5 +10,8 @@ export const OPTIONS = {
     },
     manipulation: {
         enabled: false
+    },
+    edges: {
+        arrows: 'to'
     }
 };

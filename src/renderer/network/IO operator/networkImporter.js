@@ -1,4 +1,4 @@
-import {getNetworkCreationObject} from "./networkCreationObject";
+import {getNetworkCreationObject} from "../networkCreationObject";
 import {NodeCreator} from "./primitiveElements/nodeCreator";
 import {EdgeCreator} from "./primitiveElements/edgeCreator";
 

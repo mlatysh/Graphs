@@ -1,7 +1,7 @@
 import {Network} from './../../../libs/vis-network'
-import {NetworkExporter} from "./networkExporter"
+import {NetworkExporter} from "./IO operator/networkExporter"
 import {RendererEventListener} from "./rendererEventListener";
-import {NetworkImporter} from "./networkImporter";
+import {NetworkImporter} from "./IO operator/networkImporter";
 import {ipcRenderer as ipc} from 'electron';
 import {OPTIONS} from "./networkInitOptions";
 
@@ -85,12 +85,42 @@ export class NetworkController {
         });
 
         document.addEventListener('keydown', (params) => {
-            if (params.key === 'Backspace'){
+            if (params.key === 'Backspace') {
                 this.initDeleteNode(this.network.getSelectedNodes()[0])
             }
         });
 
+        document.addEventListener('keydown', params => {
+            if (params.code === 'KeyT') {
+                const selected = this.network.getSelectedEdges()
+                if (selected.length) {
+                    selected.forEach((edge) => {
+                        let to = this.network.body.edges[edge].options.arrows.to
+                        to.enabled = !to.enabled;
+                    })
+                }
+                this.network.redraw()
+            }
+        })
+
+        document.addEventListener('keydown', params =>{
+            if (params.code === 'KeyS' && !params.metaKey) {
+                const selected = this.network.getSelectedEdges()
+                if (selected.length) {
+                    selected.forEach((edge) => {
+                        const fullEdge = this.network.body.data.edges.get(edge)
+                        this.network.body.data.edges.update({
+                            id: edge,
+                            from: fullEdge.to,
+                            to: fullEdge.from
+                        })
+                    })
+                }
+                this.network.redraw()
+            }
+        })
     }
+
 
     initDeleteNode(nodeId) {
         this.__removeNode(nodeId);
@@ -133,7 +163,7 @@ export class NetworkController {
         this.network.body.data.nodes.update({id: nodeId, label: newValue})
     }
 
-    __removeNode(nodeId){
+    __removeNode(nodeId) {
         this.network.body.data.nodes.remove({id: nodeId})
     }
 
