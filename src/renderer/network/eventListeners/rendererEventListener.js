@@ -1,12 +1,9 @@
-import {consts as rendererActionConsts} from "../../main/eventConsts/rendererActionConsts";
-import {consts as mainActionConsts} from "../../main/eventConsts/mainActionConsts";
+import {consts as rendererActionConsts} from "../../../main/eventConsts/rendererActionConsts";
+import {consts as mainActionConsts} from "../../../main/eventConsts/mainActionConsts";
 
 export class RendererEventListener {
     constructor(controller) {
         this.controller = controller;
-    }
-
-    startMonitoring() {
         this.setRendererEventListeners()
     }
 
