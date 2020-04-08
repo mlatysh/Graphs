@@ -31,11 +31,10 @@ export class NetworkController {
     resetEventListeners() {
         this.rendererEventListener = new RendererEventListener(this);
         this.documentEventListener = new DocumentEventListener(this);
-        this.interactionEventListener = new InteractionEventListener(this);
     }
 
 
-    destroyCurrentNetwork() {
+    __destroyCurrentNetwork() {
         try {
             this.network.destroy();
         } catch (e) {
@@ -45,7 +44,7 @@ export class NetworkController {
     }
 
     setCurrentNetwork(networkCreationObject) {
-        this.destroyCurrentNetwork();
+        this.__destroyCurrentNetwork();
         this.network = new Network(networkCreationObject.container,
             networkCreationObject.data, OPTIONS);
         this.resetEventListeners()

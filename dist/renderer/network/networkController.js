@@ -50,11 +50,10 @@ var NetworkController = exports.NetworkController = function () {
         value: function resetEventListeners() {
             this.rendererEventListener = new _rendererEventListener.RendererEventListener(this);
             this.documentEventListener = new _documentEventListener.DocumentEventListener(this);
-            this.interactionEventListener = new _interactionEventListener.InteractionEventListener(this);
         }
     }, {
-        key: "destroyCurrentNetwork",
-        value: function destroyCurrentNetwork() {
+        key: "__destroyCurrentNetwork",
+        value: function __destroyCurrentNetwork() {
             try {
                 this.network.destroy();
             } catch (e) {} finally {
@@ -64,7 +63,7 @@ var NetworkController = exports.NetworkController = function () {
     }, {
         key: "setCurrentNetwork",
         value: function setCurrentNetwork(networkCreationObject) {
-            this.destroyCurrentNetwork();
+            this.__destroyCurrentNetwork();
             this.network = new _visNetwork.Network(networkCreationObject.container, networkCreationObject.data, _networkInitOptions.OPTIONS);
             this.resetEventListeners();
         }

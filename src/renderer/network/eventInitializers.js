@@ -47,18 +47,18 @@ export class EventInitializer {
     }
 
     __addNode(node) {
-        this.parent.body.data.nodes.add(node)
+        this.parent.network.body.data.nodes.add(node)
     }
 
     __editNode(nodeId, newValue) {
-        this.parent.body.data.nodes.update({id: nodeId, label: newValue})
+        this.parent.network.body.data.nodes.update({id: nodeId, label: newValue})
     }
 
     __removeNode(nodeId) {
-        this.parent.body.data.nodes.remove({id: nodeId})
+        this.parent.network.body.data.nodes.remove({id: nodeId})
     }
 
     __removeEdge(edgeId) {
-        this.parent.body.data.edges.remove({id: edgeId})
+        this.parent.network.body.data.edges.remove({id: edgeId})
     }
 }

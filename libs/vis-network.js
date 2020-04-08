@@ -4187,12 +4187,12 @@
 	  return target;
 	}
 	/**
-	 * Check if given element contains given parent somewhere in the DOM tree.
+	 * Check if given element contains given network somewhere in the DOM tree.
 	 *
 	 * @param element - The element to be tested.
-	 * @param parent - The ancestor (not necessarily parent) of the element.
+	 * @param parent - The ancestor (not necessarily network) of the element.
 	 *
-	 * @returns True if parent is an ancestor of the element, false otherwise.
+	 * @returns True if network is an ancestor of the element, false otherwise.
 	 */
 
 
@@ -5767,7 +5767,7 @@
 	      // clone default attributes
 	      current.attr = merge(current.attr, graph.node);
 	    }
-	  } // add node to this (sub)graph and all its parent graphs
+	  } // add node to this (sub)graph and all its network graphs
 
 
 	  for (i = graphs.length - 1; i >= 0; i--) {
@@ -6124,7 +6124,7 @@
 	}
 	/**
 	 * Parse a subgraph
-	 * @param {Object} graph    parent graph object
+	 * @param {Object} graph    network graph object
 	 * @return {Object | null} subgraph
 	 */
 
@@ -6167,7 +6167,7 @@
 	    delete subgraph.node;
 	    delete subgraph.edge;
 	    delete subgraph.graph;
-	    delete subgraph.parent; // register at the parent graph
+	    delete subgraph.parent; // register at the network graph
 
 	    if (!graph.subgraphs) {
 	      graph.subgraphs = [];
@@ -7817,7 +7817,7 @@
 	}();
 	/**
 	 * @private
-	 * find if a node is in the given parent
+	 * find if a node is in the given network
 	 * @method hasParent
 	 * @param {HTMLElement} node
 	 * @param {HTMLElement} parent
@@ -9702,7 +9702,7 @@
 	  /**
 	   * @private
 	   * EXPERIMENTAL FEATURE -- can be removed/changed
-	   * Change the parent input target element.
+	   * Change the network input target element.
 	   * If Null, then it is being set the to main element.
 	   * @type {Null|EventTarget}
 	   * @default null
@@ -12816,12 +12816,12 @@
 	  event.srcEvent.stopPropagation();
 	};
 	/**
-	 * Test whether the element has the requested parent element somewhere in
-	 * its chain of parent nodes.
+	 * Test whether the element has the requested network element somewhere in
+	 * its chain of network nodes.
 	 * @param {HTMLElement} element
 	 * @param {HTMLElement} parent
-	 * @returns {boolean} Returns true when the parent is found somewhere in the
-	 *                    chain of parent nodes.
+	 * @returns {boolean} Returns true when the network is found somewhere in the
+	 *                    chain of network nodes.
 	 * @private
 	 */
 
@@ -15645,7 +15645,7 @@
 
 	      for (prop in parentConfig) {
 	        if (hasOwnProp(parentConfig, prop) && !hasOwnProp(childConfig, prop) && isObject(parentConfig[prop])) {
-	          // make sure changes to properties don't modify parent config
+	          // make sure changes to properties don't modify network config
 	          res[prop] = extend({}, res[prop]);
 	        }
 	      }
@@ -23522,7 +23522,7 @@
 	}();
 
 	/**
-	 * Callback to determine text dimensions, using the parent label settings.
+	 * Callback to determine text dimensions, using the network label settings.
 	 * @callback MeasureText
 	 * @param {text} text
 	 * @param {text} mod
@@ -24509,14 +24509,14 @@
 	    this.isEdgeLabel = edgelabel;
 	  }
 	  /**
-	   * @param {Object} options the options of the parent Node-instance
+	   * @param {Object} options the options of the network Node-instance
 	   */
 
 
 	  createClass(Label, [{
 	    key: "setOptions",
 	    value: function setOptions(options) {
-	      this.elementOptions = options; // Reference to the options of the parent Node-instance 
+	      this.elementOptions = options; // Reference to the options of the network Node-instance
 
 	      this.initFontOptions(options.font);
 
@@ -24770,7 +24770,7 @@
 	     *
 	     * The determination of multi-font option values is a special case, because any values not
 	     * present in the multi-font options should by definition be taken from the main font options,
-	     * i.e. from the current 'parent' object of the multi-font option.
+	     * i.e. from the current 'network' object of the multi-font option.
 	     *
 	     * ### Search order for multi-fonts
 	     *
@@ -24811,7 +24811,7 @@
 	            return multiFont[option];
 	          }
 	        }
-	      } // Option is not mentioned in the multi font options; take it from the parent font options.
+	      } // Option is not mentioned in the multi font options; take it from the network font options.
 	      // These have already been converted with getBasicOptions(), so use the converted values.
 
 
@@ -25187,7 +25187,7 @@
 	          // Grumbl leaving out test on undefined equals false for "" 
 	          return fontOptions[mod][option];
 	        } else {
-	          // Take from parent font option
+	          // Take from network font option
 	          return fontOptions[option];
 	        }
 	      };
@@ -28307,7 +28307,7 @@
 	      var hasGroup = typeof group === 'number' || typeof group === 'string' && group != '';
 	      if (!hasGroup) return; // current node has no group, no need to merge
 
-	      var groupObj = groupList.get(group); // Skip merging of group font options into parent; these are required to be distinct for labels
+	      var groupObj = groupList.get(group); // Skip merging of group font options into network; these are required to be distinct for labels
 	      // Also skip mergin of color IF it is already defined in the node itself. This is to avoid the color of the
 	      // group overriding the color set at the node level
 	      // TODO: It might not be a good idea either to merge the rest of the options, investigate this.
@@ -28339,7 +28339,7 @@
 	      var groupList = arguments.length > 4 ? arguments[4] : undefined;
 	      var fields = ['color', 'fixed', 'shadow'];
 	      selectiveNotDeepExtend(fields, parentOptions, newOptions, allowDeletion);
-	      Node.checkMass(newOptions); // merge the shadow options into the parent.
+	      Node.checkMass(newOptions); // merge the shadow options into the network.
 
 	      mergeOptions(parentOptions, newOptions, 'shadow', globalOptions); // individual shape newOptions
 
@@ -28925,8 +28925,8 @@
 	    /**
 	     * Get the Ids of nodes connected to this node.
 	     * @param {Node.id} nodeId
-	     * @param {'to'|'from'|undefined} direction values 'from' and 'to' select respectively parent and child nodes only.
-	     *                                          Any other value returns both parent and child nodes.
+	     * @param {'to'|'from'|undefined} direction values 'from' and 'to' select respectively network and child nodes only.
+	     *                                          Any other value returns both network and child nodes.
 	     * @returns {Array}
 	     */
 
@@ -30197,7 +30197,7 @@
 	      var angleTo = Math.PI * 2;
 
 	      if (!this.options.selfReference.renderBehindTheNode) {
-	        //render only parts which are not overlaping with parent node
+	        //render only parts which are not overlaping with network node
 	        //need to find x,y of from point and x,y to point
 	        //calculating radians
 	        var low = this.options.selfReference.angle;
@@ -35247,7 +35247,7 @@
 	            parentClusterEdge.clusteringEdgeReplacingIds.push(srcId); // Maintain correct bookkeeping for transferred edge
 
 	            _this2.body.edges[srcId].edgeReplacedById = parentClusterEdge.id;
-	          }); // Remove cluster edge from parent cluster edge
+	          }); // Remove cluster edge from network cluster edge
 
 	          splice$2(_context2 = parentClusterEdge.clusteringEdgeReplacingIds).call(_context2, index$1, 1);
 	        });
@@ -35975,7 +35975,7 @@
 	      var parentIndex = indexOf$3(stack).call(stack, clusterNodeId) - 1;
 
 	      if (parentIndex >= 0) {
-	        // Current cluster is clustered; transfer contained nodes and edges to parent
+	        // Current cluster is clustered; transfer contained nodes and edges to network
 	        var parentClusterNodeId = stack[parentIndex];
 	        var parentClusterNode = this.body.nodes[parentClusterNodeId]; // clustering.clusteredNodes and clustering.clusteredEdges remain unchanged
 
@@ -41645,7 +41645,7 @@
 	  /**
 	   * Constructor
 	   *
-	   * @param {Object} layout reference to the parent LayoutEngine instance.
+	   * @param {Object} layout reference to the network LayoutEngine instance.
 	   */
 	  function VerticalStrategy(layout) {
 	    var _this;
@@ -41739,7 +41739,7 @@
 	  /**
 	   * Constructor
 	   *
-	   * @param {Object} layout reference to the parent LayoutEngine instance.
+	   * @param {Object} layout reference to the network LayoutEngine instance.
 	   */
 	  function HorizontalStrategy(layout) {
 	    var _this2;
@@ -42064,7 +42064,7 @@
 	/**
 	 * There's a mix-up with terms in the code. Following are the formal definitions:
 	 *
-	 *   tree   - a strict hierarchical network, i.e. every node has at most one parent
+	 *   tree   - a strict hierarchical network, i.e. every node has at most one network
 	 *   forest - a collection of trees. These distinct trees are thus not connected.
 	 *
 	 * So:
@@ -42107,7 +42107,7 @@
 
 	    this.childrenReference = {}; // child id's per node id
 
-	    this.parentReference = {}; // parent id's per node id
+	    this.parentReference = {}; // network id's per node id
 
 	    this.trees = {}; // tree id per node id; i.e. to which tree does given node id belong
 
@@ -42147,7 +42147,7 @@
 	    /**
 	     * Check if the current state is for a formal tree or formal forest.
 	     *
-	     * This is the case if every node has at most one parent.
+	     * This is the case if every node has at most one network.
 	     *
 	     * Pre: parentReference init'ed properly for current network
 	     */
@@ -42326,7 +42326,7 @@
 	      };
 	    }
 	    /**
-	     * Check if two nodes have the same parent(s)
+	     * Check if two nodes have the same network(s)
 	     *
 	     * @param {Node} node1
 	     * @param {Node} node2
@@ -42910,7 +42910,7 @@
 	          } // check the distribution of the nodes per level.
 
 
-	          var distribution = this._getDistribution(); // get the parent children relations.
+	          var distribution = this._getDistribution(); // get the network children relations.
 
 
 	          this._generateMap(); // place the nodes on the canvas.
@@ -43390,7 +43390,7 @@
 	      }
 	    }
 	    /**
-	     * We use this method to center a parent node and check if it does not cross other nodes when it does.
+	     * We use this method to center a network node and check if it does not cross other nodes when it does.
 	     * @param {Node} node
 	     * @private
 	     */
@@ -43487,7 +43487,7 @@
 	    value: function _placeBranchNodes(parentId, parentLevel) {
 	      var _context2;
 
-	      var childRef = this.hierarchical.childrenReference[parentId]; // if this is not a parent, cancel the placing. This can happen with multiple parents to one child.
+	      var childRef = this.hierarchical.childrenReference[parentId]; // if this is not a network, cancel the placing. This can happen with multiple parents to one child.
 
 	      if (childRef === undefined) {
 	        return;
@@ -43506,10 +43506,10 @@
 
 	      for (var _i5 = 0; _i5 < childNodes.length; _i5++) {
 	        var childNode = childNodes[_i5];
-	        var childNodeLevel = this.hierarchical.levels[childNode.id]; // check if the child node is below the parent node and if it has already been positioned.
+	        var childNodeLevel = this.hierarchical.levels[childNode.id]; // check if the child node is below the network node and if it has already been positioned.
 
 	        if (childNodeLevel > parentLevel && this.positionedNodes[childNode.id] === undefined) {
-	          // get the amount of space required for this node. If parent the width is based on the amount of children.
+	          // get the amount of space required for this node. If network the width is based on the amount of children.
 	          var spacing = this.options.hierarchical.nodeSpacing;
 	          var pos = void 0; // we get the X or Y values we need and store them in pos and previousPos.
 	          // The get and set make sure we get X or Y
@@ -43526,7 +43526,7 @@
 	        } else {
 	          return;
 	        }
-	      } // center the parent nodes.
+	      } // center the network nodes.
 
 
 	      var center = this._getCenterPosition(childNodes);
@@ -43769,7 +43769,7 @@
 	      this.hierarchical.setMinLevelToZero(this.body.nodes);
 	    }
 	    /**
-	     * Update the bookkeeping of parent and child.
+	     * Update the bookkeeping of network and child.
 	     * @private
 	     */
 
@@ -43894,7 +43894,7 @@
 	      shifter(parentId);
 	    }
 	    /**
-	     * Find a common parent between branches.
+	     * Find a common network between branches.
 	     * @param {Node.id} childA
 	     * @param {Node.id} childB
 	     * @returns {{foundParent, withChild}}

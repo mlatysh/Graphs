@@ -31,7 +31,7 @@ export class RendererEventListener {
     }
 
     onCreateNewActiveNetworkHandler(event) {
-        this.controller.destroyCurrentNetwork();
+        this.controller.__destroyCurrentNetwork();
         event.sender.send(mainActionConsts.NEW_FILE_CREATION)
     }
 

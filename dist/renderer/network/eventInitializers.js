@@ -63,22 +63,22 @@ var EventInitializer = exports.EventInitializer = function () {
     }, {
         key: '__addNode',
         value: function __addNode(node) {
-            this.parent.body.data.nodes.add(node);
+            this.parent.network.body.data.nodes.add(node);
         }
     }, {
         key: '__editNode',
         value: function __editNode(nodeId, newValue) {
-            this.parent.body.data.nodes.update({ id: nodeId, label: newValue });
+            this.parent.network.body.data.nodes.update({ id: nodeId, label: newValue });
         }
     }, {
         key: '__removeNode',
         value: function __removeNode(nodeId) {
-            this.parent.body.data.nodes.remove({ id: nodeId });
+            this.parent.network.body.data.nodes.remove({ id: nodeId });
         }
     }, {
         key: '__removeEdge',
         value: function __removeEdge(edgeId) {
-            this.parent.body.data.edges.remove({ id: edgeId });
+            this.parent.network.body.data.edges.remove({ id: edgeId });
         }
     }]);
 

@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -17,50 +17,15 @@ var InteractionEventListener = exports.InteractionEventListener = function () {
     }
 
     _createClass(InteractionEventListener, [{
-        key: 'addInteractionEventListeners',
+        key: "addInteractionEventListeners",
         value: function addInteractionEventListeners() {
-            var _this = this;
 
-            this.parent.network.on('doubleClick', function (params) {
-                console.log('dbl');
-                var e = params.event.srcEvent;
-                _this.parent.network.releaseNode();
-                if (params.nodes.length === 0 && params.edges.length === 0) {
-                    _this.parent.eventInitializer.initAddNode(params.pointer.canvas.x, params.pointer.canvas.y, false);
-                } else if (params.nodes.length !== 0) {
-                    _this.parent.eventInitializer.initEditNode(params.nodes[0]);
-                }
-            });
-
-            this.parent.network.on('oncontext', function (params) {
-                _this.parent.eventInitializer.initDeletion(_this.parent.network.getSelection());
-            });
-
-            this.parent.network.on('click', function (params) {
-                var prompt = require('electron-prompt');
-                _this.parent.network.releaseNode();
-                var e = params.event.srcEvent;
-                if (e.shiftKey) _this.parent.eventInitializer.initAddNode(params.pointer.canvas.x, params.pointer.canvas.y, true);
-                // prompt({
-                //     title: 'Choose color',
-                //     label: 'Color:',
-                //     value: 'red',
-                //     inputAttrs: {
-                //         type: 'text',
-                //         required: true
-                //     },
-                //     type: 'input'
-                // })
-                //     .then((r) => {
-                //         if (r === null) {
-                //             console.log('user cancelled');
-                //         } else {
-                //             console.log(params, r)
-                //             // this.onNodeColorChange(params.)
-                //         }
-                //     })
-                //     .catch(console.error);
-            });
+            // this.parent.network.on('click', params => {
+            //     const prompt = require('electron-prompt')
+            //     const e = params.event.srcEvent;
+            //     if (e.shiftKey)
+            //         this.parent.eventInitializer.initAddNode(params.pointer.canvas.x, params.pointer.canvas.y, true)
+            // })
         }
     }]);
 
