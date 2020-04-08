@@ -2,8 +2,9 @@ export const OPTIONS = {
     autoResize: true,
     clickToUse: false,
     interaction: {
+        hoverConnectedEdges: false,
         hover: true,
-        multiselect: false,
+        multiselect: true,
         keyboard: {
             enabled: true
         }

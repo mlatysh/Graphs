@@ -76,14 +76,16 @@ var NetworkController = exports.NetworkController = function () {
             });
 
             this.network.on('oncontext', function (params) {
-                console.log(params);
-                _this.initDeleteNode(params.nodes[0]);
+                _this.initDeletion(_this.network.getSelection());
             });
 
             this.network.on('click', function (params) {
                 _this.network.releaseNode();
                 var e = params.event.srcEvent;
-                if (e.ctrlKey || e.metaKey) _this.initAddNode(params.pointer.canvas.x, params.pointer.canvas.y, true);
+                if (e.shiftKey) _this.initAddNode(params.pointer.canvas.x, params.pointer.canvas.y, true);else {
+                    console.log(_this.network.getEdgeAt({ x: params.pointer.DOM.x, y: params.pointer.DOM.y }));
+                    console.log(_this.network.getNodeAt({ x: params.pointer.DOM.x, y: params.pointer.DOM.y }));
+                }
             });
         }
     }, {
@@ -105,7 +107,7 @@ var NetworkController = exports.NetworkController = function () {
 
             document.addEventListener('keydown', function (params) {
                 if (params.key === 'Backspace') {
-                    _this2.initDeleteNode(_this2.network.getSelectedNodes()[0]);
+                    _this2.initDeletion(_this2.network.getSelection());
                 }
             });
 
@@ -140,25 +142,33 @@ var NetworkController = exports.NetworkController = function () {
             });
         }
     }, {
-        key: "initDeleteNode",
-        value: function initDeleteNode(nodeId) {
-            this.__removeNode(nodeId);
+        key: "initDeletion",
+        value: function initDeletion(selection) {
+            var _this3 = this;
+
+            console.log(selection);
+            if (selection.nodes) selection.nodes.forEach(function (node) {
+                _this3.__removeNode(node);
+            });
+            if (selection.edges) selection.edges.forEach(function (edge) {
+                _this3.__removeEdge(edge);
+            });
         }
     }, {
         key: "initEditNode",
         value: function initEditNode(nodeId) {
-            var _this3 = this;
+            var _this4 = this;
 
             Dialogs.prompt('Input node\'s new value: ', function (newValue) {
                 if (newValue !== undefined) {
-                    _this3.__editNode(nodeId, newValue);
+                    _this4.__editNode(nodeId, newValue);
                 }
             });
         }
     }, {
         key: "initAddNode",
         value: function initAddNode(x, y, emptyNode) {
-            var _this4 = this;
+            var _this5 = this;
 
             var node = {};
             var id = (Math.random() * 1e7).toString(32);
@@ -168,7 +178,7 @@ var NetworkController = exports.NetworkController = function () {
                     node.label = value;
                     node.x = x;
                     node.y = y;
-                    _this4.__addNode(node);
+                    _this5.__addNode(node);
                 }
             });else {
                 this.__addNode({ id: id, x: x, y: y });
@@ -188,6 +198,11 @@ var NetworkController = exports.NetworkController = function () {
         key: "__removeNode",
         value: function __removeNode(nodeId) {
             this.network.body.data.nodes.remove({ id: nodeId });
+        }
+    }, {
+        key: "__removeEdge",
+        value: function __removeEdge(edgeId) {
+            this.network.body.data.edges.remove({ id: edgeId });
         }
     }]);
 

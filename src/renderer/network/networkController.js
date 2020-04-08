@@ -58,15 +58,21 @@ export class NetworkController {
         });
 
         this.network.on('oncontext', params => {
-            console.log(params)
-            this.initDeleteNode(params.nodes[0])
+            this.initDeletion(this.network.getSelection())
         });
 
         this.network.on('click', params => {
             this.network.releaseNode();
             const e = params.event.srcEvent;
-            if (e.ctrlKey || e.metaKey)
+            if (e.shiftKey)
                 this.initAddNode(params.pointer.canvas.x, params.pointer.canvas.y, true)
+
+
+            else
+            {
+                console.log(this.network.getEdgeAt({x: params.pointer.DOM.x, y: params.pointer.DOM.y}))
+                console.log(this.network.getNodeAt({x: params.pointer.DOM.x, y: params.pointer.DOM.y}))
+            }
         });
     }
 
@@ -86,7 +92,7 @@ export class NetworkController {
 
         document.addEventListener('keydown', (params) => {
             if (params.key === 'Backspace') {
-                this.initDeleteNode(this.network.getSelectedNodes()[0])
+                this.initDeletion(this.network.getSelection())
             }
         });
 
@@ -103,7 +109,7 @@ export class NetworkController {
             }
         })
 
-        document.addEventListener('keydown', params =>{
+        document.addEventListener('keydown', params => {
             if (params.code === 'KeyS' && !params.metaKey) {
                 const selected = this.network.getSelectedEdges()
                 if (selected.length) {
@@ -122,8 +128,16 @@ export class NetworkController {
     }
 
 
-    initDeleteNode(nodeId) {
-        this.__removeNode(nodeId);
+    initDeletion(selection) {
+        console.log(selection)
+        if (selection.nodes)
+            selection.nodes.forEach((node) => {
+                this.__removeNode(node)
+            })
+        if (selection.edges)
+            selection.edges.forEach((edge) => {
+                this.__removeEdge(edge)
+            })
     }
 
 
@@ -165,6 +179,10 @@ export class NetworkController {
 
     __removeNode(nodeId) {
         this.network.body.data.nodes.remove({id: nodeId})
+    }
+
+    __removeEdge(edgeId) {
+        this.network.body.data.edges.remove({id: edgeId})
     }
 
 }
