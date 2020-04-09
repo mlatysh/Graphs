@@ -16,7 +16,6 @@ var EdgeCreator = exports.EdgeCreator = function () {
     _createClass(EdgeCreator, null, [{
         key: 'getSerializedEdge',
         value: function getSerializedEdge(edgeObject) {
-            console.log(edgeObject);
             return {
                 type: 'edge',
                 id: edgeObject.id,

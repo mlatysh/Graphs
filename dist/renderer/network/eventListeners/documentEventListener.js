@@ -61,7 +61,8 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
     }, {
         key: 'onContext',
         value: function onContext(params) {
-            this.parent.network.fit({ animation: true });
+            var selectedNodes = this.parent.network.getSelectedNodes();
+            if (selectedNodes.length === 1) this.parent.network.focus(selectedNodes[0], { animation: true });else this.parent.network.fit({ animation: true });
         }
     }, {
         key: 'onKeyUp',
@@ -111,7 +112,6 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
 
             if (params.code === 'KeyC' && !params.metaKey) {
                 var selection = this.parent.network.getSelection();
-                console.log(selection);
                 if (selection.nodes.length || selection.edges.length) {
                     var prompt = require('electron-prompt');
                     prompt({
@@ -151,7 +151,6 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
     }, {
         key: 'onClick',
         value: function onClick(params) {
-            console.log(this.parent.network.body.edges);
             this.parent.network.releaseNode();
             var coordinates = this.parent.network.DOMtoCanvas({ x: params.x, y: params.y });
             if (params.shiftKey && !this.parent.network.getNodeAt({ x: params.x, y: params.y })) this.parent.eventInitializer.initAddNode(coordinates.x, coordinates.y, true, this.callbacks, this.eventListeners);

@@ -55,7 +55,9 @@ export class DocumentEventListener {
     }
 
     onContext(params) {
-        this.parent.network.fit({animation: true})
+        const selectedNodes = this.parent.network.getSelectedNodes()
+        if (selectedNodes.length === 1) this.parent.network.focus(selectedNodes[0], {animation: true})
+        else this.parent.network.fit({animation: true})
     }
 
     onKeyUp(params) {
@@ -106,7 +108,6 @@ export class DocumentEventListener {
 
         if (params.code === 'KeyC' && !params.metaKey) {
             const selection = this.parent.network.getSelection()
-            console.log(selection)
             if (selection.nodes.length || selection.edges.length) {
                 const prompt = require('electron-prompt');
                 prompt({
@@ -148,7 +149,6 @@ export class DocumentEventListener {
     }
 
     onClick(params) {
-        console.log(this.parent.network.body.edges)
         this.parent.network.releaseNode();
         const coordinates = this.parent.network.DOMtoCanvas({x: params.x, y: params.y})
         if (params.shiftKey && !this.parent.network.getNodeAt({x: params.x, y: params.y}))

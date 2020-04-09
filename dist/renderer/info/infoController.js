@@ -27,9 +27,17 @@ var InfoController = exports.InfoController = function () {
         key: 'updateState',
         value: function updateState() {
             var network = this.networkController.getNetwork();
+            var selectedNodes = network.getSelectedNodes();
             var totalNodes = network.body.data.nodes.length;
             var totalEdges = Object.keys(network.body.edges).length;
-            this.DOMElement.innerText = 'Edges amount: ' + totalEdges + '\nNodes amount: ' + totalNodes;
+            var connectedEdges = NaN;
+            if (selectedNodes.length === 1) {
+                connectedEdges = network.getConnectedEdges(selectedNodes[0]).length;
+            }
+            var rez = "";
+            rez += 'Edges amount: ' + totalEdges + '\nNodes amount: ' + totalNodes + '\n\n';
+            if (!isNaN(connectedEdges)) rez += 'Selected vertex degree: ' + connectedEdges;
+            this.DOMElement.innerText = rez;
         }
     }]);
 

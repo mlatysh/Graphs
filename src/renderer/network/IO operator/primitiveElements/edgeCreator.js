@@ -1,6 +1,5 @@
 export class EdgeCreator {
     static getSerializedEdge(edgeObject) {
-        console.log(edgeObject)
         return {
             type: 'edge',
             id: edgeObject.id,

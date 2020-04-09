@@ -13,8 +13,17 @@ export class InfoController {
 
     updateState() {
         const network = this.networkController.getNetwork()
-        let totalNodes = network.body.data.nodes.length
-        let totalEdges = Object.keys(network.body.edges).length
-        this.DOMElement.innerText = `Edges amount: ${totalEdges}\nNodes amount: ${totalNodes}`
+        const selectedNodes =network.getSelectedNodes()
+        const totalNodes = network.body.data.nodes.length
+        const totalEdges = Object.keys(network.body.edges).length
+        let connectedEdges = NaN
+        if (selectedNodes.length === 1) {
+            connectedEdges = network.getConnectedEdges(selectedNodes[0]).length
+        }
+        let rez = ""
+        rez+= `Edges amount: ${totalEdges}\nNodes amount: ${totalNodes}\n\n`
+        if(!isNaN(connectedEdges))
+            rez+=`Selected vertex degree: ${connectedEdges}`
+        this.DOMElement.innerText = rez
     }
 }
