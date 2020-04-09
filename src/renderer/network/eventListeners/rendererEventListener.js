@@ -1,5 +1,6 @@
 import {consts as rendererActionConsts} from "../../../main/eventConsts/rendererActionConsts";
 import {consts as mainActionConsts} from "../../../main/eventConsts/mainActionConsts";
+import {getNetworkCreationObject} from "../networkCreationObject";
 
 export class RendererEventListener {
     constructor(controller) {
@@ -31,7 +32,11 @@ export class RendererEventListener {
     }
 
     onCreateNewActiveNetworkHandler(event) {
-        this.controller.__destroyCurrentNetwork();
+        this.controller.documentEventListener.removeEventListeners(
+            this.controller.documentEventListener.eventListeners)
+        this.controller.setCurrentNetwork(getNetworkCreationObject([], []));
+        this.controller.documentEventListener.addEventListeners(
+            this.controller.documentEventListener.eventListeners)
         event.sender.send(mainActionConsts.NEW_FILE_CREATION)
     }
 

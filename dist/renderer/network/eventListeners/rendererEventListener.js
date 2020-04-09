@@ -11,6 +11,8 @@ var _rendererActionConsts = require("../../../main/eventConsts/rendererActionCon
 
 var _mainActionConsts = require("../../../main/eventConsts/mainActionConsts");
 
+var _networkCreationObject = require("../networkCreationObject");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var RendererEventListener = exports.RendererEventListener = function () {
@@ -46,7 +48,9 @@ var RendererEventListener = exports.RendererEventListener = function () {
     }, {
         key: "onCreateNewActiveNetworkHandler",
         value: function onCreateNewActiveNetworkHandler(event) {
-            this.controller.__destroyCurrentNetwork();
+            this.controller.documentEventListener.removeEventListeners(this.controller.documentEventListener.eventListeners);
+            this.controller.setCurrentNetwork((0, _networkCreationObject.getNetworkCreationObject)([], []));
+            this.controller.documentEventListener.addEventListeners(this.controller.documentEventListener.eventListeners);
             event.sender.send(_mainActionConsts.consts.NEW_FILE_CREATION);
         }
     }]);

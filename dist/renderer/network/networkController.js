@@ -34,6 +34,7 @@ var NetworkController = exports.NetworkController = function () {
         this.init();
         this.networkExporter = _networkExporter.NetworkExporter;
         this.networkImporter = _networkImporter.NetworkImporter;
+        this.rendererEventListener = new _rendererEventListener.RendererEventListener(this);
         this.eventInitializer = new _eventInitializers.EventInitializer(this);
         this.resetEventListeners();
     }
@@ -46,7 +47,6 @@ var NetworkController = exports.NetworkController = function () {
     }, {
         key: "resetEventListeners",
         value: function resetEventListeners() {
-            this.rendererEventListener = new _rendererEventListener.RendererEventListener(this);
             this.documentEventListener = new _documentEventListener.DocumentEventListener(this);
         }
     }, {

@@ -15,6 +15,7 @@ export class NetworkController {
         this.init()
         this.networkExporter = NetworkExporter;
         this.networkImporter = NetworkImporter;
+        this.rendererEventListener = new RendererEventListener(this);
         this.eventInitializer = new EventInitializer(this);
         this.resetEventListeners()
     }
@@ -28,7 +29,6 @@ export class NetworkController {
     }
 
     resetEventListeners() {
-        this.rendererEventListener = new RendererEventListener(this);
         this.documentEventListener = new DocumentEventListener(this);
     }
 
