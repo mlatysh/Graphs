@@ -55,8 +55,7 @@ export class DocumentEventListener {
     }
 
     onContext(params) {
-        this.parent.eventInitializer.initDeletion(this.parent.network.getSelection(),
-            this.callbacks, this.eventListeners)
+        this.parent.network.fit({animation: true})
     }
 
     onKeyUp(params) {
@@ -141,6 +140,7 @@ export class DocumentEventListener {
                                     }
                                 })
                         })
+                        this.parent.network.redraw()
                     })
                     .catch(console.error);
             }

@@ -61,7 +61,7 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
     }, {
         key: 'onContext',
         value: function onContext(params) {
-            this.parent.eventInitializer.initDeletion(this.parent.network.getSelection(), this.callbacks, this.eventListeners);
+            this.parent.network.fit({ animation: true });
         }
     }, {
         key: 'onKeyUp',
@@ -143,6 +143,7 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
                                 }
                             });
                         });
+                        _this.parent.network.redraw();
                     }).catch(console.error);
                 }
             }
