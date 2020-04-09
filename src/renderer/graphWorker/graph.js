@@ -45,7 +45,12 @@ export class Graph {
     }
 
     findIndexByLineAndColumn(line, column, matrix) {
-        const mat = matrix
+        const size = matrix.size()[0]
+        let rowIndex = undefined
+        let columnIndex = undefined
+        for (let i = 0; i < size; i++) {
+            matrix.get([])
+        }
 
     }
 

@@ -60,6 +60,16 @@ var Graph = exports.Graph = function () {
             };
         }
     }, {
+        key: 'findIndexByLineAndColumn',
+        value: function findIndexByLineAndColumn(line, column, matrix) {
+            var size = matrix.size()[0];
+            var rowIndex = undefined;
+            var columnIndex = undefined;
+            for (var i = 0; i < size; i++) {
+                matrix.get([]);
+            }
+        }
+    }, {
         key: '__builtMatrix',
         value: function __builtMatrix(network) {
             var _this2 = this;
