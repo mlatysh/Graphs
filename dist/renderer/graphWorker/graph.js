@@ -29,9 +29,7 @@ var Graph = exports.Graph = function () {
         Object.keys(network.body.edges).forEach(function (edge) {
             _this.edgesIds.push(edge);
         });
-        console.log(this.nodesIds, this.edgesIds);
         this.__builtMatrix(network);
-        console.log(this.matrix);
     }
 
     _createClass(Graph, [{
@@ -89,31 +87,26 @@ var Graph = exports.Graph = function () {
             });
             nodes.forEach(function (node) {
                 node.edges.forEach(function (edge) {
+                    var indexes = _this2.__findIndexByLineAndColumn(edge.from, edge.to, matrix);
+                    var value = matrix.get(indexes);
                     if (edge.arrowed) {
-                        console.log(edge);
-                        var indexes = _this2.__findIndexByLineAndColumn(edge.from, edge.to, matrix);
-                        console.log(indexes);
-                        var value = matrix.get(indexes);
                         matrix.set(indexes, value + 1);
                     } else {
-                        var _indexes = _this2.__findIndexByLineAndColumn(edge.from, edge.to, matrix);
-                        var _value = matrix.get(_indexes);
-                        matrix.set(_indexes, _value + 1);
-                        _indexes = [_indexes[1], _indexes[0]];
-                        matrix.set(_indexes, _value + 1);
+                        matrix.set(indexes, value + 1);
+                        indexes = [indexes[1], indexes[0]];
+                        value = matrix.get(indexes);
+                        matrix.set(indexes, value + 1);
                     }
                 });
             });
             this.matrix = matrix;
         }
+    }, {
+        key: 'getMatrix',
+        value: function getMatrix() {
+            return this.matrix;
+        }
     }]);
 
     return Graph;
 }();
-
-// {
-//     id: edge.id,
-//     from: edge.fromId,
-//     to: edge.toId,
-//     arrowed: edge.options.arrows.to.enabled
-// }

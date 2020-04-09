@@ -70,12 +70,13 @@ export class Graph {
         nodes.forEach(node => {
             node.edges.forEach(edge => {
                 let indexes = this.__findIndexByLineAndColumn(edge.from, edge.to, matrix)
-                const value = matrix.get(indexes)
+                let value = matrix.get(indexes)
                 if (edge.arrowed) {
                     matrix.set(indexes, value + 1)
                 } else {
                     matrix.set(indexes, value + 1)
                     indexes = [indexes[1], indexes[0]]
+                    value = matrix.get(indexes)
                     matrix.set(indexes, value + 1)
                 }
             })

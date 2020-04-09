@@ -7,16 +7,22 @@ const containerID = 'network';
 
 const NODES = [
     {id: 1, label: "Node 1"},
-    {id:2, label: "Node 2"}
+    {id: 2, label: "Node 2"},
+    {id: 3, label: "Node 3"}
 ];
 
 const EDGES = [
     {from: 1, to: 2},
+    {from: 2, to: 1},
 ];
 
 const network = getNetworkCreationObject(NODES, EDGES);
 const controller = new NetworkController(network);
 const informator = new InfoController(controller);
-const a = new Graph(controller.getNetwork())
+document.addEventListener('keyup', (event) => {
+    if (event.code === 'KeyB')
+        console.log(new Graph(controller.getNetwork()).getMatrix()._data)
+})
+
 
 
