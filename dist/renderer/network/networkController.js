@@ -65,6 +65,11 @@ var NetworkController = exports.NetworkController = function () {
             this.network = new _visNetwork.Network(networkCreationObject.container, networkCreationObject.data, _networkInitOptions.OPTIONS);
             this.resetEventListeners();
         }
+    }, {
+        key: "getNetwork",
+        value: function getNetwork() {
+            return this.network;
+        }
     }]);
 
     return NetworkController;

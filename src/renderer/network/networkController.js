@@ -48,4 +48,8 @@ export class NetworkController {
             networkCreationObject.data, OPTIONS);
         this.resetEventListeners()
     }
+
+    getNetwork(){
+        return this.network
+    }
 }
