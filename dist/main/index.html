@@ -3,26 +3,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <style>
-        #network {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-        }
-        #info {
-            font-size: 1.5vw;
-            font-family :"Courier New", Courier, monospace;
-            position: relative;
-            z-index: 2;
-            pointer-events: none;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css"/>
 </head>
 
 <body>
-<div id="info"></div>
+<div id="info-left"></div>
+<div id="info-right"></div>
 <div id="network"></div>
 <script>require('./../renderer/index.js')</script>
 </body>

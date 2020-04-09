@@ -136,7 +136,8 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
                         });
                         selection.edges.forEach(function (edgeId) {
                             _this.parent.network.body.data.edges.update({
-                                id: edgeId, color: {
+                                id: edgeId,
+                                color: {
                                     color: col.border,
                                     hover: col.hover.border,
                                     highlight: col.highlight.border

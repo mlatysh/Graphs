@@ -1,7 +1,8 @@
 export class InfoController {
     constructor(networkController) {
         this.networkController = networkController
-        this.DOMElement = document.getElementById('info')
+        this.leftDOMElement = document.getElementById('info-left')
+        this.rightDOMElement = document.getElementById('info-right')
         const upd = this.updateState.bind(this)
         document.addEventListener('keydown', upd)
         document.addEventListener('keyup', upd)
@@ -13,17 +14,23 @@ export class InfoController {
 
     updateState() {
         const network = this.networkController.getNetwork()
-        const selectedNodes =network.getSelectedNodes()
+        this.updateLeft(network)
+        this.updateRight(network)
+    }
+
+    updateLeft(network){
         const totalNodes = network.body.data.nodes.length
         const totalEdges = Object.keys(network.body.edges).length
-        let connectedEdges = NaN
+        this.leftDOMElement.innerText = `Edges amount: ${totalEdges}\nNodes amount: ${totalNodes}\n\n`
+    }
+
+    updateRight(network) {
+        const selectedNodes =network.getSelectedNodes()
         if (selectedNodes.length === 1) {
-            connectedEdges = network.getConnectedEdges(selectedNodes[0]).length
+            const degree = network.getConnectedEdges(selectedNodes[0]).length
+            this.rightDOMElement.innerText = `Selected vertex degree: ${degree}`
+        } else {
+            this.rightDOMElement.innerText = ''
         }
-        let rez = ""
-        rez+= `Edges amount: ${totalEdges}\nNodes amount: ${totalNodes}\n\n`
-        if(!isNaN(connectedEdges))
-            rez+=`Selected vertex degree: ${connectedEdges}`
-        this.DOMElement.innerText = rez
     }
 }

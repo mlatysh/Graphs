@@ -13,7 +13,8 @@ var InfoController = exports.InfoController = function () {
         _classCallCheck(this, InfoController);
 
         this.networkController = networkController;
-        this.DOMElement = document.getElementById('info');
+        this.leftDOMElement = document.getElementById('info-left');
+        this.rightDOMElement = document.getElementById('info-right');
         var upd = this.updateState.bind(this);
         document.addEventListener('keydown', upd);
         document.addEventListener('keyup', upd);
@@ -27,17 +28,26 @@ var InfoController = exports.InfoController = function () {
         key: 'updateState',
         value: function updateState() {
             var network = this.networkController.getNetwork();
-            var selectedNodes = network.getSelectedNodes();
+            this.updateLeft(network);
+            this.updateRight(network);
+        }
+    }, {
+        key: 'updateLeft',
+        value: function updateLeft(network) {
             var totalNodes = network.body.data.nodes.length;
             var totalEdges = Object.keys(network.body.edges).length;
-            var connectedEdges = NaN;
+            this.leftDOMElement.innerText = 'Edges amount: ' + totalEdges + '\nNodes amount: ' + totalNodes + '\n\n';
+        }
+    }, {
+        key: 'updateRight',
+        value: function updateRight(network) {
+            var selectedNodes = network.getSelectedNodes();
             if (selectedNodes.length === 1) {
-                connectedEdges = network.getConnectedEdges(selectedNodes[0]).length;
+                var degree = network.getConnectedEdges(selectedNodes[0]).length;
+                this.rightDOMElement.innerText = 'Selected vertex degree: ' + degree;
+            } else {
+                this.rightDOMElement.innerText = '';
             }
-            var rez = "";
-            rez += 'Edges amount: ' + totalEdges + '\nNodes amount: ' + totalNodes + '\n\n';
-            if (!isNaN(connectedEdges)) rez += 'Selected vertex degree: ' + connectedEdges;
-            this.DOMElement.innerText = rez;
         }
     }]);
 
