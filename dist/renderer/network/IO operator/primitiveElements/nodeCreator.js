@@ -19,7 +19,11 @@ var NodeCreator = exports.NodeCreator = function () {
             return {
                 type: 'node',
                 id: nodeObject.id,
-                label: nodeObject.options.label
+                label: nodeObject.options.label,
+                color: {
+                    background: nodeObject.options.color.background,
+                    border: nodeObject.options.color.border
+                }
             };
         }
     }, {
@@ -27,7 +31,11 @@ var NodeCreator = exports.NodeCreator = function () {
         value: function getReadyForUseNode(serializedNode) {
             return {
                 id: serializedNode.id,
-                label: serializedNode.label
+                label: serializedNode.label,
+                color: {
+                    background: serializedNode.color.background,
+                    border: serializedNode.color.border
+                }
             };
         }
     }]);

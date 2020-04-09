@@ -46,7 +46,7 @@ var RendererEventListener = exports.RendererEventListener = function () {
     }, {
         key: "onCreateNewActiveNetworkHandler",
         value: function onCreateNewActiveNetworkHandler(event) {
-            this.controller.destroyCurrentNetwork();
+            this.controller.__destroyCurrentNetwork();
             event.sender.send(_mainActionConsts.consts.NEW_FILE_CREATION);
         }
     }]);

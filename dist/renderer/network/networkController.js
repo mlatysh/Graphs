@@ -21,9 +21,7 @@ var _networkInitOptions = require("./networkInitOptions");
 
 var _documentEventListener = require("./eventListeners/documentEventListener");
 
-var _interactionEventListener = require("./eventListeners/interactionEventListener");
-
-var _eventInitializers = require("./eventInitializers");
+var _eventInitializers = require("./eventListeners/eventInitializers");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 

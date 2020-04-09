@@ -5,8 +5,7 @@ import {NetworkImporter} from "./IO operator/networkImporter";
 import {ipcRenderer as ipc} from 'electron';
 import {OPTIONS} from "./networkInitOptions";
 import {DocumentEventListener} from "./eventListeners/documentEventListener";
-import {InteractionEventListener} from "./eventListeners/interactionEventListener";
-import {EventInitializer} from "./eventInitializers";
+import {EventInitializer} from "./eventListeners/eventInitializers";
 
 
 export class NetworkController {

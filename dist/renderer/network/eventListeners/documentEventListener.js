@@ -11,7 +11,7 @@ var _visNetwork = require('../../../../libs/vis-network');
 
 var vis = _interopRequireWildcard(_visNetwork);
 
-var _colors = require('../colors');
+var _colors = require('../consts/colors');
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -22,18 +22,37 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
         _classCallCheck(this, DocumentEventListener);
 
         this.parent = parent;
-        this.isArrowing = false;
-        this.addEventListeners();
+        this.eventListeners = {
+            onDoubleClick: this.onDoubleClick.bind(this),
+            onContext: this.onContext.bind(this),
+            onKeyUp: this.onKeyUp.bind(this),
+            onKeyDown: this.onKeyDown.bind(this),
+            onClick: this.onClick.bind(this)
+        };
+        this.callbacks = {
+            setter: this.addEventListeners,
+            remover: this.removeEventListeners
+        };
+        this.addEventListeners(this.eventListeners);
     }
 
     _createClass(DocumentEventListener, [{
+        key: 'removeEventListeners',
+        value: function removeEventListeners(eventListeners) {
+            document.removeEventListener('dblclick', eventListeners.onDoubleClick);
+            document.removeEventListener('contextmenu', eventListeners.onContext);
+            document.removeEventListener('keyup', eventListeners.onKeyUp);
+            document.removeEventListener('keydown', eventListeners.onKeyDown);
+            document.removeEventListener('click', eventListeners.onClick);
+        }
+    }, {
         key: 'addEventListeners',
-        value: function addEventListeners() {
-            document.addEventListener('dblclick', this.onDoubleClick.bind(this));
-            document.addEventListener('contextmenu', this.onContext.bind(this));
-            document.addEventListener('keyup', this.onKeyUp.bind(this));
-            document.addEventListener('keydown', this.onKeyDown.bind(this));
-            document.addEventListener('click', this.onClick.bind(this));
+        value: function addEventListeners(eventListeners) {
+            document.addEventListener('dblclick', eventListeners.onDoubleClick);
+            document.addEventListener('contextmenu', eventListeners.onContext);
+            document.addEventListener('keyup', eventListeners.onKeyUp);
+            document.addEventListener('keydown', eventListeners.onKeyDown);
+            document.addEventListener('click', eventListeners.onClick);
         }
     }, {
         key: 'onDoubleClick',
@@ -42,12 +61,13 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
             var coordinates = this.parent.network.DOMtoCanvas({ x: params.x, y: params.y });
             var nodes = this.parent.network.getNodeAt(this.parent.network.canvasToDOM(coordinates));
             var edges = this.parent.network.getEdgeAt(this.parent.network.canvasToDOM(coordinates));
-            if (!nodes && !edges) this.parent.eventInitializer.initAddNode(coordinates.x, coordinates.y, false);else if (nodes) this.parent.eventInitializer.initEditNode(nodes);
+
+            if (!nodes && !edges) this.parent.eventInitializer.initAddNode(coordinates.x, coordinates.y, false, this.callbacks, this.eventListeners);else if (nodes) this.parent.eventInitializer.initEditNode(nodes, this.callbacks, this.eventListeners);
         }
     }, {
         key: 'onContext',
         value: function onContext(params) {
-            this.parent.eventInitializer.initDeletion(this.parent.network.getSelection());
+            this.parent.eventInitializer.initDeletion(this.parent.network.getSelection(), this.callbacks, this.eventListeners);
         }
     }, {
         key: 'onKeyUp',
@@ -88,7 +108,7 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
             }
 
             if (params.key === 'Backspace' && !params.metaKey) {
-                this.parent.eventInitializer.initDeletion(this.parent.network.getSelection());
+                this.parent.eventInitializer.initDeletion(this.parent.network.getSelection(), this.callbacks, this.eventListeners);
             }
 
             if (params.shiftKey && !params.metaKey) {
@@ -96,35 +116,44 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
             }
 
             if (params.code === 'KeyC' && !params.metaKey) {
-                var prompt = require('electron-prompt');
-                prompt({
-                    title: 'Prompt example',
-                    label: 'URL:',
-                    selectOptions: {
-                        yellow: 'yellow',
-                        blue: 'blue',
-                        green: 'green',
-                        orange: 'orange',
-                        red: 'red'
-                    },
-                    // alwaysOnTop: true,
-                    type: 'select'
-                }).then(function (r) {
-                    var selection = _this.parent.network.getSelection();
-                    var color = r.toUpperCase();
-                    var col = _colors.COLORS[color];
-                    selection.nodes.forEach(function (nodeId) {
-                        _this.parent.network.body.data.nodes.update({ id: nodeId, color: col, chosen: false });
-                    });
-                }).catch(console.error);
+                var selection = this.parent.network.getSelection();
+                console.log(selection);
+                if (selection.nodes.length || selection.edges.length) {
+                    var prompt = require('electron-prompt');
+                    prompt({
+                        title: 'Choose color',
+                        label: 'Color: ',
+                        selectOptions: {
+                            yellow: 'yellow',
+                            blue: 'blue',
+                            green: 'green',
+                            orange: 'orange',
+                            red: 'red'
+                        },
+                        alwaysOnTop: true,
+                        type: 'select'
+                    }).then(function (r) {
+                        if (!r) return;
+                        var selection = _this.parent.network.getSelection();
+                        var color = r.toUpperCase();
+                        var col = _colors.COLORS[color];
+                        selection.nodes.forEach(function (nodeId) {
+                            _this.parent.network.body.data.nodes.update({ id: nodeId, color: col });
+                        });
+                        selection.edges.forEach(function (edgeId) {
+                            _this.parent.network.body.data.edges.update({ id: edgeId, color: col.background });
+                        });
+                    }).catch(console.error);
+                }
             }
         }
     }, {
         key: 'onClick',
         value: function onClick(params) {
+            console.log(this.parent.network.body.edges);
             this.parent.network.releaseNode();
             var coordinates = this.parent.network.DOMtoCanvas({ x: params.x, y: params.y });
-            if (params.shiftKey && !this.parent.network.getNodeAt({ x: params.x, y: params.y })) this.parent.eventInitializer.initAddNode(coordinates.x, coordinates.y, true);
+            if (params.shiftKey && !this.parent.network.getNodeAt({ x: params.x, y: params.y })) this.parent.eventInitializer.initAddNode(coordinates.x, coordinates.y, true, this.callbacks, this.eventListeners);
         }
     }]);
 
