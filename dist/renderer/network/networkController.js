@@ -70,6 +70,11 @@ var NetworkController = exports.NetworkController = function () {
         value: function getNetwork() {
             return this.network;
         }
+    }, {
+        key: "getSerializedNetwork",
+        value: function getSerializedNetwork() {
+            return this.networkExporter.getSerializedNetwork(this.network);
+        }
     }]);
 
     return NetworkController;

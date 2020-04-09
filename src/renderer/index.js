@@ -1,6 +1,7 @@
 import {NetworkController} from "./network/networkController";
 import {getNetworkCreationObject} from "./network/networkCreationObject";
 import {InfoController} from "./info/infoController";
+import {Graph} from "./graphWorker/graph";
 
 const containerID = 'network';
 
@@ -16,5 +17,6 @@ const EDGES = [
 const network = getNetworkCreationObject(NODES, EDGES);
 const controller = new NetworkController(network);
 const informator = new InfoController(controller);
+const a = new Graph(controller.getNetwork())
 
 

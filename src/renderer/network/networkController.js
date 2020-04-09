@@ -49,7 +49,11 @@ export class NetworkController {
         this.resetEventListeners()
     }
 
-    getNetwork(){
+    getNetwork() {
         return this.network
+    }
+
+    getSerializedNetwork() {
+        return this.networkExporter.getSerializedNetwork(this.network)
     }
 }
