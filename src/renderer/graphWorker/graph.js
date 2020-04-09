@@ -11,7 +11,6 @@ export class Graph {
         Object.keys(network.body.edges).forEach((edge) => {
             this.edgesIds.push(edge)
         })
-        console.log(this.nodesIds, this.edgesIds)
         this.__builtMatrix(network)
     }
 
@@ -40,22 +39,25 @@ export class Graph {
         })
         return {
             node: exactNode,
-            fromIds: doneEdges
+            edges: doneEdges
         }
     }
 
-    findIndexByLineAndColumn(line, column, matrix) {
+    __findIndexByLineAndColumn(line, column, matrix) {
         const size = matrix.size()[0]
-        let rowIndex = undefined
+        let lineIndex = undefined
         let columnIndex = undefined
-        for (let i = 0; i < size; i++) {
-            matrix.get([])
+        for (let i = 1; i < size; i++) {
+            if (matrix.get([i, 0]) === line)
+                lineIndex = i
+            if (matrix.get([0, i]) === column)
+                columnIndex = i
         }
-
+        return [lineIndex, columnIndex]
     }
 
     __builtMatrix(network) {
-        const temp = []
+        const nodes = []
         const size = this.nodesIds.length + 1
         const matrix = math.zeros(size, size)
         for (let i = 1; i < size; i++) {
@@ -63,12 +65,25 @@ export class Graph {
             matrix.set([i, 0], this.nodesIds[i - 1])
         }
         this.nodesIds.forEach(nodeId => {
-            temp.push(this.__getNodeById(nodeId, network))
+            nodes.push(this.__getNodeById(nodeId, network))
         })
-        temp.forEach(node => {
-            const id = node.node.id
-            const fromIds = node.fromIds
+        nodes.forEach(node => {
+            node.edges.forEach(edge => {
+                let indexes = this.__findIndexByLineAndColumn(edge.from, edge.to, matrix)
+                const value = matrix.get(indexes)
+                if (edge.arrowed) {
+                    matrix.set(indexes, value + 1)
+                } else {
+                    matrix.set(indexes, value + 1)
+                    indexes = [indexes[1], indexes[0]]
+                    matrix.set(indexes, value + 1)
+                }
+            })
         })
-        console.log(matrix)
+        this.matrix = matrix
+    }
+
+    getMatrix() {
+        return this.matrix
     }
 }
