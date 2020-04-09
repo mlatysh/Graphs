@@ -6,7 +6,8 @@ export class EdgeCreator {
             id: edgeObject.id,
             from: edgeObject.from.id,
             to: edgeObject.to.id,
-            oriented: !!edgeObject.options.arrows.to.enabled
+            oriented: !!edgeObject.options.arrows.to.enabled,
+            color: edgeObject.options.color.color
         }
     }
 
@@ -20,7 +21,8 @@ export class EdgeCreator {
             id: serializedEdge.id,
             from: serializedEdge.from,
             to: serializedEdge.to,
-            arrows
+            arrows,
+            color: serializedEdge.color
         }
     }
 }

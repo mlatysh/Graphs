@@ -5,15 +5,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 var COLORS = exports.COLORS = {
     RED: {
-        border: '#482C3D',
-        background: '#FFE1A8',
+        background: '#482C3D',
+        border: '#FFE1A8',
         highlight: {
-            border: 'rgba(72,44,61,0.5)',
-            background: 'rgba(255,225,168,0.5)'
+            background: 'rgba(72,44,61,0.5)',
+            border: 'rgba(255,225,168,0.5)'
         },
         hover: {
-            border: 'rgba(72,44,61,0.8)',
-            background: 'rgba(255,225,168,0.8)'
+            background: 'rgba(72,44,61,0.8)',
+            border: 'rgba(255,225,168,0.8)'
         }
     },
     BLUE: {
