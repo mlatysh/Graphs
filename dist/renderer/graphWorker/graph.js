@@ -106,6 +106,68 @@ var Graph = exports.Graph = function () {
         value: function getMatrix() {
             return this.matrix;
         }
+    }, {
+        key: 'getValuesMatrix',
+        value: function getValuesMatrix() {
+            var matrix = this.matrix.clone().toArray();
+            matrix.shift();
+            for (var i = 0; i < matrix.length; i++) {
+                matrix[i].splice(0, 1);
+            }
+            return matrix;
+        }
+    }], [{
+        key: 'setOnesToDiagonal',
+        value: function setOnesToDiagonal(array) {
+            var size = array.length;
+            var arr = array.slice();
+            for (var i = 0; i < size; i++) {
+                arr[i][i] = 1;
+            }
+            return arr;
+        }
+    }, {
+        key: 'checkConnections',
+        value: function checkConnections(matrix) {
+            var size = matrix.length;
+            var rez = Graph.matrixPow(size, matrix);
+            var connected = true;
+            rez.forEach(function (line) {
+                line.forEach(function (element) {
+                    if (element <= 0) {
+                        connected = false;
+                        return connected;
+                    }
+                });
+            });
+            return connected;
+        }
+    }, {
+        key: 'multiplyMatrix',
+        value: function multiplyMatrix(matrixA, matrixB) {
+            var rowsA = matrixA.length,
+                colsA = matrixA[0].length,
+                rowsB = matrixB.length,
+                colsB = matrixB[0].length,
+                rezMatrix = [];
+            if (colsA !== rowsB) return false;
+            for (var i = 0; i < rowsA; i++) {
+                rezMatrix[i] = [];
+            }for (var k = 0; k < colsB; k++) {
+                for (var _i = 0; _i < rowsA; _i++) {
+                    var t = 0;
+                    for (var j = 0; j < rowsB; j++) {
+                        t += matrixA[_i][j] * matrixB[j][k];
+                    }rezMatrix[_i][k] = t;
+                }
+            }
+            return rezMatrix;
+        }
+    }, {
+        key: 'matrixPow',
+        value: function matrixPow(pow, matrix) {
+            if (pow === 1) return matrix;else return this.multiplyMatrix(matrix, Graph.matrixPow(pow - 1, matrix));
+        }
     }]);
 
     return Graph;

@@ -87,4 +87,61 @@ export class Graph {
     getMatrix() {
         return this.matrix
     }
+
+    static setOnesToDiagonal(array) {
+        const size = array.length
+        const arr = array.slice()
+        for (let i = 0; i < size; i++) {
+            arr[i][i] = 1
+        }
+        return arr
+    }
+
+    getValuesMatrix() {
+        const matrix = this.matrix.clone().toArray()
+        matrix.shift()
+        for (let i = 0; i < matrix.length; i++) {
+            matrix[i].splice(0, 1)
+        }
+        return matrix
+    }
+
+    static checkConnections(matrix) {
+        const size = matrix.length
+        const rez = Graph.matrixPow(size, matrix)
+        let connected = true
+        rez.forEach(line => {
+            line.forEach(element => {
+                if (element <= 0) {
+                    connected = false
+                    return connected
+                }
+
+            })
+        })
+        return connected
+    }
+
+    static multiplyMatrix(matrixA, matrixB) {
+        const rowsA = matrixA.length, colsA = matrixA[0].length,
+            rowsB = matrixB.length, colsB = matrixB[0].length,
+            rezMatrix = [];
+        if (colsA !== rowsB) return false;
+        for (let i = 0; i < rowsA; i++) rezMatrix[i] = [];
+        for (let k = 0; k < colsB; k++) {
+            for (let i = 0; i < rowsA; i++) {
+                let t = 0;
+                for (let j = 0; j < rowsB; j++) t += matrixA[i][j] * matrixB[j][k];
+                rezMatrix[i][k] = t;
+            }
+        }
+        return rezMatrix;
+    }
+
+    static matrixPow(pow, matrix) {
+        if (pow === 1) return matrix;
+        else return this.multiplyMatrix(matrix, Graph.matrixPow(pow - 1, matrix));
+    }
+
+
 }

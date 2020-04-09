@@ -21,7 +21,7 @@ const controller = new NetworkController(network);
 const informator = new InfoController(controller);
 document.addEventListener('keyup', (event) => {
     if (event.code === 'KeyB')
-        console.log(new Graph(controller.getNetwork()).getMatrix()._data)
+        console.log(Graph.checkConnections(Graph.setOnesToDiagonal(new Graph(controller.getNetwork()).getValuesMatrix())))
 })
 
 
