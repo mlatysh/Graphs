@@ -3,6 +3,10 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.OPTIONS = undefined;
+
+var _colors = require('./consts/colors');
+
 var OPTIONS = exports.OPTIONS = {
     autoResize: true,
     clickToUse: false,
@@ -19,7 +23,21 @@ var OPTIONS = exports.OPTIONS = {
         enabled: false
     },
     edges: {
-        arrows: 'to'
+        arrows: 'to',
+        color: {
+            inherit: false,
+            color: _colors.COLORS.BLUE.border,
+            hover: _colors.COLORS.BLUE.hover.border,
+            highlight: _colors.COLORS.BLUE.highlight.border
+        }
+    },
+    nodes: {
+        color: {
+            background: _colors.COLORS.BLUE.background,
+            border: _colors.COLORS.BLUE.border,
+            hover: _colors.COLORS.BLUE.hover,
+            highlight: _colors.COLORS.BLUE.highlight
+        }
     },
     physics: {
         enabled: true,

@@ -132,7 +132,14 @@ export class DocumentEventListener {
                             this.parent.network.body.data.nodes.update({id: nodeId, color: col})
                         })
                         selection.edges.forEach(edgeId => {
-                            this.parent.network.body.data.edges.update({id: edgeId, color: col.background})
+                            this.parent.network.body.data.edges.update(
+                                {
+                                    id: edgeId, color: {
+                                        color: col.border,
+                                        hover: col.hover.border,
+                                        highlight: col.highlight.border
+                                    }
+                                })
                         })
                     })
                     .catch(console.error);

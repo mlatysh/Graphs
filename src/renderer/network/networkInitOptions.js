@@ -1,3 +1,5 @@
+import {COLORS} from "./consts/colors";
+
 export const OPTIONS = {
     autoResize: true,
     clickToUse: false,
@@ -14,7 +16,21 @@ export const OPTIONS = {
         enabled: false
     },
     edges: {
-        arrows: 'to'
+        arrows: 'to',
+        color: {
+            inherit: false,
+            color: COLORS.BLUE.border,
+            hover: COLORS.BLUE.hover.border,
+            highlight: COLORS.BLUE.highlight.border
+        }
+    },
+    nodes: {
+        color: {
+            background: COLORS.BLUE.background,
+            border: COLORS.BLUE.border,
+            hover: COLORS.BLUE.hover,
+            highlight: COLORS.BLUE.highlight
+        }
     },
     physics: {
         enabled: true,
