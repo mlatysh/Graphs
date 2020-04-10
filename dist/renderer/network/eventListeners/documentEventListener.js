@@ -19,7 +19,7 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
         this.eventListeners = {
             onDoubleClick: this.onDoubleClick.bind(this),
             onContext: this.onContext.bind(this),
-            onKeyUp: this.onKeyUp.bind(this),
+            // onKeyUp: this.onKeyUp.bind(this),
             onKeyDown: this.onKeyDown.bind(this),
             onClick: this.onClick.bind(this)
         };
@@ -35,7 +35,7 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
         value: function removeEventListeners(eventListeners) {
             document.removeEventListener('dblclick', eventListeners.onDoubleClick);
             document.removeEventListener('contextmenu', eventListeners.onContext);
-            document.removeEventListener('keyup', eventListeners.onKeyUp);
+            // document.removeEventListener('keyup', eventListeners.onKeyUp);
             document.removeEventListener('keydown', eventListeners.onKeyDown);
             document.removeEventListener('click', eventListeners.onClick);
         }
@@ -44,7 +44,7 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
         value: function addEventListeners(eventListeners) {
             document.addEventListener('dblclick', eventListeners.onDoubleClick);
             document.addEventListener('contextmenu', eventListeners.onContext);
-            document.addEventListener('keyup', eventListeners.onKeyUp);
+            // document.addEventListener('keyup', eventListeners.onKeyUp);
             document.addEventListener('keydown', eventListeners.onKeyDown);
             document.addEventListener('click', eventListeners.onClick);
         }
@@ -63,13 +63,6 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
         value: function onContext(params) {
             var selectedNodes = this.parent.network.getSelectedNodes();
             if (selectedNodes.length === 1) this.parent.network.focus(selectedNodes[0], { animation: true });else this.parent.network.fit({ animation: true });
-        }
-    }, {
-        key: 'onKeyUp',
-        value: function onKeyUp(params) {
-            if (params.shiftKey && !params.metaKey) {
-                this.parent.network.disableEditMode();
-            }
         }
     }, {
         key: 'onKeyDown',
@@ -107,7 +100,7 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
             }
 
             if (params.shiftKey && !params.metaKey) {
-                this.parent.network.addEdgeMode();
+                if (this.parent.network.manipulation.editMode) this.parent.network.disableEditMode();else this.parent.network.addEdgeMode();
             }
 
             if (params.code === 'KeyC' && !params.metaKey) {

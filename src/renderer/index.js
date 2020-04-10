@@ -1,7 +1,6 @@
 import {NetworkController} from "./network/networkController";
 import {getNetworkCreationObject} from "./network/networkCreationObject";
 import {InfoController} from "./info/infoController";
-import {Graph} from "./graphWorker/graph";
 
 const containerID = 'network';
 
@@ -19,10 +18,6 @@ const EDGES = [
 const network = getNetworkCreationObject(NODES, EDGES);
 const controller = new NetworkController(network);
 const informator = new InfoController(controller);
-document.addEventListener('keyup', (event) => {
-    if (event.code === 'KeyB')
-        console.log(Graph.checkConnections(Graph.setOnesToDiagonal(new Graph(controller.getNetwork()).getValuesMatrix())))
-})
 
 
 

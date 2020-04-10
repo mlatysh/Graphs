@@ -17,6 +17,3 @@ var EDGES = [{ from: 1, to: 2 }, { from: 2, to: 1 }];
 var network = (0, _networkCreationObject.getNetworkCreationObject)(NODES, EDGES);
 var controller = new _networkController.NetworkController(network);
 var informator = new _infoController.InfoController(controller);
-document.addEventListener('keyup', function (event) {
-    if (event.code === 'KeyB') console.log(_graph.Graph.checkConnections(_graph.Graph.setOnesToDiagonal(new _graph.Graph(controller.getNetwork()).getValuesMatrix())));
-});

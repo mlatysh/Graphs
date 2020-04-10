@@ -88,6 +88,14 @@ export class Graph {
         return this.matrix
     }
 
+    isConnected() {
+        return Graph.checkConnections(
+            Graph.setOnesToDiagonal(
+                this.getValuesMatrix()
+            )
+        )
+    }
+
     static setOnesToDiagonal(array) {
         const size = array.length
         const arr = array.slice()
@@ -116,7 +124,6 @@ export class Graph {
                     connected = false
                     return connected
                 }
-
             })
         })
         return connected

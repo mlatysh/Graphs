@@ -12,6 +12,7 @@
     z-index: 2;
     pointer-events: none;
     float: left;
+    text-align: left;
 }
 #info-right {
     font-size: 2vw;
@@ -20,4 +21,5 @@
     z-index: 2;
     pointer-events: none;
     float: right;
+    text-align: right;
 }

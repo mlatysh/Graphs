@@ -1,3 +1,5 @@
+import {Graph} from "../graphWorker/graph";
+
 export class InfoController {
     constructor(networkController) {
         this.networkController = networkController
@@ -18,19 +20,22 @@ export class InfoController {
         this.updateRight(network)
     }
 
-    updateLeft(network){
+    updateLeft(network) {
         const totalNodes = network.body.data.nodes.length
         const totalEdges = Object.keys(network.body.edges).length
-        this.leftDOMElement.innerText = `Edges amount: ${totalEdges}\nNodes amount: ${totalNodes}\n\n`
+        const connected = new Graph(this.networkController.getNetwork()).isConnected()
+        this.leftDOMElement.innerText = `Nodes amount: ${totalNodes}\nEdges amount: ${totalEdges}\n\n`
+            + `Connected: ${connected}`
     }
 
     updateRight(network) {
-        const selectedNodes =network.getSelectedNodes()
+        const selectedNodes = network.getSelectedNodes()
+        const editing = network.manipulation.editMode
+        let rez = `Edit mode: ${editing}\n\n`
         if (selectedNodes.length === 1) {
             const degree = network.getConnectedEdges(selectedNodes[0]).length
-            this.rightDOMElement.innerText = `Selected vertex degree: ${degree}`
-        } else {
-            this.rightDOMElement.innerText = ''
+            rez += `Selected vertex degree: ${degree}`
         }
+        this.rightDOMElement.innerText = rez
     }
 }
