@@ -19,9 +19,7 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
         this.eventListeners = {
             onDoubleClick: this.onDoubleClick.bind(this),
             onContext: this.onContext.bind(this),
-            // onKeyUp: this.onKeyUp.bind(this),
-            onKeyDown: this.onKeyDown.bind(this),
-            onClick: this.onClick.bind(this)
+            onKeyDown: this.onKeyDown.bind(this)
         };
         this.callbacks = {
             setter: this.addEventListeners,
@@ -36,7 +34,6 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
             document.removeEventListener('dblclick', eventListeners.onDoubleClick);
             document.removeEventListener('contextmenu', eventListeners.onContext);
             document.removeEventListener('keydown', eventListeners.onKeyDown);
-            document.removeEventListener('click', eventListeners.onClick);
         }
     }, {
         key: 'addEventListeners',
@@ -44,7 +41,6 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
             document.addEventListener('dblclick', eventListeners.onDoubleClick);
             document.addEventListener('contextmenu', eventListeners.onContext);
             document.addEventListener('keydown', eventListeners.onKeyDown);
-            document.addEventListener('click', eventListeners.onClick);
         }
     }, {
         key: 'onDoubleClick',
@@ -71,11 +67,12 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
                 var selected = this.parent.network.getSelectedEdges();
                 if (selected.length) {
                     selected.forEach(function (edge) {
-                        var fullEdge = _this.parent.network.body.data.edges.get(edge);
-                        _this.parent.network.body.data.edges.update({
+                        var edgeObject = _this.parent.network.body.edges[edge];
+                        if (edgeObject.options.arrows.to.enabled) _this.parent.network.body.data.edges.update({
                             id: edge,
-                            from: fullEdge.to,
-                            to: fullEdge.from
+                            from: edgeObject.toId,
+                            to: edgeObject.fromId,
+                            arrows: edgeObject.options.arrows
                         });
                     });
                 }
@@ -139,13 +136,6 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
                     }).catch(console.error);
                 }
             }
-        }
-    }, {
-        key: 'onClick',
-        value: function onClick(params) {
-            this.parent.network.releaseNode();
-            var coordinates = this.parent.network.DOMtoCanvas({ x: params.x, y: params.y });
-            if (params.shiftKey && !this.parent.network.getNodeAt({ x: params.x, y: params.y })) this.parent.eventInitializer.initAddNode(coordinates.x, coordinates.y, true, this.callbacks, this.eventListeners);
         }
     }]);
 

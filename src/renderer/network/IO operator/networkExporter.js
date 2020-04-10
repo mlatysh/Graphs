@@ -8,7 +8,7 @@ export class NetworkExporter {
         const edges = network.body.edges;
         for (const nodeKey in nodes) {
            if (nodes.hasOwnProperty(nodeKey)) {
-               serializedNetwork.push(NodeCreator.getSerializedNode(nodes[nodeKey]))
+             serializedNetwork.push(NodeCreator.getSerializedNode(nodes[nodeKey]))
            }
         }
         for (const edgeKey in edges) {

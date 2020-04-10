@@ -37,15 +37,18 @@ var NetworkController = exports.NetworkController = function () {
         this.networkImporter = _networkImporter.NetworkImporter;
         this.rendererEventListener = new _rendererEventListener.RendererEventListener(this);
         this.eventInitializer = new _eventInitializers.EventInitializer(this);
-        this.resetEventListeners();
+        this.documentEventListener = new _documentEventListener.DocumentEventListener(this);
     }
 
     _createClass(NetworkController, [{
-        key: "addInfoCallback",
-        value: function addInfoCallback(callback) {
+        key: "setInfoCallback",
+        value: function setInfoCallback(callback) {
             this.infoCallback = callback;
+        }
+    }, {
+        key: "applyInfoCallback",
+        value: function applyInfoCallback() {
             var callbacks = this.network._callbacks;
-
             for (var callbacksArray in callbacks) {
                 if (callbacks.hasOwnProperty(callbacksArray)) callbacks[callbacksArray].push(this.infoCallback);
             }
@@ -55,11 +58,6 @@ var NetworkController = exports.NetworkController = function () {
         key: "init",
         value: function init() {
             this.networkCreationObject ? this.network = new _visNetwork.Network(this.networkCreationObject.container, this.networkCreationObject.data, _networkInitOptions.OPTIONS) : this.network = undefined;
-        }
-    }, {
-        key: "resetEventListeners",
-        value: function resetEventListeners() {
-            this.documentEventListener = new _documentEventListener.DocumentEventListener(this);
         }
     }, {
         key: "__destroyCurrentNetwork",
@@ -73,10 +71,10 @@ var NetworkController = exports.NetworkController = function () {
     }, {
         key: "setCurrentNetwork",
         value: function setCurrentNetwork(networkCreationObject) {
+            console.log('new network set');
             this.__destroyCurrentNetwork();
             this.network = new _visNetwork.Network(networkCreationObject.container, networkCreationObject.data, _networkInitOptions.OPTIONS);
-            this.resetEventListeners();
-            this.infoCallback();
+            this.applyInfoCallback();
         }
     }, {
         key: "getNetwork",

@@ -13,14 +13,19 @@ export class InfoController {
     }
 
     updateState() {
-        console.log('updating')
-        const network = this.networkController.getNetwork()
-        this.updateLeft(network)
-        this.updateRight(network)
+        this.updateLeft(this.networkController.getNetwork())
+        this.updateRight(this.networkController.getNetwork())
     }
 
     updateLeft(network) {
-        const totalNodes = network.body.data.nodes.length
+        const nodes = network.body.data.nodes
+        let totalNodes = 0
+        nodes.forEach(node => {
+            if (typeof node.id !== 'string')
+                totalNodes++
+            if (typeof node.id === 'string' && !node.id.startsWith('edgeId:'))
+                totalNodes++
+        })
         const totalEdges = Object.keys(network.body.edges).length
         const connected = new Graph(this.networkController.getNetwork()).isConnected()
         this.leftDOMElement.innerText = `Nodes amount: ${totalNodes}\nEdges amount: ${totalEdges}\n\n`

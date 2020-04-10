@@ -15,5 +15,5 @@ var EDGES = [{ from: 1, to: 2 }, { from: 2, to: 1 }];
 var network = (0, _networkCreationObject.getNetworkCreationObject)(NODES, EDGES);
 var networkController = new _networkController.NetworkController(network);
 var infoController = new _infoController.InfoController(networkController);
-networkController.addInfoCallback(infoController.getUpdateCallback());
-console.log(network);
+networkController.setInfoCallback(infoController.getUpdateCallback());
+networkController.applyInfoCallback();

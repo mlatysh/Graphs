@@ -6,9 +6,7 @@ export class DocumentEventListener {
         this.eventListeners = {
             onDoubleClick: this.onDoubleClick.bind(this),
             onContext: this.onContext.bind(this),
-            // onKeyUp: this.onKeyUp.bind(this),
             onKeyDown: this.onKeyDown.bind(this),
-            onClick: this.onClick.bind(this)
         }
         this.callbacks = {
             setter: this.addEventListeners,
@@ -21,14 +19,12 @@ export class DocumentEventListener {
         document.removeEventListener('dblclick', eventListeners.onDoubleClick)
         document.removeEventListener('contextmenu', eventListeners.onContext)
         document.removeEventListener('keydown', eventListeners.onKeyDown);
-        document.removeEventListener('click', eventListeners.onClick);
     }
 
     addEventListeners(eventListeners) {
         document.addEventListener('dblclick', eventListeners.onDoubleClick)
         document.addEventListener('contextmenu', eventListeners.onContext)
         document.addEventListener('keydown', eventListeners.onKeyDown);
-        document.addEventListener('click', eventListeners.onClick);
     }
 
     onDoubleClick(params) {
@@ -62,12 +58,14 @@ export class DocumentEventListener {
             const selected = this.parent.network.getSelectedEdges()
             if (selected.length) {
                 selected.forEach((edge) => {
-                    const fullEdge = this.parent.network.body.data.edges.get(edge)
-                    this.parent.network.body.data.edges.update({
-                        id: edge,
-                        from: fullEdge.to,
-                        to: fullEdge.from
-                    })
+                    const edgeObject = this.parent.network.body.edges[edge]
+                    if (edgeObject.options.arrows.to.enabled)
+                        this.parent.network.body.data.edges.update({
+                            id: edge,
+                            from: edgeObject.toId,
+                            to: edgeObject.fromId,
+                            arrows: edgeObject.options.arrows
+                        })
                 })
             }
             this.parent.network.redraw()
@@ -77,12 +75,7 @@ export class DocumentEventListener {
             const selected = this.parent.network.getSelectedEdges()
             if (selected.length) {
                 selected.forEach((edge) => {
-                    let to = this.parent
-                        .network
-                        .body
-                        .edges[edge]
-                        .options
-                        .arrows.to
+                    let to = this.parent.network.body.edges[edge].options.arrows.to
                     to.enabled = !to.enabled;
                 })
             }
@@ -140,12 +133,5 @@ export class DocumentEventListener {
                     .catch(console.error);
             }
         }
-    }
-
-    onClick(params) {
-        this.parent.network.releaseNode();
-        const coordinates = this.parent.network.DOMtoCanvas({x: params.x, y: params.y})
-        if (params.shiftKey && !this.parent.network.getNodeAt({x: params.x, y: params.y}))
-            this.parent.eventInitializer.initAddNode(coordinates.x, coordinates.y, true, this.callbacks, this.eventListeners)
     }
 }

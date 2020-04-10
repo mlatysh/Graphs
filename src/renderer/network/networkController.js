@@ -18,13 +18,15 @@ export class NetworkController {
         this.networkImporter = NetworkImporter;
         this.rendererEventListener = new RendererEventListener(this);
         this.eventInitializer = new EventInitializer(this);
-        this.resetEventListeners()
+        this.documentEventListener = new DocumentEventListener(this)
     }
 
-    addInfoCallback(callback) {
+    setInfoCallback(callback) {
         this.infoCallback = callback
-        const callbacks = this.network._callbacks
+    }
 
+    applyInfoCallback() {
+        const callbacks = this.network._callbacks
         for (const callbacksArray in callbacks) {
             if (callbacks.hasOwnProperty(callbacksArray))
                 callbacks[callbacksArray].push(this.infoCallback)
@@ -40,10 +42,6 @@ export class NetworkController {
             this.network = undefined;
     }
 
-    resetEventListeners() {
-        this.documentEventListener = new DocumentEventListener(this);
-    }
-
 
     __destroyCurrentNetwork() {
         try {
@@ -55,11 +53,11 @@ export class NetworkController {
     }
 
     setCurrentNetwork(networkCreationObject) {
+        console.log('new network set')
         this.__destroyCurrentNetwork();
         this.network = new Network(networkCreationObject.container,
             networkCreationObject.data, OPTIONS);
-        this.resetEventListeners()
-        this.infoCallback()
+        this.applyInfoCallback()
     }
 
     getNetwork() {

@@ -15,7 +15,6 @@ class Main {
         this.openedFile = undefined;
         app.allowRendererProcessReuse = true;
 
-
         this.setMainIpcHandlers()
     }
 

@@ -32,11 +32,7 @@ export class RendererEventListener {
     }
 
     onCreateNewActiveNetworkHandler(event) {
-        this.controller.documentEventListener.removeEventListeners(
-            this.controller.documentEventListener.eventListeners)
         this.controller.setCurrentNetwork(getNetworkCreationObject([], []));
-        this.controller.documentEventListener.addEventListeners(
-            this.controller.documentEventListener.eventListeners)
         event.sender.send(mainActionConsts.NEW_FILE_CREATION)
     }
 

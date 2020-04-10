@@ -6,12 +6,19 @@ export class Graph {
         this.edgesIds = [];
         this.nodesIds = [];
         network.body.data.nodes.forEach((node) => {
-            this.nodesIds.push(node.id)
+            if (typeof node.id === 'string' && !node.id.startsWith('edgeId:'))
+                this.nodesIds.push(node.id)
+            if (typeof node.id !== 'string')
+                this.nodesIds.push(node.id)
         })
         Object.keys(network.body.edges).forEach((edge) => {
             this.edgesIds.push(edge)
         })
-        this.__builtMatrix(network)
+        try {
+            this.__builtMatrix(network)
+        } catch (e) {
+            this.matrix = math.matrix([])
+        }
     }
 
 
@@ -89,6 +96,7 @@ export class Graph {
     }
 
     isConnected() {
+        console.log(this.getValuesMatrix())
         return Graph.checkConnections(
             Graph.setOnesToDiagonal(
                 this.getValuesMatrix()
@@ -117,6 +125,7 @@ export class Graph {
     static checkConnections(matrix) {
         const size = matrix.length
         const rez = Graph.matrixPow(size, matrix)
+        if (!rez) return undefined
         let connected = true
         rez.forEach(line => {
             line.forEach(element => {
@@ -146,6 +155,7 @@ export class Graph {
     }
 
     static matrixPow(pow, matrix) {
+        if (pow === 0) return undefined
         if (pow === 1) return matrix;
         else return this.multiplyMatrix(matrix, Graph.matrixPow(pow - 1, matrix));
     }
