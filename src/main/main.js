@@ -5,6 +5,7 @@ import {consts as builtinConsts} from "./eventConsts/buitinConsts";
 import {consts as mainActionConsts} from "./eventConsts/mainActionConsts";
 import {MenuEventsEmitter} from "./menu/menuEventsEmitter";
 import {saveAsFileHandler} from "./menu/menuHandlers";
+import * as path from 'path';
 
 class Main {
     init() {
@@ -67,6 +68,7 @@ class Main {
     }
 
     onReady() {
+        console.log(path.join(__dirname, 'assets/icon/icon.png'))
         this.mainWindow = new BrowserWindow({
             minWidth: 800,
             minHeight: 600,
@@ -74,7 +76,8 @@ class Main {
                 nodeIntegration: true
             },
             title: 'Graphs [New File]',
-            show: false
+            show: false,
+            icon: path.join(__dirname, 'assets/icon/icon.png')
         });
         this.menuEventsEmitter = new MenuEventsEmitter(this.mainWindow);
         setApplicationMenu();

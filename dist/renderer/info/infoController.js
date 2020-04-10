@@ -29,15 +29,18 @@ var InfoController = exports.InfoController = function () {
     }, {
         key: 'updateState',
         value: function updateState() {
-            console.log('updating');
-            var network = this.networkController.getNetwork();
-            this.updateLeft(network);
-            this.updateRight(network);
+            this.updateLeft(this.networkController.getNetwork());
+            this.updateRight(this.networkController.getNetwork());
         }
     }, {
         key: 'updateLeft',
         value: function updateLeft(network) {
-            var totalNodes = network.body.data.nodes.length;
+            var nodes = network.body.data.nodes;
+            var totalNodes = 0;
+            nodes.forEach(function (node) {
+                if (typeof node.id !== 'string') totalNodes++;
+                if (typeof node.id === 'string' && !node.id.startsWith('edgeId:')) totalNodes++;
+            });
             var totalEdges = Object.keys(network.body.edges).length;
             var connected = new _graph.Graph(this.networkController.getNetwork()).isConnected();
             this.leftDOMElement.innerText = 'Nodes amount: ' + totalNodes + '\nEdges amount: ' + totalEdges + '\n\n' + ('Connected: ' + connected);

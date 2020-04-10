@@ -16,6 +16,12 @@ var _menuEventsEmitter = require("./menu/menuEventsEmitter");
 
 var _menuHandlers = require("./menu/menuHandlers");
 
+var _path = require("path");
+
+var path = _interopRequireWildcard(_path);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Main = function () {
@@ -94,6 +100,7 @@ var Main = function () {
         value: function onReady() {
             var _this = this;
 
+            console.log(path.join(__dirname, 'assets/icon/icon.png'));
             this.mainWindow = new _electron.BrowserWindow({
                 minWidth: 800,
                 minHeight: 600,
@@ -101,7 +108,8 @@ var Main = function () {
                     nodeIntegration: true
                 },
                 title: 'Graphs [New File]',
-                show: false
+                show: false,
+                icon: path.join(__dirname, 'assets/icon/icon.png')
             });
             this.menuEventsEmitter = new _menuEventsEmitter.MenuEventsEmitter(this.mainWindow);
             (0, _envSetting.setApplicationMenu)();

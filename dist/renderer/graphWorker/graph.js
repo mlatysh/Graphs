@@ -24,12 +24,17 @@ var Graph = exports.Graph = function () {
         this.edgesIds = [];
         this.nodesIds = [];
         network.body.data.nodes.forEach(function (node) {
-            _this.nodesIds.push(node.id);
+            if (typeof node.id === 'string' && !node.id.startsWith('edgeId:')) _this.nodesIds.push(node.id);
+            if (typeof node.id !== 'string') _this.nodesIds.push(node.id);
         });
         Object.keys(network.body.edges).forEach(function (edge) {
             _this.edgesIds.push(edge);
         });
-        this.__builtMatrix(network);
+        try {
+            this.__builtMatrix(network);
+        } catch (e) {
+            this.matrix = math.matrix([]);
+        }
     }
 
     _createClass(Graph, [{
@@ -109,6 +114,7 @@ var Graph = exports.Graph = function () {
     }, {
         key: 'isConnected',
         value: function isConnected() {
+            console.log(this.getValuesMatrix());
             return Graph.checkConnections(Graph.setOnesToDiagonal(this.getValuesMatrix()));
         }
     }, {
@@ -136,6 +142,7 @@ var Graph = exports.Graph = function () {
         value: function checkConnections(matrix) {
             var size = matrix.length;
             var rez = Graph.matrixPow(size, matrix);
+            if (!rez) return undefined;
             var connected = true;
             rez.forEach(function (line) {
                 line.forEach(function (element) {
@@ -171,6 +178,7 @@ var Graph = exports.Graph = function () {
     }, {
         key: 'matrixPow',
         value: function matrixPow(pow, matrix) {
+            if (pow === 0) return undefined;
             if (pow === 1) return matrix;else return this.multiplyMatrix(matrix, Graph.matrixPow(pow - 1, matrix));
         }
     }]);
