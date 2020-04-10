@@ -38,7 +38,6 @@ var Main = function () {
             this.menuEventsEmitter = undefined;
             this.openedFile = undefined;
             _electron.app.allowRendererProcessReuse = true;
-
             this.setMainIpcHandlers();
         }
     }, {
@@ -100,7 +99,6 @@ var Main = function () {
         value: function onReady() {
             var _this = this;
 
-            console.log(path.join(__dirname, 'assets/icon/icon.png'));
             this.mainWindow = new _electron.BrowserWindow({
                 minWidth: 800,
                 minHeight: 600,
@@ -109,15 +107,16 @@ var Main = function () {
                 },
                 title: 'Graphs [New File]',
                 show: false,
-                icon: path.join(__dirname, 'assets/icon/icon.png')
+                icon: path.join(__dirname, 'assets/icon/icon.png'),
+                webSecurity: false
             });
             this.menuEventsEmitter = new _menuEventsEmitter.MenuEventsEmitter(this.mainWindow);
             (0, _envSetting.setApplicationMenu)();
             this.mainWindow.on('ready-to-show', function () {
                 _this.mainWindow.show();
             });
-            this.mainWindow.loadFile('index.html');
-            this.mainWindow.webContents.openDevTools();
+            this.mainWindow.loadFile(path.resolve(__dirname, 'index.html'));
+            // this.mainWindow.webContents.openDevTools()
         }
     }, {
         key: "setOpenedFile",

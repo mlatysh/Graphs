@@ -6,5 +6,6 @@ Object.defineProperty(exports, "__esModule", {
 var consts = exports.consts = {
     READY: 'ready',
     WINDOW_ALL_CLOSED: 'window-all-closed',
-    ACTIVATE: 'activate'
+    ACTIVATE: 'activate',
+    OPEN_FILE: 'open-file'
 };

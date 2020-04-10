@@ -15,7 +15,6 @@ class Main {
         this.menuEventsEmitter = undefined;
         this.openedFile = undefined;
         app.allowRendererProcessReuse = true;
-
         this.setMainIpcHandlers()
     }
 
@@ -49,6 +48,7 @@ class Main {
         this.setOpenedFile(args[1])
     };
 
+
     onWindowAllClosed() {
         if (process.platform !== 'darwin') {
             app.quit();
@@ -68,7 +68,6 @@ class Main {
     }
 
     onReady() {
-        console.log(path.join(__dirname, 'assets/icon/icon.png'))
         this.mainWindow = new BrowserWindow({
             minWidth: 800,
             minHeight: 600,
@@ -77,15 +76,16 @@ class Main {
             },
             title: 'Graphs [New File]',
             show: false,
-            icon: path.join(__dirname, 'assets/icon/icon.png')
+            icon: path.join(__dirname, 'assets/icon/icon.png'),
+            webSecurity: false
         });
         this.menuEventsEmitter = new MenuEventsEmitter(this.mainWindow);
         setApplicationMenu();
         this.mainWindow.on('ready-to-show', () => {
             this.mainWindow.show()
         });
-        this.mainWindow.loadFile('index.html');
-        this.mainWindow.webContents.openDevTools()
+        this.mainWindow.loadFile(path.resolve(__dirname, 'index.html'));
+        // this.mainWindow.webContents.openDevTools()
     }
 
     setOpenedFile(fileName) {
