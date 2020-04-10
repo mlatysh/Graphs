@@ -23,6 +23,12 @@ export class NetworkController {
 
     addInfoCallback(callback) {
         this.infoCallback = callback
+        const callbacks = this.network._callbacks
+
+        for (const callbacksArray in callbacks) {
+            if (callbacks.hasOwnProperty(callbacksArray))
+                callbacks[callbacksArray].push(this.infoCallback)
+        }
         this.infoCallback()
     }
 

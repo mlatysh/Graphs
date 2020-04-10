@@ -44,6 +44,11 @@ var NetworkController = exports.NetworkController = function () {
         key: "addInfoCallback",
         value: function addInfoCallback(callback) {
             this.infoCallback = callback;
+            var callbacks = this.network._callbacks;
+
+            for (var callbacksArray in callbacks) {
+                if (callbacks.hasOwnProperty(callbacksArray)) callbacks[callbacksArray].push(this.infoCallback);
+            }
             this.infoCallback();
         }
     }, {

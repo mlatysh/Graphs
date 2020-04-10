@@ -55,14 +55,12 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
             var edges = this.parent.network.getEdgeAt(this.parent.network.canvasToDOM(coordinates));
 
             if (!nodes && !edges) this.parent.eventInitializer.initAddNode(coordinates.x, coordinates.y, false, this.callbacks, this.eventListeners);else if (nodes) this.parent.eventInitializer.initEditNode(nodes, this.callbacks, this.eventListeners);
-            this.parent.infoCallback();
         }
     }, {
         key: 'onContext',
         value: function onContext(params) {
             var selectedNodes = this.parent.network.getSelectedNodes();
             if (selectedNodes.length === 1) this.parent.network.focus(selectedNodes[0], { animation: true });else this.parent.network.fit({ animation: true });
-            this.parent.infoCallback();
         }
     }, {
         key: 'onKeyDown',
@@ -141,7 +139,6 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
                     }).catch(console.error);
                 }
             }
-            this.parent.infoCallback();
         }
     }, {
         key: 'onClick',
@@ -149,7 +146,6 @@ var DocumentEventListener = exports.DocumentEventListener = function () {
             this.parent.network.releaseNode();
             var coordinates = this.parent.network.DOMtoCanvas({ x: params.x, y: params.y });
             if (params.shiftKey && !this.parent.network.getNodeAt({ x: params.x, y: params.y })) this.parent.eventInitializer.initAddNode(coordinates.x, coordinates.y, true, this.callbacks, this.eventListeners);
-            this.parent.infoCallback();
         }
     }]);
 

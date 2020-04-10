@@ -49,15 +49,12 @@ export class DocumentEventListener {
             this.parent
                 .eventInitializer
                 .initEditNode(nodes, this.callbacks, this.eventListeners)
-        this.parent.infoCallback()
     }
 
     onContext(params) {
         const selectedNodes = this.parent.network.getSelectedNodes()
         if (selectedNodes.length === 1) this.parent.network.focus(selectedNodes[0], {animation: true})
         else this.parent.network.fit({animation: true})
-        this.parent.infoCallback()
-
     }
 
     onKeyDown(params) {
@@ -143,8 +140,6 @@ export class DocumentEventListener {
                     .catch(console.error);
             }
         }
-        this.parent.infoCallback()
-
     }
 
     onClick(params) {
@@ -152,6 +147,5 @@ export class DocumentEventListener {
         const coordinates = this.parent.network.DOMtoCanvas({x: params.x, y: params.y})
         if (params.shiftKey && !this.parent.network.getNodeAt({x: params.x, y: params.y}))
             this.parent.eventInitializer.initAddNode(coordinates.x, coordinates.y, true, this.callbacks, this.eventListeners)
-        this.parent.infoCallback()
     }
 }
