@@ -3,8 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.InfoController = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _graph = require('../graphWorker/graph');
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -12,21 +15,21 @@ var InfoController = exports.InfoController = function () {
     function InfoController(networkController) {
         _classCallCheck(this, InfoController);
 
-        this.networkController = networkController;
         this.leftDOMElement = document.getElementById('info-left');
         this.rightDOMElement = document.getElementById('info-right');
-        var upd = this.updateState.bind(this);
-        document.addEventListener('keydown', upd);
-        document.addEventListener('keyup', upd);
-        document.addEventListener('click', upd);
-        document.addEventListener('dblclick', upd);
-        document.addEventListener('contextmenu', upd);
-        this.updateState();
+        this.updateCallback = this.updateState.bind(this);
+        this.networkController = networkController;
     }
 
     _createClass(InfoController, [{
+        key: 'getUpdateCallback',
+        value: function getUpdateCallback() {
+            return this.updateCallback;
+        }
+    }, {
         key: 'updateState',
         value: function updateState() {
+            console.log('updating');
             var network = this.networkController.getNetwork();
             this.updateLeft(network);
             this.updateRight(network);
@@ -36,18 +39,19 @@ var InfoController = exports.InfoController = function () {
         value: function updateLeft(network) {
             var totalNodes = network.body.data.nodes.length;
             var totalEdges = Object.keys(network.body.edges).length;
-            this.leftDOMElement.innerText = 'Edges amount: ' + totalEdges + '\nNodes amount: ' + totalNodes + '\n\n';
+            var connected = new _graph.Graph(this.networkController.getNetwork()).isConnected();
+            this.leftDOMElement.innerText = 'Nodes amount: ' + totalNodes + '\nEdges amount: ' + totalEdges + '\n\n' + ('Connected: ' + connected);
         }
     }, {
         key: 'updateRight',
         value: function updateRight(network) {
             var selectedNodes = network.getSelectedNodes();
+            var rez = 'Edit mode: ' + network.manipulation.editMode + '\n\n';
             if (selectedNodes.length === 1) {
                 var degree = network.getConnectedEdges(selectedNodes[0]).length;
-                this.rightDOMElement.innerText = 'Selected vertex degree: ' + degree;
-            } else {
-                this.rightDOMElement.innerText = '';
+                rez += 'Selected vertex degree: ' + degree;
             }
+            this.rightDOMElement.innerText = rez;
         }
     }]);
 

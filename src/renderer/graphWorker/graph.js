@@ -149,6 +149,4 @@ export class Graph {
         if (pow === 1) return matrix;
         else return this.multiplyMatrix(matrix, Graph.matrixPow(pow - 1, matrix));
     }
-
-
 }

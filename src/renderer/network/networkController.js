@@ -12,12 +12,18 @@ export class NetworkController {
     constructor(networkCreationObject) {
         this.ipc = ipc;
         this.networkCreationObject = networkCreationObject;
+        this.infoCallback = null
         this.init()
         this.networkExporter = NetworkExporter;
         this.networkImporter = NetworkImporter;
         this.rendererEventListener = new RendererEventListener(this);
         this.eventInitializer = new EventInitializer(this);
         this.resetEventListeners()
+    }
+
+    addInfoCallback(callback) {
+        this.infoCallback = callback
+        this.infoCallback()
     }
 
     init() {
@@ -47,13 +53,10 @@ export class NetworkController {
         this.network = new Network(networkCreationObject.container,
             networkCreationObject.data, OPTIONS);
         this.resetEventListeners()
+        this.infoCallback()
     }
 
     getNetwork() {
         return this.network
-    }
-
-    getSerializedNetwork() {
-        return this.networkExporter.getSerializedNetwork(this.network)
     }
 }

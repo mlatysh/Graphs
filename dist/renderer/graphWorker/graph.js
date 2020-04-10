@@ -107,6 +107,11 @@ var Graph = exports.Graph = function () {
             return this.matrix;
         }
     }, {
+        key: 'isConnected',
+        value: function isConnected() {
+            return Graph.checkConnections(Graph.setOnesToDiagonal(this.getValuesMatrix()));
+        }
+    }, {
         key: 'getValuesMatrix',
         value: function getValuesMatrix() {
             var matrix = this.matrix.clone().toArray();

@@ -31,6 +31,7 @@ var NetworkController = exports.NetworkController = function () {
 
         this.ipc = _electron.ipcRenderer;
         this.networkCreationObject = networkCreationObject;
+        this.infoCallback = null;
         this.init();
         this.networkExporter = _networkExporter.NetworkExporter;
         this.networkImporter = _networkImporter.NetworkImporter;
@@ -40,6 +41,12 @@ var NetworkController = exports.NetworkController = function () {
     }
 
     _createClass(NetworkController, [{
+        key: "addInfoCallback",
+        value: function addInfoCallback(callback) {
+            this.infoCallback = callback;
+            this.infoCallback();
+        }
+    }, {
         key: "init",
         value: function init() {
             this.networkCreationObject ? this.network = new _visNetwork.Network(this.networkCreationObject.container, this.networkCreationObject.data, _networkInitOptions.OPTIONS) : this.network = undefined;
@@ -64,16 +71,12 @@ var NetworkController = exports.NetworkController = function () {
             this.__destroyCurrentNetwork();
             this.network = new _visNetwork.Network(networkCreationObject.container, networkCreationObject.data, _networkInitOptions.OPTIONS);
             this.resetEventListeners();
+            this.infoCallback();
         }
     }, {
         key: "getNetwork",
         value: function getNetwork() {
             return this.network;
-        }
-    }, {
-        key: "getSerializedNetwork",
-        value: function getSerializedNetwork() {
-            return this.networkExporter.getSerializedNetwork(this.network);
         }
     }]);
 

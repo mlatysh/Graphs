@@ -16,8 +16,10 @@ const EDGES = [
 ];
 
 const network = getNetworkCreationObject(NODES, EDGES);
-const controller = new NetworkController(network);
-const informator = new InfoController(controller);
+const networkController = new NetworkController(network);
+const infoController = new InfoController(networkController)
+networkController.addInfoCallback(infoController.getUpdateCallback())
+
 
 
 
