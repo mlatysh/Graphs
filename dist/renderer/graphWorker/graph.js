@@ -114,7 +114,6 @@ var Graph = exports.Graph = function () {
     }, {
         key: 'isConnected',
         value: function isConnected() {
-            console.log(this.getValuesMatrix());
             return Graph.checkConnections(Graph.setOnesToDiagonal(this.getValuesMatrix()));
         }
     }, {

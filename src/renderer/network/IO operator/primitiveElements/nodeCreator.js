@@ -4,7 +4,8 @@ export class NodeCreator {
             type: 'node',
             id: nodeObject.id,
             label: nodeObject.options.label,
-            color: nodeObject.options.color
+            color: nodeObject.options.color,
+            shape: nodeObject.shape.labelModule.elementOptions.shape
         }
     }
 
@@ -12,7 +13,8 @@ export class NodeCreator {
         return {
             id: serializedNode.id,
             label: serializedNode.label,
-            color: serializedNode.color
+            color: serializedNode.color,
+            shape: serializedNode.shape
         }
     }
 }

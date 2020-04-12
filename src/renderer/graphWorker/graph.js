@@ -96,7 +96,6 @@ export class Graph {
     }
 
     isConnected() {
-        console.log(this.getValuesMatrix())
         return Graph.checkConnections(
             Graph.setOnesToDiagonal(
                 this.getValuesMatrix()
