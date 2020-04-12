@@ -30,17 +30,21 @@ export class InfoController {
         const totalEdges = Object.keys(network.body.edges).length
         const graph = new Graph(this.networkController.getNetwork())
         const connected = graph.isConnected()
-        const hasEulerCycle = graph.hasEulerCycle()
         const oriented = graph.oriented
         const disoriented = graph.disoriented
+        let hasEulerCycle = graph.hasEulerCycle()
         let state = undefined
+
         if (oriented) state = 'directed'
         if (disoriented) state = 'not directed'
         if (!oriented && !disoriented) state = 'mixed'
+        if (hasEulerCycle === true) hasEulerCycle = 'yes'
+        if (hasEulerCycle === false) hasEulerCycle = 'no'
+        if (hasEulerCycle === undefined) hasEulerCycle = 'not applicable'
         this.leftDOMElement.innerText = `Nodes amount: ${totalNodes}\nEdges amount: ${totalEdges}\n\n`
             + `Type: ${state}\n`
             + `Connected: ${connected ? 'yes' : 'no'}\n`
-            + `Has Euler cycle: ${hasEulerCycle ? 'yes' : 'no'}`
+            + `Has Euler cycle: ${hasEulerCycle}`
     }
 
     updateRight(network) {

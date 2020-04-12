@@ -108,7 +108,7 @@ var Main = function () {
                 _this.mainWindow.show();
             });
             this.mainWindow.loadFile(path.resolve(__dirname, 'index.html'));
-            this.mainWindow.webContents.openDevTools();
+            // this.mainWindow.webContents.openDevTools()
             //DEBUG
         }
     }, {

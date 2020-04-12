@@ -45,14 +45,18 @@ var InfoController = exports.InfoController = function () {
             var totalEdges = Object.keys(network.body.edges).length;
             var graph = new _graph.Graph(this.networkController.getNetwork());
             var connected = graph.isConnected();
-            var hasEulerCycle = graph.hasEulerCycle();
             var oriented = graph.oriented;
             var disoriented = graph.disoriented;
+            var hasEulerCycle = graph.hasEulerCycle();
             var state = undefined;
+
             if (oriented) state = 'directed';
             if (disoriented) state = 'not directed';
             if (!oriented && !disoriented) state = 'mixed';
-            this.leftDOMElement.innerText = 'Nodes amount: ' + totalNodes + '\nEdges amount: ' + totalEdges + '\n\n' + ('Type: ' + state + '\n') + ('Connected: ' + (connected ? 'yes' : 'no') + '\n') + ('Has Euler cycle: ' + (hasEulerCycle ? 'yes' : 'no'));
+            if (hasEulerCycle === true) hasEulerCycle = 'yes';
+            if (hasEulerCycle === false) hasEulerCycle = 'no';
+            if (hasEulerCycle === undefined) hasEulerCycle = 'not applicable';
+            this.leftDOMElement.innerText = 'Nodes amount: ' + totalNodes + '\nEdges amount: ' + totalEdges + '\n\n' + ('Type: ' + state + '\n') + ('Connected: ' + (connected ? 'yes' : 'no') + '\n') + ('Has Euler cycle: ' + hasEulerCycle);
         }
     }, {
         key: 'updateRight',
