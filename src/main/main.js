@@ -1,15 +1,16 @@
 import {app, BrowserWindow, ipcMain as ipc} from 'electron'
 import {setApplicationMenu} from "./menu/envSetting";
 import {FileWorker} from "./fileWorker/fileWorker";
-import {consts as builtinConsts} from "./eventConsts/buitinConsts";
-import {consts as mainActionConsts} from "./eventConsts/mainActionConsts";
+import {consts as builtinConsts} from "./consts/buitinConsts";
+import {consts as mainActionConsts} from "./consts/mainActionConsts";
 import {MenuEventsEmitter} from "./menu/menuEventsEmitter";
 import {saveAsFileHandler} from "./menu/menuHandlers";
 import * as path from 'path';
+import {BASIC_WINDOW_TITLE, MAIN_WINDOW_SETTINGS} from "./consts/mainWindowSettings";
 
 class Main {
     init() {
-        this.basicWindowTitle = 'Graphs [New File]';
+        this.basicWindowTitle = BASIC_WINDOW_TITLE;
         this.mainWindow = undefined;
         this.ipc = ipc;
         this.menuEventsEmitter = undefined;
@@ -68,24 +69,15 @@ class Main {
     }
 
     onReady() {
-        this.mainWindow = new BrowserWindow({
-            minWidth: 800,
-            minHeight: 600,
-            webPreferences: {
-                nodeIntegration: true
-            },
-            title: 'Graphs [New File]',
-            show: false,
-            icon: path.join(__dirname, 'assets/icon/icon.png'),
-            webSecurity: false
-        });
+        this.mainWindow = new BrowserWindow(MAIN_WINDOW_SETTINGS);
         this.menuEventsEmitter = new MenuEventsEmitter(this.mainWindow);
         setApplicationMenu();
-        this.mainWindow.on('ready-to-show', () => {
+        this.mainWindow.on(mainActionConsts.READY_TO_SHOW, () => {
             this.mainWindow.show()
         });
         this.mainWindow.loadFile(path.resolve(__dirname, 'index.html'));
-        // this.mainWindow.webContents.openDevTools()
+        this.mainWindow.webContents.openDevTools()
+        //DEBUG
     }
 
     setOpenedFile(fileName) {

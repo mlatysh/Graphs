@@ -29,12 +29,12 @@ export class InfoController {
         const totalEdges = Object.keys(network.body.edges).length
         const connected = new Graph(this.networkController.getNetwork()).isConnected()
         this.leftDOMElement.innerText = `Nodes amount: ${totalNodes}\nEdges amount: ${totalEdges}\n\n`
-            + `Connected: ${connected}`
+            + `Connected: ${connected ? 'yes' : 'no'}`
     }
 
     updateRight(network) {
         const selectedNodes = network.getSelectedNodes()
-        let rez = `Edit mode: ${network.manipulation.editMode}\n\n`
+        let rez = `Edit mode: ${network.manipulation.editMode ? 'enabled' : 'disabled'}\n\n`
         if (selectedNodes.length === 1) {
             const degree = network.getConnectedEdges(selectedNodes[0]).length
             rez += `Selected vertex degree: ${degree}`

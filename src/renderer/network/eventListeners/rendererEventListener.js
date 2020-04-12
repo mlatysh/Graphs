@@ -1,5 +1,5 @@
-import {consts as rendererActionConsts} from "../../../main/eventConsts/rendererActionConsts";
-import {consts as mainActionConsts} from "../../../main/eventConsts/mainActionConsts";
+import {consts as rendererActionConsts} from "../../../main/consts/rendererActionConsts";
+import {consts as mainActionConsts} from "../../../main/consts/mainActionConsts";
 import {getNetworkCreationObject} from "../networkCreationObject";
 
 export class RendererEventListener {

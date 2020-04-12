@@ -1,4 +1,6 @@
 import {COLORS} from '../consts/colors'
+import {PromptController} from "./promptController";
+import {DIALOG_OPTIONS} from "../consts/dialogOptions";
 
 export class DocumentEventListener {
     constructor(parent) {
@@ -53,6 +55,39 @@ export class DocumentEventListener {
         else this.parent.network.fit({animation: true})
     }
 
+    callNodeShapeSelectionDialog(options = false, response) {
+        if (options) return DIALOG_OPTIONS.NODE_SHAPE_SELECTION
+        else return function (response) {
+            const selected = this.parent.network.getSelectedNodes()
+            selected.forEach(nodeId => {
+                this.parent.network.body.data.nodes.update({id: nodeId, shape: response})
+            })
+        }
+    }
+
+    callColorSelectionDialog(options = false, response) {
+        if (options) return DIALOG_OPTIONS.COLOR_SELECTION
+        else return function (response) {
+            const selection = this.parent.network.getSelection()
+            let color = response.toUpperCase()
+            const col = COLORS[color]
+            selection.nodes.forEach(nodeId => {
+                this.parent.network.body.data.nodes.update({id: nodeId, color: col})
+            })
+            selection.edges.forEach(edgeId => {
+                this.parent.network.body.data.edges.update(
+                    {
+                        id: edgeId,
+                        color: {
+                            color: col.border,
+                            hover: col.hover.border,
+                            highlight: col.highlight.border
+                        }
+                    })
+            })
+        }
+    }
+
     onKeyDown(params) {
         if (params.code === 'KeyS' && !params.metaKey) {
             const selected = this.parent.network.getSelectedEdges()
@@ -72,18 +107,29 @@ export class DocumentEventListener {
         }
 
         if (params.code === 'KeyT' && !params.metaKey) {
-            const selected = this.parent.network.getSelectedEdges()
-            if (selected.length) {
-                selected.forEach((edge) => {
-                    let to = this.parent.network.body.edges[edge].options.arrows.to
+            const selected = this.parent.network.getSelection()
+            const edges = selected.edges
+            const nodes = selected.nodes
+            if (nodes.length && edges.length) {
+                alert('Select only edges or only nodes!')
+                return
+            }
+            if (edges.length) {
+                edges.forEach((edge) => {
+                    const to = this.parent.network.body.edges[edge].options.arrows.to
                     to.enabled = !to.enabled;
                 })
             }
-            this.parent.network.redraw()
+            if (nodes.length) {
+                PromptController.init(this.callNodeShapeSelectionDialog(true),
+                    this.callNodeShapeSelectionDialog(), this)
+            }
         }
 
         if (params.key === 'Backspace' && !params.metaKey) {
-            this.parent.eventInitializer.initDeletion(this.parent.network.getSelection(), this.callbacks, this.eventListeners)
+            this.parent.eventInitializer.initDeletion(this.parent.network.getSelection(),
+                this.callbacks,
+                this.eventListeners)
         }
 
         if (params.shiftKey && !params.metaKey) {
@@ -95,42 +141,8 @@ export class DocumentEventListener {
         if (params.code === 'KeyC' && !params.metaKey) {
             const selection = this.parent.network.getSelection()
             if (selection.nodes.length || selection.edges.length) {
-                const prompt = require('electron-prompt');
-                prompt({
-                    title: 'Choose color',
-                    label: 'Color: ',
-                    selectOptions: {
-                        yellow: 'yellow',
-                        blue: 'blue',
-                        green: 'green',
-                        orange: 'orange',
-                        red: 'red'
-                    },
-                    alwaysOnTop: true,
-                    type: 'select'
-                })
-                    .then((r) => {
-                        if (!r) return
-                        const selection = this.parent.network.getSelection()
-                        let color = r.toUpperCase()
-                        const col = COLORS[color]
-                        selection.nodes.forEach(nodeId => {
-                            this.parent.network.body.data.nodes.update({id: nodeId, color: col})
-                        })
-                        selection.edges.forEach(edgeId => {
-                            this.parent.network.body.data.edges.update(
-                                {
-                                    id: edgeId,
-                                    color: {
-                                        color: col.border,
-                                        hover: col.hover.border,
-                                        highlight: col.highlight.border
-                                    }
-                                })
-                        })
-                        this.parent.network.redraw()
-                    })
-                    .catch(console.error);
+                PromptController.init(this.callColorSelectionDialog(true),
+                    this.callColorSelectionDialog(), this)
             }
         }
     }

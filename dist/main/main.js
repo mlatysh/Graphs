@@ -8,9 +8,9 @@ var _envSetting = require("./menu/envSetting");
 
 var _fileWorker = require("./fileWorker/fileWorker");
 
-var _buitinConsts = require("./eventConsts/buitinConsts");
+var _buitinConsts = require("./consts/buitinConsts");
 
-var _mainActionConsts = require("./eventConsts/mainActionConsts");
+var _mainActionConsts = require("./consts/mainActionConsts");
 
 var _menuEventsEmitter = require("./menu/menuEventsEmitter");
 
@@ -19,6 +19,8 @@ var _menuHandlers = require("./menu/menuHandlers");
 var _path = require("path");
 
 var path = _interopRequireWildcard(_path);
+
+var _mainWindowSettings = require("./consts/mainWindowSettings");
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -32,7 +34,7 @@ var Main = function () {
     _createClass(Main, [{
         key: "init",
         value: function init() {
-            this.basicWindowTitle = 'Graphs [New File]';
+            this.basicWindowTitle = _mainWindowSettings.BASIC_WINDOW_TITLE;
             this.mainWindow = undefined;
             this.ipc = _electron.ipcMain;
             this.menuEventsEmitter = undefined;
@@ -99,24 +101,15 @@ var Main = function () {
         value: function onReady() {
             var _this = this;
 
-            this.mainWindow = new _electron.BrowserWindow({
-                minWidth: 800,
-                minHeight: 600,
-                webPreferences: {
-                    nodeIntegration: true
-                },
-                title: 'Graphs [New File]',
-                show: false,
-                icon: path.join(__dirname, 'assets/icon/icon.png'),
-                webSecurity: false
-            });
+            this.mainWindow = new _electron.BrowserWindow(_mainWindowSettings.MAIN_WINDOW_SETTINGS);
             this.menuEventsEmitter = new _menuEventsEmitter.MenuEventsEmitter(this.mainWindow);
             (0, _envSetting.setApplicationMenu)();
-            this.mainWindow.on('ready-to-show', function () {
+            this.mainWindow.on(_mainActionConsts.consts.READY_TO_SHOW, function () {
                 _this.mainWindow.show();
             });
             this.mainWindow.loadFile(path.resolve(__dirname, 'index.html'));
-            // this.mainWindow.webContents.openDevTools()
+            this.mainWindow.webContents.openDevTools();
+            //DEBUG
         }
     }, {
         key: "setOpenedFile",

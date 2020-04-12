@@ -43,13 +43,13 @@ var InfoController = exports.InfoController = function () {
             });
             var totalEdges = Object.keys(network.body.edges).length;
             var connected = new _graph.Graph(this.networkController.getNetwork()).isConnected();
-            this.leftDOMElement.innerText = 'Nodes amount: ' + totalNodes + '\nEdges amount: ' + totalEdges + '\n\n' + ('Connected: ' + connected);
+            this.leftDOMElement.innerText = 'Nodes amount: ' + totalNodes + '\nEdges amount: ' + totalEdges + '\n\n' + ('Connected: ' + (connected ? 'yes' : 'no'));
         }
     }, {
         key: 'updateRight',
         value: function updateRight(network) {
             var selectedNodes = network.getSelectedNodes();
-            var rez = 'Edit mode: ' + network.manipulation.editMode + '\n\n';
+            var rez = 'Edit mode: ' + (network.manipulation.editMode ? 'enabled' : 'disabled') + '\n\n';
             if (selectedNodes.length === 1) {
                 var degree = network.getConnectedEdges(selectedNodes[0]).length;
                 rez += 'Selected vertex degree: ' + degree;

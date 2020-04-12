@@ -1,5 +1,5 @@
 import {dialog, ipcMain as ipc} from 'electron';
-import {consts as mainActionConsts} from "../eventConsts/mainActionConsts";
+import {consts as mainActionConsts} from "../consts/mainActionConsts";
 
 const createOptionsObject = (title, type) => {
     let rez = {

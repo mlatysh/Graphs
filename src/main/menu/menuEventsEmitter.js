@@ -1,6 +1,6 @@
 import {ipcMain as ipc} from 'electron';
-import {consts as mainActionConsts} from './../eventConsts/mainActionConsts'
-import {consts as rendererConsts} from './../eventConsts/rendererActionConsts'
+import {consts as mainActionConsts} from '../consts/mainActionConsts'
+import {consts as rendererConsts} from '../consts/rendererActionConsts'
 
 export class MenuEventsEmitter {
 

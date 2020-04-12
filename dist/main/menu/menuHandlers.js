@@ -7,7 +7,7 @@ exports.newFileCreationHandler = exports.openFileHandler = exports.saveFileHandl
 
 var _electron = require('electron');
 
-var _mainActionConsts = require('../eventConsts/mainActionConsts');
+var _mainActionConsts = require('../consts/mainActionConsts');
 
 var createOptionsObject = function createOptionsObject(title, type) {
     var rez = {

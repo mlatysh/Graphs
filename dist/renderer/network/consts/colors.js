@@ -5,14 +5,14 @@ Object.defineProperty(exports, "__esModule", {
 });
 var COLORS = exports.COLORS = {
     RED: {
-        background: '#482C3D',
+        background: '#ba1837',
         border: '#FFE1A8',
         highlight: {
-            background: 'rgba(72,44,61,0.5)',
+            background: 'rgba(186,24,55,0.5)',
             border: 'rgba(255,225,168,0.5)'
         },
         hover: {
-            background: 'rgba(72,44,61,0.8)',
+            background: 'rgba(186,24,55,0.8)',
             border: 'rgba(255,225,168,0.8)'
         }
     },

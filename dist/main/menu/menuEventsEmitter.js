@@ -9,9 +9,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _electron = require('electron');
 
-var _mainActionConsts = require('./../eventConsts/mainActionConsts');
+var _mainActionConsts = require('../consts/mainActionConsts');
 
-var _rendererActionConsts = require('./../eventConsts/rendererActionConsts');
+var _rendererActionConsts = require('../consts/rendererActionConsts');
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
