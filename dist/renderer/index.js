@@ -6,6 +6,8 @@ var _networkCreationObject = require("./network/networkCreationObject");
 
 var _infoController = require("./info/infoController");
 
+var _graph = require("./graphWorker/graph");
+
 var containerID = 'network';
 
 var NODES = [{ id: 1, label: "Node 1" }, { id: 2, label: "Node 2" }, { id: 3, label: "Node 3" }];
@@ -17,3 +19,6 @@ var networkController = new _networkController.NetworkController(network);
 var infoController = new _infoController.InfoController(networkController);
 networkController.setInfoCallback(infoController.getUpdateCallback());
 networkController.applyInfoCallback();
+document.addEventListener('keydown', function () {
+    new _graph.Graph(networkController.getNetwork()).hasEulerCycle();
+});

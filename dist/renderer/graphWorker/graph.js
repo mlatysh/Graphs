@@ -23,12 +23,23 @@ var Graph = exports.Graph = function () {
 
         this.edgesIds = [];
         this.nodesIds = [];
+        this.oriented = true;
+        this.disoriented = true;
+        this.allDegreesAreEven = true;
         network.body.data.nodes.forEach(function (node) {
             if (typeof node.id === 'string' && !node.id.startsWith('edgeId:')) _this.nodesIds.push(node.id);
             if (typeof node.id !== 'string') _this.nodesIds.push(node.id);
+            var edgesCount = 0;
+            var connectedEdges = network.getConnectedEdges(node.id);
+            connectedEdges.forEach(function (edgeId) {
+                if (network.body.edges[edgeId].fromId === network.body.edges[edgeId].toId) edgesCount += 2;else edgesCount++;
+            });
+            if (edgesCount % 2 !== 0) _this.allDegreesAreEven = false;
         });
         Object.keys(network.body.edges).forEach(function (edge) {
             _this.edgesIds.push(edge);
+            if (!network.body.edges[edge].options.arrows.to.enabled) _this.oriented = false;
+            if (network.body.edges[edge].options.arrows.to.enabled) _this.disoriented = false;
         });
         try {
             this.__builtMatrix(network);
@@ -117,6 +128,16 @@ var Graph = exports.Graph = function () {
             return Graph.checkConnections(Graph.setOnesToDiagonal(this.getValuesMatrix()));
         }
     }, {
+        key: 'hasEulerCycle',
+        value: function hasEulerCycle() {
+            if (this.oriented) {
+                return this.allDegreesAreEven && Graph.isConnected(Graph.removeIsolatedVertexes(this.getValuesMatrix()));
+            }
+            if (this.disoriented) {
+                return this.allDegreesAreEven && Graph.isConnected(Graph.removeIsolatedVertexes(this.getValuesMatrix()));
+            } else return undefined;
+        }
+    }, {
         key: 'getValuesMatrix',
         value: function getValuesMatrix() {
             var matrix = this.matrix.clone().toArray();
@@ -127,6 +148,41 @@ var Graph = exports.Graph = function () {
             return matrix;
         }
     }], [{
+        key: 'removeIsolatedVertexes',
+        value: function removeIsolatedVertexes(matrix) {
+            var mat = matrix.slice();
+            var needToBeShifted = [];
+            var length = mat.length;
+            for (var i = 0; i < length; i++) {
+                var emptyLine = true;
+                var emptyColumn = true;
+                for (var j = 0; j < length; j++) {
+                    if (mat[i][j] !== 0) {
+                        emptyLine = false;
+                        break;
+                    }
+                }
+                for (var _j = 0; _j < length; _j++) {
+                    if (mat[_j][i] !== 0) {
+                        emptyColumn = false;
+                    }
+                }
+                if (emptyLine && emptyColumn) {
+                    needToBeShifted.push(i);
+                }
+            }
+            needToBeShifted.forEach(function (cross) {
+                for (var _i = 0; _i < mat.length; _i++) {
+                    mat[_i].splice(cross, 1);
+                }
+                mat.splice(cross, 1);
+                for (var _i2 = 0; _i2 < needToBeShifted.length; _i2++) {
+                    needToBeShifted[_i2]--;
+                }
+            });
+            return mat;
+        }
+    }, {
         key: 'setOnesToDiagonal',
         value: function setOnesToDiagonal(array) {
             var size = array.length;
@@ -165,11 +221,11 @@ var Graph = exports.Graph = function () {
             for (var i = 0; i < rowsA; i++) {
                 rezMatrix[i] = [];
             }for (var k = 0; k < colsB; k++) {
-                for (var _i = 0; _i < rowsA; _i++) {
+                for (var _i3 = 0; _i3 < rowsA; _i3++) {
                     var t = 0;
                     for (var j = 0; j < rowsB; j++) {
-                        t += matrixA[_i][j] * matrixB[j][k];
-                    }rezMatrix[_i][k] = t;
+                        t += matrixA[_i3][j] * matrixB[j][k];
+                    }rezMatrix[_i3][k] = t;
                 }
             }
             return rezMatrix;
@@ -179,6 +235,11 @@ var Graph = exports.Graph = function () {
         value: function matrixPow(pow, matrix) {
             if (pow === 0) return undefined;
             if (pow === 1) return matrix;else return this.multiplyMatrix(matrix, Graph.matrixPow(pow - 1, matrix));
+        }
+    }, {
+        key: 'isConnected',
+        value: function isConnected(matrix) {
+            return Graph.checkConnections(Graph.setOnesToDiagonal(matrix));
         }
     }]);
 

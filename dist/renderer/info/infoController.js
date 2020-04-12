@@ -42,8 +42,16 @@ var InfoController = exports.InfoController = function () {
                 if (typeof node.id === 'string' && !node.id.startsWith('edgeId:')) totalNodes++;
             });
             var totalEdges = Object.keys(network.body.edges).length;
-            var connected = new _graph.Graph(this.networkController.getNetwork()).isConnected();
-            this.leftDOMElement.innerText = 'Nodes amount: ' + totalNodes + '\nEdges amount: ' + totalEdges + '\n\n' + ('Connected: ' + (connected ? 'yes' : 'no'));
+            var graph = new _graph.Graph(this.networkController.getNetwork());
+            var connected = graph.isConnected();
+            var hasEulerCycle = graph.hasEulerCycle();
+            var oriented = graph.oriented;
+            var disoriented = graph.disoriented;
+            var state = undefined;
+            if (oriented) state = 'directed';
+            if (disoriented) state = 'not directed';
+            if (!oriented && !disoriented) state = 'mixed';
+            this.leftDOMElement.innerText = 'Nodes amount: ' + totalNodes + '\nEdges amount: ' + totalEdges + '\n\n' + ('Type: ' + state + '\n') + ('Connected: ' + (connected ? 'yes' : 'no') + '\n') + ('Has Euler cycle: ' + hasEulerCycle);
         }
     }, {
         key: 'updateRight',

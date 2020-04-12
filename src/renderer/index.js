@@ -1,6 +1,7 @@
 import {NetworkController} from "./network/networkController";
 import {getNetworkCreationObject} from "./network/networkCreationObject";
 import {InfoController} from "./info/infoController";
+import {Graph} from "./graphWorker/graph";
 
 const containerID = 'network';
 
@@ -20,6 +21,9 @@ const networkController = new NetworkController(network);
 const infoController = new InfoController(networkController)
 networkController.setInfoCallback(infoController.getUpdateCallback())
 networkController.applyInfoCallback()
+document.addEventListener('keydown', () => {
+    new Graph(networkController.getNetwork()).hasEulerCycle()
+})
 
 
 
