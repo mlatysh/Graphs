@@ -5,6 +5,7 @@ export class InfoController {
         this.leftDOMElement = document.getElementById('info-left')
         this.rightDOMElement = document.getElementById('info-right')
         this.updateCallback = this.updateState.bind(this)
+        document.addEventListener('keyup', this.updateState.bind(this))
         this.networkController = networkController
     }
 
@@ -39,7 +40,7 @@ export class InfoController {
         this.leftDOMElement.innerText = `Nodes amount: ${totalNodes}\nEdges amount: ${totalEdges}\n\n`
             + `Type: ${state}\n`
             + `Connected: ${connected ? 'yes' : 'no'}\n`
-            + `Has Euler cycle: ${hasEulerCycle}`
+            + `Has Euler cycle: ${hasEulerCycle ? 'yes' : 'no'}`
     }
 
     updateRight(network) {
