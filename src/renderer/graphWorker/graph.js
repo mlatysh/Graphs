@@ -126,7 +126,6 @@ export class Graph {
 
     __getNodeById(id, network) {
         const nodes = network.body.nodes
-        const edges = network.body.edges
         let exactNode = undefined
         for (const node in nodes) {
             if (nodes.hasOwnProperty(node)
@@ -221,6 +220,56 @@ export class Graph {
                 )
             )
         } else return undefined
+    }
+
+    makeConnected() {
+        const matrix = this.matrix.toArray()
+        const firstColumn = []
+        const firstLine = matrix.shift()
+        matrix.forEach(element => {
+            firstColumn.push(element.shift())
+        })
+
+        const poweredMatrix = Graph.matrixPow(matrix.length, matrix)
+        console.log(poweredMatrix)
+        if (poweredMatrix){
+            const positions = Graph.findNullPositions(poweredMatrix)
+            const actualPositions = Graph.convertFromValuablePositionsToCommon(positions)
+            for (let i = 0; i < poweredMatrix.length ; i++) {
+                poweredMatrix[i].unshift(firstColumn[i])
+            }
+            poweredMatrix.unshift(firstLine)
+            console.log(poweredMatrix)
+
+        }
+    }
+
+    static convertFromValuablePositionsToCommon(positions){
+        const convertedPositions = [...positions]
+         convertedPositions.forEach(position => {
+             position[0]++
+             position[1]++
+         })
+        return convertedPositions
+    }
+
+    static lineIsEmpty(lineNumber, array){
+
+    }
+
+    static columnIsEmpty(columnNumber, array){
+
+    }
+
+    static findNullPositions(matrix){
+        const size = matrix.length
+        const positions = []
+        for (let i = 0; i < size ; i++) {
+            for (let j = 0; j < size ; j++) {
+                if (matrix[i][j] === 0) positions.push([i,j])
+            }
+        }
+        return positions
     }
 
     getValuesMatrix() {

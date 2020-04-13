@@ -75,8 +75,8 @@ class Main {
         this.mainWindow.on(mainActionConsts.READY_TO_SHOW, () => {
             this.mainWindow.show()
         });
-        this.mainWindow.loadFile(path.resolve(__dirname, 'index.html'));
-        // this.mainWindow.webContents.openDevTools()
+        this.mainWindow.loadFile(path.resolve(__dirname,'static','index.html'));
+        this.mainWindow.webContents.openDevTools()
         //DEBUG
     }
 
@@ -89,6 +89,7 @@ class Main {
             this.mainWindow.setTitle(this.basicWindowTitle)
         }
     }
+
 
     onTotalExit() {
         app.quit()

@@ -9,7 +9,7 @@ export const OPTIONS = {
         hover: true,
         multiselect: true,
         keyboard: {
-            enabled: true
+            enabled: false
         }
     },
     manipulation: {

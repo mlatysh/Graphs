@@ -6,14 +6,14 @@ import {Graph} from "./graphWorker/graph";
 const containerID = 'network';
 
 const NODES = [
-    {id: 1, label: "Node 1"},
-    {id: 2, label: "Node 2"},
-    {id: 3, label: "Node 3"}
+    {id: 'abc', label: "Node 1"},
+    {id: 'bcd', label: "Node 2"},
+    {id: 'cde', label: "Node 3"}
 ];
 
 const EDGES = [
-    {from: 1, to: 2},
-    {from: 2, to: 1},
+    {from: 'abc', to: 'bcd'},
+    {from: 'bcd', to: 'abc'},
 ];
 
 const network = getNetworkCreationObject(NODES, EDGES);
@@ -21,8 +21,12 @@ const networkController = new NetworkController(network);
 const infoController = new InfoController(networkController)
 networkController.setInfoCallback(infoController.getUpdateCallback())
 networkController.applyInfoCallback()
-document.addEventListener('keydown', () => {
-    new Graph(networkController.getNetwork()).hasEulerCycle()
+document.addEventListener('keydown', (event) => {
+    if (event.code === 'KeyB') {
+        const matrix =Graph.setOnesToDiagonal(new Graph(networkController.getNetwork()).getValuesMatrix())
+        console.log(matrix)
+        console.log(Graph.matrixPow(matrix.length, matrix))
+    }
 })
 
 
