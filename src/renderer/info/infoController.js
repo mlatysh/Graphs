@@ -51,8 +51,15 @@ export class InfoController {
         const selectedNodes = network.getSelectedNodes()
         let rez = `Edit mode: ${network.manipulation.editMode ? 'enabled' : 'disabled'}\n\n`
         if (selectedNodes.length === 1) {
-            const degree = network.getConnectedEdges(selectedNodes[0]).length
-            rez += `Selected vertex degree: ${degree}`
+            const connectedEdges = network.getConnectedEdges(selectedNodes[0])
+            const edges = network.body.edges
+            let amount = connectedEdges.length
+            connectedEdges.forEach(edgeId => {
+                const edge = edges[edgeId]
+                if (edge.fromId === edge.toId)
+                    amount++
+            })
+            rez += `Selected vertex degree: ${amount}`
         }
         this.rightDOMElement.innerText = rez
     }
