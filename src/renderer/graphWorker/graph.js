@@ -78,52 +78,89 @@ export class Graph {
         return arr
     }
 
-    static checkConnections(matrix) {
-        const size = matrix.length
-        const rez = Graph.matrixPow(size, matrix)
-        if (!rez) return undefined
-        let connected = true
-        rez.forEach(line => {
-            line.forEach(element => {
-                if (element <= 0) {
-                    connected = false
-                    return connected
-                }
+    static getReachabilityMatrix(matrixWithIds, returnWithIds = false, givenWithIds = false) {
+
+        if (returnWithIds && !givenWithIds) return undefined
+
+        let mat = [...matrixWithIds]
+        const firstColumn = []
+        let firstLine = []
+        if (givenWithIds) {
+            mat.forEach(element => {
+                firstColumn.push(element.shift())
+            })
+            firstLine = mat.shift()
+        }
+
+        const copyLineWithAddition = (mainMatrix, indexLineFrom, indexLineWhere) => {
+            const fromLine = mainMatrix[indexLineFrom]
+            mainMatrix[indexLineWhere].forEach((element, index) => {
+                if (fromLine[index] > 0 && element === 0)
+                    mainMatrix[indexLineWhere][index] = 1
+            })
+        }
+
+        mat.forEach((element, indexRow) => {
+            element.forEach((subElement, indexColumn) => {
+                if (mat[indexRow][indexColumn] > 0)
+                    mat[indexRow][indexColumn] = 1
             })
         })
-        return connected
+        mat.forEach((element, indexRow) => {
+            element.forEach((subElement, indexColumn) => {
+                if (subElement === 1)
+                    copyLineWithAddition(mat, indexColumn, indexRow)
+            })
+        })
+        if (returnWithIds) {
+            mat.unshift(firstLine)
+            mat.forEach((element, index) => {
+                element.unshift(firstColumn[index])
+            })
+        }
+        return mat
     }
 
-    static multiplyMatrix(matrixA, matrixB) {
-        const rowsA = matrixA.length, colsA = matrixA[0].length,
-            rowsB = matrixB.length, colsB = matrixB[0].length,
-            rezMatrix = [];
-        if (colsA !== rowsB) return false;
-        for (let i = 0; i < rowsA; i++) rezMatrix[i] = [];
-        for (let k = 0; k < colsB; k++) {
-            for (let i = 0; i < rowsA; i++) {
-                let t = 0;
-                for (let j = 0; j < rowsB; j++) t += matrixA[i][j] * matrixB[j][k];
-                rezMatrix[i][k] = t;
+    static checkConnectionsStrict(matrix) {
+        const size = matrix.length
+        if (!size) return undefined
+        const mat = Graph.getReachabilityMatrix(matrix)
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < size; j++) {
+                if (mat[i][j] === 0) return false
             }
         }
-        return rezMatrix;
+        return true
     }
 
     static matrixPow(pow, matrix) {
+        const multiplyMatrix = (matrixA, matrixB) => {
+            const rowsA = matrixA.length, colsA = matrixA[0].length,
+                rowsB = matrixB.length, colsB = matrixB[0].length,
+                rezMatrix = [];
+            if (colsA !== rowsB) return false;
+            for (let i = 0; i < rowsA; i++) rezMatrix[i] = [];
+            for (let k = 0; k < colsB; k++) {
+                for (let i = 0; i < rowsA; i++) {
+                    let t = 0;
+                    for (let j = 0; j < rowsB; j++) t += matrixA[i][j] * matrixB[j][k];
+                    rezMatrix[i][k] = t;
+                }
+            }
+            return rezMatrix;
+        }
         if (pow === 0) return undefined
         if (pow === 1) return matrix;
-        else return this.multiplyMatrix(matrix, Graph.matrixPow(pow - 1, matrix));
+        else return multiplyMatrix(matrix, Graph.matrixPow(pow - 1, matrix));
     }
 
     static isConnected(matrix) {
-        return Graph.checkConnections(
+        return Graph.checkConnectionsStrict(
             Graph.setOnesToDiagonal(
                 matrix
             )
         )
     }
-
     __getNodeById(id, network) {
         const nodes = network.body.nodes
         let exactNode = undefined
@@ -192,18 +229,18 @@ export class Graph {
         this.matrix = matrix
     }
 
-    getMatrix() {
-        return this.matrix
+
+    getMatrixAsArray() {
+        return this.matrix.toArray()
     }
 
     isConnected() {
-        return Graph.checkConnections(
+        return Graph.checkConnectionsStrict(
             Graph.setOnesToDiagonal(
                 this.getValuesMatrix()
             )
         )
     }
-
 
     hasEulerCycle() {
         if (this.oriented) {
@@ -222,58 +259,8 @@ export class Graph {
         } else return undefined
     }
 
-    makeConnected() {
-        const matrix = this.matrix.toArray()
-        const firstColumn = []
-        const firstLine = matrix.shift()
-        matrix.forEach(element => {
-            firstColumn.push(element.shift())
-        })
-
-        const poweredMatrix = Graph.matrixPow(matrix.length, matrix)
-        console.log(poweredMatrix)
-        if (poweredMatrix){
-            const positions = Graph.findNullPositions(poweredMatrix)
-            const actualPositions = Graph.convertFromValuablePositionsToCommon(positions)
-            for (let i = 0; i < poweredMatrix.length ; i++) {
-                poweredMatrix[i].unshift(firstColumn[i])
-            }
-            poweredMatrix.unshift(firstLine)
-            console.log(poweredMatrix)
-
-        }
-    }
-
-    static convertFromValuablePositionsToCommon(positions){
-        const convertedPositions = [...positions]
-         convertedPositions.forEach(position => {
-             position[0]++
-             position[1]++
-         })
-        return convertedPositions
-    }
-
-    static lineIsEmpty(lineNumber, array){
-
-    }
-
-    static columnIsEmpty(columnNumber, array){
-
-    }
-
-    static findNullPositions(matrix){
-        const size = matrix.length
-        const positions = []
-        for (let i = 0; i < size ; i++) {
-            for (let j = 0; j < size ; j++) {
-                if (matrix[i][j] === 0) positions.push([i,j])
-            }
-        }
-        return positions
-    }
-
     getValuesMatrix() {
-        const matrix = this.matrix.clone().toArray()
+        const matrix = this.matrix.toArray()
         matrix.shift()
         for (let i = 0; i < matrix.length; i++) {
             matrix[i].splice(0, 1)

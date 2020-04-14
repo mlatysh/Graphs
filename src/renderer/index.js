@@ -23,9 +23,9 @@ networkController.setInfoCallback(infoController.getUpdateCallback())
 networkController.applyInfoCallback()
 document.addEventListener('keydown', (event) => {
     if (event.code === 'KeyB') {
-        const matrix =Graph.setOnesToDiagonal(new Graph(networkController.getNetwork()).getValuesMatrix())
-        console.log(matrix)
-        console.log(Graph.matrixPow(matrix.length, matrix))
+        const matrix = Graph.setOnesToDiagonal(new Graph(networkController.getNetwork()).getMatrixAsArray())
+        // console.log(matrix)
+        console.log(Graph.getReachabilityMatrix(matrix))
     }
 })
 
