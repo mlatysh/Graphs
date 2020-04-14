@@ -6,7 +6,7 @@ Graphs is a grpah editor created on JS and Electron!
 ```sh
 git clone https://github.com/BBCQX/Graphs
 cd Graphs
-yarn & yarn bstart
+yarn && yarn bstart
 ```
 Some main shortcuts are available now such as *Ctrl(Cmd)+S, Ctrl(Cmd)+N, Ctrl(Cmd)+O, Ctrl(Cmd)+Q*, but main graph manipulations are available ONLY via shortcuts:
 - C key (with node(s) or edge(s) selected) - *Color changing*
