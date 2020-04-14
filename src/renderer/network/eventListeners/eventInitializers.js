@@ -24,11 +24,20 @@ export class EventInitializer {
     initEditNode(nodeId, setterAndRemover, eventListeners) {
         setterAndRemover.remover(eventListeners)
         Dialogs.prompt('Input node\'s new value: ', newValue => {
-            if (newValue !== undefined) {
+            if (newValue !== undefined)
                 this.__editNode(nodeId, newValue)
-            }
             setterAndRemover.setter(eventListeners)
         });
+    }
+
+    initEditEdge(edgeId, setterAndRemover, eventListeners) {
+        setterAndRemover.remover(eventListeners)
+        Dialogs.prompt('Input new edge\'s value: ', newValue => {
+            if (newValue !== undefined)
+                this.__editEdge(edgeId, newValue)
+            setterAndRemover.setter(eventListeners)
+
+        })
     }
 
 
@@ -59,6 +68,10 @@ export class EventInitializer {
 
     __editNode(nodeId, newValue) {
         this.parent.network.body.data.nodes.update({id: nodeId, label: newValue})
+    }
+
+    __editEdge(edgeId, newValue) {
+        this.parent.network.body.data.edges.update({id: edgeId, label: newValue})
     }
 
     __removeNode(nodeId) {

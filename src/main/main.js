@@ -51,9 +51,7 @@ class Main {
 
 
     onWindowAllClosed() {
-        if (process.platform !== 'darwin') {
-            app.quit();
-        }
+        app.quit()
     }
 
     onActivate() {

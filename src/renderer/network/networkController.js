@@ -1,4 +1,4 @@
-import {Network} from '../../../libs/vis-network'
+import {Network} from '../../../visjs/vis-network'
 import {NetworkExporter} from "./IO operator/networkExporter"
 import {RendererEventListener} from "./eventListeners/rendererEventListener";
 import {NetworkImporter} from "./IO operator/networkImporter";
