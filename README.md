@@ -15,5 +15,6 @@ Some main shortcuts are available now such as *Ctrl(Cmd)+S, Ctrl(Cmd)+N, Ctrl(Cm
 - S key (with edge(s) selected) - *Swaps selected edge orientation*
 - Double click (on empty space) - *Creates a named node*
 - Double click (on node) - *Renames node*
+- Double click (on edge) - *Renames edge*
 - Press SHIFT and drag(from node to another node) - *Creates an edge*
 - Backspace key (with edge(s) or node(s) selected) - *Deletes edge(s) or node(s)*
