@@ -48,7 +48,6 @@ export class DocumentEventListener {
                 .eventInitializer
                 .initEditNode(nodes, this.callbacks, this.eventListeners)
         else if (edges) {
-            console.log(this.parent.network.body.edges[edges])
             this.parent
                 .eventInitializer
                 .initEditEdge(edges, this.callbacks, this.eventListeners)

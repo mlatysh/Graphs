@@ -1,4 +1,4 @@
-import {Graph} from "../graphWorker/OldGraph";
+import {Graph} from "../graphWorker/graph";
 
 export class InfoController {
     constructor(networkController) {
@@ -28,21 +28,17 @@ export class InfoController {
                 totalNodes++
         })
         const totalEdges = Object.keys(network.body.edges).length
-        const graph = new Graph(this.networkController.getNetwork())
+        const graph = new Graph(Graph.getMatrixFromNetwork(network), Graph.getConnectivityFromNetwork(network))
         const connected = graph.isConnected()
-        const oriented = graph.oriented
-        const disoriented = graph.disoriented
         let hasEulerCycle = graph.hasEulerCycle()
-        let state = undefined
-
-        if (oriented) state = 'directed'
-        if (disoriented) state = 'not directed'
-        if (!oriented && !disoriented) state = 'mixed'
+        const type = graph.getType()
         if (hasEulerCycle === true) hasEulerCycle = 'yes'
         if (hasEulerCycle === false) hasEulerCycle = 'no'
         if (hasEulerCycle === undefined) hasEulerCycle = 'not applicable'
+
+
         this.leftDOMElement.innerText = `Nodes amount: ${totalNodes}\nEdges amount: ${totalEdges}\n\n`
-            + `Type: ${state}\n`
+            + `Type: ${type}\n`
             + `Connected: ${connected ? 'yes' : 'no'}\n`
             + `Has Euler cycle: ${hasEulerCycle}`
     }

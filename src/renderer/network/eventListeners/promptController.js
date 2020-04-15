@@ -2,7 +2,6 @@ const prompt = require('electron-prompt')
 
 export class PromptController {
     static init(options, thenCallback, parent) {
-        console.log('prompt entered')
         prompt(options)
             .then((r) => {
                 if (!r) return

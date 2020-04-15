@@ -22,7 +22,6 @@ exports.Graph = (function () {
             for (var j = 0; j < size; j++) {
                 if (mat.get([i, j]) === 1) {
                     copyLineWithAddition(mat, j, i);
-                    break;
                 }
             }
         }
@@ -30,10 +29,17 @@ exports.Graph = (function () {
         return mat;
     };
     class_1.checkConnectionsStrict = function (matrix) {
-        return;
-    };
-    class_1.findIndexByRowAndColumnValue = function (rowValue, columnValue, matrix) {
-        return;
+        var size = matrix.getSize();
+        if (!size)
+            return undefined;
+        var mat = exports.Graph.getReachabilityMatrix(matrix);
+        for (var i = 0; i < size; i++) {
+            for (var j = 0; j < size; j++) {
+                if (mat.get([i, j]) === 0)
+                    return false;
+            }
+        }
+        return true;
     };
     class_1.getConnectivityFromNetwork = function (network) {
         var oriented = true;
@@ -117,8 +123,7 @@ exports.Graph = (function () {
                 var value = matrix.get(indexes);
                 if (edge.arrowed) {
                     matrix.set(value + 1, indexes);
-                }
-                else {
+                } else {
                     matrix.set(value + 1, indexes);
                     value = matrix.get([indexes[1], indexes[0]]);
                     matrix.set(value + 1, [indexes[1], indexes[0]]);
@@ -126,6 +131,9 @@ exports.Graph = (function () {
             });
         });
         return matrix;
+    };
+    class_1.isConnected = function (matrix) {
+        return exports.Graph.checkConnectionsStrict(squareMatrix_1.SquareMatrix.setOnesToDiagonal(matrix));
     };
     class_1.prototype.getIdsFromMatrix = function (matrix) {
         var size = matrix.getSize();
@@ -165,13 +173,17 @@ exports.Graph = (function () {
         this.allVertexesDegreesAreEven = true;
     };
     class_1.prototype.hasEulerCycle = function () {
-        return false;
+        if (this.getType() === 'directed' || this.getType() === 'not directed') {
+            return this.allVertexesDegreesAreEven &&
+                exports.Graph.isConnected(squareMatrix_1.SquareMatrix.setOnesToDiagonal(squareMatrix_1.SquareMatrix.removeEmptyCrosses(this.valuesMatrix)));
+        } else
+            return undefined;
     };
     class_1.prototype.isConnected = function () {
-        return;
+        return exports.Graph.checkConnectionsStrict(squareMatrix_1.SquareMatrix.setOnesToDiagonal(this.valuesMatrix));
     };
     class_1.prototype.getType = function () {
-        return "";
+        return this.type;
     };
     return class_1;
 }());

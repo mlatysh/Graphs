@@ -53,7 +53,6 @@ export class NetworkController {
     }
 
     setCurrentNetwork(networkCreationObject) {
-        console.log('new network set')
         this.__destroyCurrentNetwork();
         this.network = new Network(networkCreationObject.container,
             networkCreationObject.data, OPTIONS);

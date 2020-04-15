@@ -36,12 +36,10 @@ export const Graph: IGraphStatic = class implements IGraph {
                     innerMatrix.set(1, [indexRowWhere, i])
             }
         }
-
         for (let i = 0; i < size; i++) {
             for (let j = 0; j < size; j++) {
                 if (mat.get([i, j]) === 1) {
                     copyLineWithAddition(mat, j, i)
-                    break
                 }
             }
         }
@@ -152,6 +150,14 @@ export const Graph: IGraphStatic = class implements IGraph {
         return matrix
     }
 
+    static isConnected(matrix: ISquareMatrix): boolean | undefined {
+        return Graph.checkConnectionsStrict(
+            SquareMatrix.setOnesToDiagonal(
+                matrix
+            )
+        )
+    }
+
 
     private getIdsFromMatrix(matrix: ISquareMatrix): Array<any> {
         const size = matrix.getSize()
@@ -196,15 +202,12 @@ export const Graph: IGraphStatic = class implements IGraph {
     hasEulerCycle(): boolean | undefined {
         if (this.getType() === 'directed' || this.getType() === 'not directed') {
             return this.allVertexesDegreesAreEven &&
-                new Graph(
-                    SquareMatrix.removeEmptyCrosses(
-                        this.valuesMatrix
-                    ), this.getType()
-                ).isConnected()
+                Graph.isConnected(SquareMatrix.setOnesToDiagonal(
+                    SquareMatrix.removeEmptyCrosses(this.valuesMatrix)))
         } else return undefined
     }
 
-    isConnected(): boolean {
+    isConnected(): boolean | undefined {
         return Graph.checkConnectionsStrict(
             SquareMatrix.setOnesToDiagonal(
                 this.valuesMatrix
