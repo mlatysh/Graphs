@@ -9,7 +9,7 @@
     "mathjs": "^6.6.2"
   },
   "scripts": {
-    "bstart": "yarn build && ./prepare.sh && yarn start",
+    "bstart": "tsc && yarn build && ./prepare.sh && yarn start",
     "start": "electron ./dist/main/main.js",
     "build": "babel src -d dist --presets=babel-preset-env",
     "prod": "electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=release-builds",

@@ -22,11 +22,11 @@ const infoController = new InfoController(networkController)
 networkController.setInfoCallback(infoController.getUpdateCallback())
 networkController.applyInfoCallback()
 document.addEventListener('keydown', (event) => {
-    if (event.code === 'KeyB') {
-        const matrix = Graph.setOnesToDiagonal(new Graph(networkController.getNetwork()).getMatrixAsArray())
-        // console.log(matrix)
-        console.log(Graph.getReachabilityMatrix(matrix))
-    }
+    // if (event.code === 'KeyB') {
+    //     const matrix = Graph.setOnesToDiagonal(new Graph(networkController.getNetwork()).getMatrixAsArray())
+    //     // console.log(matrix)
+    //     console.log(Graph.getReachabilityMatrix(matrix))
+    // }
 })
 
 

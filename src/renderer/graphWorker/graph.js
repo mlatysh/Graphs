@@ -86,10 +86,7 @@ export class Graph {
         const firstColumn = []
         let firstLine = []
         if (givenWithIds) {
-            mat.forEach(element => {
-                firstColumn.push(element.shift())
-            })
-            firstLine = mat.shift()
+
         }
 
         const copyLineWithAddition = (mainMatrix, indexLineFrom, indexLineWhere) => {
