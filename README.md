@@ -1,7 +1,7 @@
 # Graphs
 
 
-Graphs is a grpah editor created on JS and Electron!
+Graphs is a grpah editor created on JS, TypeScript and Electron!
 ### Launch:
 ```sh
 git clone https://github.com/BBCQX/Graphs
