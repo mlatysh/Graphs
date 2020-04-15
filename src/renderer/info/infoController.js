@@ -1,4 +1,4 @@
-import {Graph} from "../graphWorker/graph";
+import {Graph} from "../graphWorker/OldGraph";
 
 export class InfoController {
     constructor(networkController) {

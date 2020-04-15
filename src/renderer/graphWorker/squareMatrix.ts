@@ -1,3 +1,6 @@
+import * as _ from "lodash";
+
+
 type IPosition = [number, number]
 type Matrix = Array<Array<number>>
 
@@ -6,7 +9,7 @@ export const SquareMatrix: ISquareMatrixStatic = class implements ISquareMatrix 
     private readonly matrix: Matrix;
 
     constructor(matrix: Matrix) {
-        this.matrix = matrix
+        this.matrix = _.cloneDeep(matrix)
     }
 
     static removeEmptyCrosses(matrix: ISquareMatrix): ISquareMatrix {
@@ -52,6 +55,29 @@ export const SquareMatrix: ISquareMatrixStatic = class implements ISquareMatrix 
         return arr
     }
 
+    static getZeroMatrix(size: number): ISquareMatrix {
+        const mainArray: Array<Array<any>> = []
+        for (let i = 0; i < size; i++) {
+            mainArray.push([])
+            for (let j = 0; j < size; j++) {
+                mainArray[i].push(0)
+            }
+        }
+        return new SquareMatrix(mainArray)
+    }
+
+    static changeValuesToOnes(matrix: ISquareMatrix): ISquareMatrix {
+        const mat = matrix.getCopy()
+        const size = mat.getSize()
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < size; j++) {
+                if (mat.get([i, j]) > 0)
+                    mat.set(1, [i, j])
+            }
+        }
+        return mat
+    }
+
     get(position: IPosition): any {
         try {
             return this.matrix[position[0]][position[1]]
@@ -75,7 +101,7 @@ export const SquareMatrix: ISquareMatrixStatic = class implements ISquareMatrix 
     }
 
     getCopy(): ISquareMatrix {
-        return this.constructor(this.matrix)
+        return new SquareMatrix(this.matrix)
     }
 
     remove(position: position): boolean {
@@ -93,6 +119,27 @@ export const SquareMatrix: ISquareMatrixStatic = class implements ISquareMatrix 
             this.matrix.splice(index, 1)
         } catch (e) {
             return false
+        }
+        return true
+    }
+
+    getCrossSum(index: number): number {
+        const size = this.getSize()
+        let sum = 0
+        for (let i = 0; i < size; i++) {
+            sum += this.get([i, index])
+            sum += this.get([index, i])
+        }
+        return sum
+    }
+
+    isSymmetric(): boolean {
+        const size = this.getSize()
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < i; j++) {
+                if (this.get([i, j]) !== this.get([j, i]))
+                    return false
+            }
         }
         return true
     }

@@ -1,7 +1,8 @@
 import {NetworkController} from "./network/networkController";
 import {getNetworkCreationObject} from "./network/networkCreationObject";
 import {InfoController} from "./info/infoController";
-import {Graph} from "./graphWorker/graph";
+import {Graph} from "./graphWorker/Graph"
+import {SquareMatrix} from "./graphWorker/squareMatrix";
 
 const containerID = 'network';
 
@@ -22,11 +23,16 @@ const infoController = new InfoController(networkController)
 networkController.setInfoCallback(infoController.getUpdateCallback())
 networkController.applyInfoCallback()
 document.addEventListener('keydown', (event) => {
-    // if (event.code === 'KeyB') {
-    //     const matrix = Graph.setOnesToDiagonal(new Graph(networkController.getNetwork()).getMatrixAsArray())
-    //     // console.log(matrix)
-    //     console.log(Graph.getReachabilityMatrix(matrix))
-    // }
+    if (event.code === 'KeyB') {
+
+        const matt = [[0]];
+        console.log(matt);
+
+        console.log(Graph.getReachabilityMatrix(new SquareMatrix(matt)))
+
+    }
+
+
 })
 
 
