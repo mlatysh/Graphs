@@ -32,35 +32,23 @@ export class DocumentEventListener {
     onDoubleClick(params) {
         this.parent.network.releaseNode();
         const coordinates = this.parent.network.DOMtoCanvas({x: params.x, y: params.y})
-        const nodes = this.parent.network.getNodeAt(this.parent.network.canvasToDOM(coordinates))
-        const edges = this.parent.network.getEdgeAt(this.parent.network.canvasToDOM(coordinates))
-
-        if (!nodes && !edges)
-            this.parent
-                .eventInitializer
-                .initAddNode(coordinates.x,
-                    coordinates.y,
-                    false,
-                    this.callbacks,
-                    this.eventListeners)
-        else if (nodes) {
+        const node = this.parent.network.getNodeAt(this.parent.network.canvasToDOM(coordinates))
+        const edge = this.parent.network.getEdgeAt(this.parent.network.canvasToDOM(coordinates))
+        console.log(edge, node)
+        if (!node && !edge)
+            PromptController.init(this.callNodeCreationDialog(true),
+                this.callNodeCreationDialog(), this,
+                {callbacks: this.callbacks, eventListeners: this.eventListeners},
+                coordinates)
+        else if (node) {
             PromptController.init(this.callNodeRenamingDialog(true),
                 this.callNodeRenamingDialog(), this,
                 {callbacks: this.callbacks, eventListeners: this.eventListeners})
-        }
-            // this.parent
-            //     .eventInitializer
-        //     .initEditNode(nodes, this.callbacks, this.eventListeners)
-        else if (edges) {
-
+        } else if (edge) {
             PromptController.init(this.callEdgeRenamingDialog(true),
                 this.callEdgeRenamingDialog(), this,
                 {callbacks: this.callbacks, eventListeners: this.eventListeners})
-            // this.parent
-            //     .eventInitializer
-            //     .initEditEdge(edges, this.callbacks, this.eventListeners)
         }
-
     }
 
     onContext(params) {
@@ -69,7 +57,21 @@ export class DocumentEventListener {
         else this.parent.network.fit({animation: true})
     }
 
-    callNodeRenamingDialog(options = false, response) {
+    callNodeCreationDialog(options = false) {
+        if (options) return DIALOG_OPTIONS.CREATING_NODE
+        else {
+            return function (response, extra) {
+                const node = {};
+                node.id = (Math.random() * 1e7).toString(32);
+                node.label = response;
+                node.x = extra.x;
+                node.y = extra.y;
+                this.parent.network.body.data.nodes.add(node)
+            }
+        }
+    }
+
+    callNodeRenamingDialog(options = false) {
         if (options) return DIALOG_OPTIONS.RENAMING_NODE
         else return function (response) {
             const selected = this.parent.network.getSelectedNodes()
@@ -79,17 +81,17 @@ export class DocumentEventListener {
         }
     }
 
-    callEdgeRenamingDialog(options = false, response) {
+    callEdgeRenamingDialog(options = false) {
         if (options) return DIALOG_OPTIONS.RENAMING_EDGE
         else return function (response) {
             const selected = this.parent.network.getSelectedEdges()
             selected.forEach(edgeId => {
-                this.parent.network.body.data.nodes.update({id: edgeId, label: response})
+                this.parent.network.body.data.edges.update({id: edgeId, label: response})
             })
         }
     }
 
-    callNodeShapeSelectionDialog(options = false, response) {
+    callNodeShapeSelectionDialog(options = false) {
         if (options) return DIALOG_OPTIONS.NODE_SHAPE_SELECTION
         else return function (response) {
             const selected = this.parent.network.getSelectedNodes()
@@ -99,7 +101,7 @@ export class DocumentEventListener {
         }
     }
 
-    callColorSelectionDialog(options = false, response) {
+    callColorSelectionDialog(options = false) {
         if (options) return DIALOG_OPTIONS.COLOR_SELECTION
         else return function (response) {
             const selection = this.parent.network.getSelection()

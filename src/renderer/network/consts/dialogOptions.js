@@ -35,6 +35,12 @@ export const DIALOG_OPTIONS = {
         alwaysOnTop: true,
         type: 'input'
     },
+    CREATING_NODE: {
+        title: 'Enter new node\'s value',
+        label: 'Value: ',
+        alwaysOnTop: true,
+        type: 'input'
+    },
     RENAMING_EDGE: {
         title: 'Enter edge\'s new value',
         label: 'Value: ',
