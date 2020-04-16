@@ -28,5 +28,17 @@ export const DIALOG_OPTIONS = {
         },
         alwaysOnTop: true,
         type: 'select'
+    },
+    RENAMING_NODE: {
+        title: 'Enter node\'s new value',
+        label: 'Value: ',
+        alwaysOnTop: true,
+        type: 'input'
+    },
+    RENAMING_EDGE: {
+        title: 'Enter edge\'s new value',
+        label: 'Value: ',
+        alwaysOnTop: true,
+        type: 'input'
     }
 }

@@ -4,10 +4,8 @@
   "main": "dist/main/main.js",
   "license": "MIT",
   "dependencies": {
-    "dialogs": "^2.0.1",
     "electron-prompt": "^1.5.1",
-    "lodash": "^4.17.15",
-    "mathjs": "^6.6.2"
+    "lodash": "^4.17.15"
   },
   "scripts": {
     "bstart": "tsc && yarn build && ./prepare.sh && yarn start",

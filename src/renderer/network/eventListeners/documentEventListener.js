@@ -43,14 +43,22 @@ export class DocumentEventListener {
                     false,
                     this.callbacks,
                     this.eventListeners)
-        else if (nodes)
-            this.parent
-                .eventInitializer
-                .initEditNode(nodes, this.callbacks, this.eventListeners)
+        else if (nodes) {
+            PromptController.init(this.callNodeRenamingDialog(true),
+                this.callNodeRenamingDialog(), this,
+                {callbacks: this.callbacks, eventListeners: this.eventListeners})
+        }
+            // this.parent
+            //     .eventInitializer
+        //     .initEditNode(nodes, this.callbacks, this.eventListeners)
         else if (edges) {
-            this.parent
-                .eventInitializer
-                .initEditEdge(edges, this.callbacks, this.eventListeners)
+
+            PromptController.init(this.callEdgeRenamingDialog(true),
+                this.callEdgeRenamingDialog(), this,
+                {callbacks: this.callbacks, eventListeners: this.eventListeners})
+            // this.parent
+            //     .eventInitializer
+            //     .initEditEdge(edges, this.callbacks, this.eventListeners)
         }
 
     }
@@ -59,6 +67,26 @@ export class DocumentEventListener {
         const selectedNodes = this.parent.network.getSelectedNodes()
         if (selectedNodes.length === 1) this.parent.network.focus(selectedNodes[0], {animation: true})
         else this.parent.network.fit({animation: true})
+    }
+
+    callNodeRenamingDialog(options = false, response) {
+        if (options) return DIALOG_OPTIONS.RENAMING_NODE
+        else return function (response) {
+            const selected = this.parent.network.getSelectedNodes()
+            selected.forEach(nodeId => {
+                this.parent.network.body.data.nodes.update({id: nodeId, label: response})
+            })
+        }
+    }
+
+    callEdgeRenamingDialog(options = false, response) {
+        if (options) return DIALOG_OPTIONS.RENAMING_EDGE
+        else return function (response) {
+            const selected = this.parent.network.getSelectedEdges()
+            selected.forEach(edgeId => {
+                this.parent.network.body.data.nodes.update({id: edgeId, label: response})
+            })
+        }
     }
 
     callNodeShapeSelectionDialog(options = false, response) {

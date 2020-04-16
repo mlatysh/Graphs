@@ -1,5 +1,4 @@
-const dialogs = require('dialogs');
-const Dialogs = dialogs();
+import {PromptController} from "./promptController";
 
 export class EventInitializer {
 
@@ -23,11 +22,9 @@ export class EventInitializer {
 
     initEditNode(nodeId, setterAndRemover, eventListeners) {
         setterAndRemover.remover(eventListeners)
-        Dialogs.prompt('Input node\'s new value: ', newValue => {
-            if (newValue !== undefined)
-                this.__editNode(nodeId, newValue)
-            setterAndRemover.setter(eventListeners)
-        });
+        PromptController.init(this.callNodeRenamingDialog(true),
+            this.callNodeRenamingDialog(), this,
+            {callbacks: this.callbacks, eventListeners: this.eventListeners})
     }
 
     initEditEdge(edgeId, setterAndRemover, eventListeners) {
