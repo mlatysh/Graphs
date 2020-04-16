@@ -1,4 +1,4 @@
-import {DataSet} from "../../../visjs/vis-network";
+import {DataSet} from 'visjs-network'
 
 export const getNetworkCreationObject = (nodesArray, edgesArray) => {
     return {

@@ -1,4 +1,4 @@
-import {Network} from '../../../visjs/vis-network'
+import {Network} from "visjs-network"
 import {NetworkExporter} from "./IO operator/networkExporter"
 import {RendererEventListener} from "./eventListeners/rendererEventListener";
 import {NetworkImporter} from "./IO operator/networkImporter";
@@ -6,7 +6,6 @@ import {ipcRenderer as ipc} from 'electron';
 import {OPTIONS} from "./networkInitOptions";
 import {DocumentEventListener} from "./eventListeners/documentEventListener";
 import {EventInitializer} from "./eventListeners/eventInitializers";
-
 
 export class NetworkController {
     constructor(networkCreationObject) {

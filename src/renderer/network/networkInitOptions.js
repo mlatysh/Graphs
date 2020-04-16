@@ -35,7 +35,6 @@ export const OPTIONS = {
     physics: {
         enabled: true,
         barnesHut: {
-            theta: 0.5,
             gravitationalConstant: -1000,
             centralGravity: 0,
             springLength: 200,
