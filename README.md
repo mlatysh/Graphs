@@ -9,6 +9,10 @@ git clone https://github.com/BBCQX/Graphs
 cd Graphs
 yarn && yarn bstart
 ```
+### Example
+![Example](https://i.imgur.com/3km0xNf.png)
+
+### Usage
 Some main shortcuts are available now such as *Ctrl(Cmd)+S, Ctrl(Cmd)+N, Ctrl(Cmd)+O, Ctrl(Cmd)+Q*, but main graph manipulations are available ONLY via shortcuts:
 - C key (with a node(s) or edge(s) selected) - *Color changing*
 - T key (with edge(s) selected) - *Swaps selected edge directed/undirected*
