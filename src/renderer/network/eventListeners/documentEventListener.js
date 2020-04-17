@@ -21,14 +21,14 @@ export class DocumentEventListener {
         const net = document.getElementById('network')
         net.removeEventListener('dblclick', eventListeners.onDoubleClick)
         net.removeEventListener('contextmenu', eventListeners.onContext)
-        net.removeEventListener('keydown', eventListeners.onKeyDown);
+        document.removeEventListener('keydown', eventListeners.onKeyDown);
     }
 
     addEventListeners(eventListeners) {
         const net = document.getElementById('network')
         net.addEventListener('dblclick', eventListeners.onDoubleClick)
         net.addEventListener('contextmenu', eventListeners.onContext)
-        net.addEventListener('keydown', eventListeners.onKeyDown);
+        document.addEventListener('keydown', eventListeners.onKeyDown);
     }
 
     onDoubleClick(params) {
@@ -142,9 +142,7 @@ export class DocumentEventListener {
                 })
             }
             this.parent.network.redraw()
-        }
-
-        if (params.code === 'KeyT' && !params.metaKey) {
+        } else if (params.code === 'KeyT' && !params.metaKey) {
             const selected = this.parent.network.getSelection()
             const edges = selected.edges
             const nodes = selected.nodes
@@ -162,21 +160,15 @@ export class DocumentEventListener {
                 PromptController.init(this.callNodeShapeSelectionDialog(true),
                     this.callNodeShapeSelectionDialog(), this)
             }
-        }
-
-        if (params.key === 'Backspace' && !params.metaKey) {
+        } else if (params.key === 'Backspace' && !params.metaKey) {
             this.parent.eventInitializer.initDeletion(this.parent.network.getSelection(),
                 this.callbacks,
                 this.eventListeners)
-        }
-
-        if (params.shiftKey && !params.metaKey) {
+        } else if (params.shiftKey && !params.metaKey) {
             if (this.parent.network.manipulation.editMode)
                 this.parent.network.disableEditMode()
             else this.parent.network.addEdgeMode()
-        }
-
-        if (params.code === 'KeyC' && !params.metaKey) {
+        } else if (params.code === 'KeyC' && !params.metaKey) {
             const selection = this.parent.network.getSelection()
             if (selection.nodes.length || selection.edges.length) {
                 PromptController.init(this.callColorSelectionDialog(true),

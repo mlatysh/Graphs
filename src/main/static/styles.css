@@ -31,3 +31,16 @@
     width: 100%;
     z-index: 2;
 }
+
+button {
+    font-size: 2vw;
+    border: none;
+    background: #404040;
+    color: #ffffff !important;
+    font-weight: 100;
+    padding: 20px;
+    text-transform: uppercase;
+    border-radius: 6px;
+    display: inline-block;
+    transition: all 0.3s ease 0s;
+}

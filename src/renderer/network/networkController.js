@@ -13,10 +13,10 @@ export class NetworkController {
         this.networkCreationObject = networkCreationObject;
         this.infoCallback = null
         this.init()
-        this.networkExporter = NetworkExporter;
-        this.networkImporter = NetworkImporter;
-        this.rendererEventListener = new RendererEventListener(this);
-        this.eventInitializer = new EventInitializer(this);
+        this.networkExporter = NetworkExporter
+        this.networkImporter = NetworkImporter
+        this.rendererEventListener = new RendererEventListener(this)
+        this.eventInitializer = new EventInitializer(this)
         this.documentEventListener = new DocumentEventListener(this)
     }
 
