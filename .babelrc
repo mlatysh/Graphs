@@ -4,5 +4,6 @@
     "@babel/preset-typescript",
     "babel-preset-minify"
   ],
-  "comments": false
+  "comments": false,
+  "sourceMaps": "inline"
 }
