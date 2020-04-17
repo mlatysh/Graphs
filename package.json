@@ -9,8 +9,9 @@
     "visjs-network": "^4.24.11"
   },
   "scripts": {
-    "start": "yarn build && electron ./dist/main/main.js",
+    "start": "yarn build && yarn pack-renderer && electron ./dist/main/main.js",
     "build": "babel src -d dist --extensions '.ts','.js' --copy-files",
+    "pack-renderer": "webpack --config webpack.config.js",
     "dev": "babel -w src -d dist --copy-files"
   },
   "devDependencies": {
@@ -20,8 +21,9 @@
     "@babel/preset-typescript": "^7.9.0",
     "@types/lodash": "^4.14.149",
     "babel-preset-minify": "^0.5.1",
-    "electron": "^8.2.0"
+    "electron": "^8.2.0",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
   },
-  "productName": "Graphs",
-  "type": "module"
+  "productName": "Graphs"
 }

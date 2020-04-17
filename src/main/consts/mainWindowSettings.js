@@ -1,5 +1,3 @@
-import path from "path";
-
 export const MAIN_WINDOW_SETTINGS = {
     minWidth: 800,
     minHeight: 600,
@@ -8,7 +6,6 @@ export const MAIN_WINDOW_SETTINGS = {
     },
     title: 'Graphs [New File]',
     show: false,
-    icon: path.join(__dirname, 'assets/icon/icon.png'),
     webSecurity: false
 }
 
