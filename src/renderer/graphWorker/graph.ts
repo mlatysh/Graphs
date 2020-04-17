@@ -1,6 +1,6 @@
 import {SquareMatrix} from "./squareMatrix";
-import {IGraph, IGraphStatic} from "./interfaces/graphInterface";
-import {ISquareMatrix} from "./interfaces/squareMatrixInterface";
+import {IGraph, IGraphStatic} from "./types/graphInterface";
+import {ISquareMatrix} from "./types/squareMatrixInterface";
 
 type IPosition = [number, number]
 type IExtendedNodeInfo = {

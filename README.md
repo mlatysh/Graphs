@@ -7,7 +7,7 @@ Graphs is a graph editor created on JS, TypeScript and Electron!
 ```sh
 git clone https://github.com/BBCQX/Graphs
 cd Graphs
-yarn && yarn bstart
+yarn && yarn start
 ```
 ### Example
 ![Example](https://i.imgur.com/3km0xNf.png)
