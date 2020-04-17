@@ -143,6 +143,4 @@ export const SquareMatrix: ISquareMatrixStatic = class implements ISquareMatrix 
         }
         return true
     }
-
-
 }

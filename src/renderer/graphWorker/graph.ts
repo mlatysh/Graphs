@@ -1,8 +1,7 @@
 import {SquareMatrix} from "./squareMatrix";
 import {IGraph, IGraphStatic} from "./types/graphInterface";
-import {ISquareMatrix} from "./types/squareMatrixInterface";
+import {ISquareMatrix, position} from "./types/squareMatrixInterface";
 
-type IPosition = [number, number]
 type IExtendedNodeInfo = {
     node: any,
     edges: Array<any>
@@ -14,9 +13,12 @@ type IExtendedEdgeInfo = {
     arrowed: boolean | undefined
 }
 
+export type idPair = [any, any]
+
+
 export const Graph: IGraphStatic = class implements IGraph {
     private readonly valuesMatrix: ISquareMatrix
-    private ids: Array<any>
+    private readonly ids: Array<any>
     private readonly type: string
     private allVertexesDegreesAreEven: boolean
 
@@ -104,7 +106,7 @@ export const Graph: IGraphStatic = class implements IGraph {
         }
 
         const findIndexesByRowAndColumnValue =
-            (rowValue: any, columnValue: any, matrix: ISquareMatrix): IPosition | undefined => {
+            (rowValue: any, columnValue: any, matrix: ISquareMatrix): position | undefined => {
                 const size = matrix.getSize()
                 let lineIndex = undefined
                 let columnIndex = undefined
@@ -138,7 +140,7 @@ export const Graph: IGraphStatic = class implements IGraph {
         })
         nodes.forEach(node => {
             node.edges.forEach((edge: IExtendedEdgeInfo) => {
-                let indexes: IPosition = findIndexesByRowAndColumnValue(edge.from, edge.to, matrix)
+                let indexes: position = findIndexesByRowAndColumnValue(edge.from, edge.to, matrix)
                 let value = matrix.get(indexes)
                 if (edge.arrowed) {
                     matrix.set(value + 1, indexes)
@@ -160,6 +162,7 @@ export const Graph: IGraphStatic = class implements IGraph {
         )
     }
 
+    private
 
     private getIdsFromMatrix(matrix: ISquareMatrix): Array<any> {
         const size = matrix.getSize()
@@ -198,7 +201,10 @@ export const Graph: IGraphStatic = class implements IGraph {
             }
         }
         this.allVertexesDegreesAreEven = true
+    }
 
+    private getIdsFromPosition(position: position): idPair {
+        return [this.ids[position[0] + 1], this.ids[position[1] + 1]]
     }
 
     hasEulerCycle(): boolean | undefined {
