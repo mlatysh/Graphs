@@ -9,16 +9,16 @@
     "visjs-network": "^4.24.11"
   },
   "scripts": {
-    "bstart": "tsc && ./prepare.sh && yarn build && yarn start",
-    "start": "electron ./dist/main/main.js",
-    "build": "babel src -d dist --presets=babel-preset-env",
-    "prod": "electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=release-builds",
-    "bprod": "yarn build && yarn prod"
+    "start": "yarn build && electron ./dist/main/main.js",
+    "build": "babel src -d dist --copy-files",
+    "dev": "babel -w src -d dist --copy-files"
   },
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "@babel/preset-typescript": "^7.9.0",
     "@types/lodash": "^4.14.149",
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
     "electron": "^8.2.0"
   },
   "productName": "Graphs",
