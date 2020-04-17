@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start": "yarn build && electron ./dist/main/main.js",
-    "build": "babel src -d dist --copy-files",
+    "build": "babel src -d dist --extensions '.ts','.js' --copy-files",
     "dev": "babel -w src -d dist --copy-files"
   },
   "devDependencies": {
@@ -19,6 +19,7 @@
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-typescript": "^7.9.0",
     "@types/lodash": "^4.14.149",
+    "babel-preset-minify": "^0.5.1",
     "electron": "^8.2.0"
   },
   "productName": "Graphs",
