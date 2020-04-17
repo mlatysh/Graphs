@@ -1,5 +1,8 @@
-interface IGraphStatic{
+import {ISquareMatrix} from "./squareMatrixInterface";
+
+export interface IGraphStatic {
     new(matrix: ISquareMatrix, type: string): IGraph
+
     getReachabilityMatrix(matrix: ISquareMatrix): ISquareMatrix
 
     checkConnectionsStrict(matrix: ISquareMatrix): boolean | undefined
@@ -12,9 +15,10 @@ interface IGraphStatic{
 }
 
 
-interface IGraph {
+export interface IGraph {
     isConnected(): boolean | undefined
 
     hasEulerCycle(): boolean
+
     getType(): string
 }

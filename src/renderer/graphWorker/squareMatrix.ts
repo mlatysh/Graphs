@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-
+import {ISquareMatrix, ISquareMatrixStatic, position} from "./interfaces/squareMatrixInterface";
 
 type IPosition = [number, number]
 type Matrix = Array<Array<number>>

@@ -1,6 +1,6 @@
-type position = [number, number]
+export type position = [number, number]
 
-interface ISquareMatrixStatic {
+export interface ISquareMatrixStatic {
     new(matrix: Array<Array<any>>): ISquareMatrix
 
     setOnesToDiagonal(matrix: ISquareMatrix): ISquareMatrix
@@ -12,7 +12,7 @@ interface ISquareMatrixStatic {
     changeValuesToOnes(matrix: ISquareMatrix): ISquareMatrix
 }
 
-interface ISquareMatrix {
+export interface ISquareMatrix {
     getSize(): number
 
     getCopy(): ISquareMatrix
