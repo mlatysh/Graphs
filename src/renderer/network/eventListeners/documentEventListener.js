@@ -18,15 +18,17 @@ export class DocumentEventListener {
     }
 
     removeEventListeners(eventListeners) {
-        document.removeEventListener('dblclick', eventListeners.onDoubleClick)
-        document.removeEventListener('contextmenu', eventListeners.onContext)
-        document.removeEventListener('keydown', eventListeners.onKeyDown);
+        const net = document.getElementById('network')
+        net.removeEventListener('dblclick', eventListeners.onDoubleClick)
+        net.removeEventListener('contextmenu', eventListeners.onContext)
+        net.removeEventListener('keydown', eventListeners.onKeyDown);
     }
 
     addEventListeners(eventListeners) {
-        document.addEventListener('dblclick', eventListeners.onDoubleClick)
-        document.addEventListener('contextmenu', eventListeners.onContext)
-        document.addEventListener('keydown', eventListeners.onKeyDown);
+        const net = document.getElementById('network')
+        net.addEventListener('dblclick', eventListeners.onDoubleClick)
+        net.addEventListener('contextmenu', eventListeners.onContext)
+        net.addEventListener('keydown', eventListeners.onKeyDown);
     }
 
     onDoubleClick(params) {

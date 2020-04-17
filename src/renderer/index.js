@@ -2,8 +2,6 @@ import {NetworkController} from "./network/networkController";
 import {getNetworkCreationObject} from "./network/networkCreationObject";
 import {InfoController} from "./info/infoController";
 
-const containerID = 'network';
-
 const NODES = [
     {id: 'abc', label: "Node 1"},
     {id: 'bcd', label: "Node 2"},

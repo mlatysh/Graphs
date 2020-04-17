@@ -16,10 +16,18 @@
 }
 #info-right {
     font-size: 2vw;
-    font-family :"Courier New", Courier, monospace;
+    font-family: "Courier New", Courier, monospace;
     position: relative;
     z-index: 2;
     pointer-events: none;
     float: right;
     text-align: right;
+}
+
+#actions {
+    position: absolute;
+    left: 2%;
+    bottom: 2%;
+    width: 100%;
+    z-index: 2;
 }
