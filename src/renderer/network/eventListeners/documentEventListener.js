@@ -36,7 +36,6 @@ export class DocumentEventListener {
         const coordinates = this.parent.network.DOMtoCanvas({x: params.x, y: params.y})
         const node = this.parent.network.getNodeAt(this.parent.network.canvasToDOM(coordinates))
         const edge = this.parent.network.getEdgeAt(this.parent.network.canvasToDOM(coordinates))
-        console.log(edge, node)
         if (!node && !edge)
             PromptController.init(this.callNodeCreationDialog(true),
                 this.callNodeCreationDialog(), this,
