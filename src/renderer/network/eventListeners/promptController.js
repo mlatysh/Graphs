@@ -6,7 +6,6 @@ export class PromptController {
             eventsHandler.callbacks.remover(eventsHandler.eventListeners)
 
         function then(r) {
-            console.log(extra, thenCallback)
             if (!r) {
                 if (eventsHandler)
                     eventsHandler.callbacks.setter(eventsHandler.eventListeners)

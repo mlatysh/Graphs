@@ -9,9 +9,8 @@
     "visjs-network": "^4.24.11"
   },
   "scripts": {
-    "start": "yarn build && yarn pack-renderer && electron ./dist/main/main.js",
+    "start": "yarn build && electron ./dist/main/main.js",
     "build": "babel src -d dist --extensions '.ts','.js' --copy-files",
-    "pack-renderer": "webpack --config webpack.config.js",
     "dev": "babel -w src -d dist --copy-files"
   },
   "devDependencies": {
