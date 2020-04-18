@@ -24,7 +24,9 @@ export interface IGraph {
 
     getType(): string
 
-    buildPathToMakeConnected(): IPath
+    buildPathToMakeConnectedOriented(): IPath
+
+    buildPathToMakeConnectedNotOriented(): IPath
 
     isEmpty(): boolean
 

@@ -84,7 +84,7 @@ export class InfoController {
     }
 
     manageControlElements(graph) {
-        if (graph.isConnected())
+        if (graph.isConnected() || graph.getType() === 'mixed')
             this.controlElements.makeGraphConnectedButton.style.display = 'none'
         else
             this.controlElements.makeGraphConnectedButton.style.display = 'block'
@@ -92,18 +92,37 @@ export class InfoController {
 
     makeGraphConnectedListener(event) {
         const graph = this.getGraph()
+        const network = this.networkController.getNetwork()
         if (graph.isEmpty()) return
-        const path = graph.buildPathToMakeConnected()
-        if (path) {
-            path.getPath().forEach(one => {
-                const ids = graph.getIdsFromPosition(one)
-                this.networkController.network.body.data.edges.add(
-                    {
-                        from: ids[0],
-                        to: ids[1]
-                    }
-                )
-            })
+        if (graph.getType() === 'directed') {
+            const path = graph.buildPathToMakeConnectedOriented()
+            if (path) {
+                path.getPath().forEach(one => {
+                    const ids = graph.getIdsFromPosition(one)
+                    network.body.data.edges.add(
+                        {
+                            from: ids[0],
+                            to: ids[1]
+                        }
+                    )
+                })
+            }
+        } else if (graph.getType() === 'not directed') {
+            const path = graph.buildPathToMakeConnectedNotOriented()
+            if (path) {
+                path.getPath().forEach(one => {
+                    const ids = graph.getIdsFromPosition(one)
+                    network.body.data.edges.add(
+                        {
+                            from: ids[0],
+                            to: ids[1],
+                        }
+                    )
+                })
+            }
+            for (const edge in network.body.edges) {
+                network.body.edges[edge].options.arrows.to = false
+            }
         }
     }
 }

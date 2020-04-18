@@ -205,53 +205,71 @@ export const Graph: IGraphStatic = class implements IGraph {
         this.allVertexesDegreesAreEven = true
     }
 
-    getIdsFromPosition(position: position): idPair {
-        return [this.ids[position[0] + 1], this.ids[position[1] + 1]]
-    }
-
-    buildPathToMakeConnected(): IPath {
-
-        function getPositions(matrix: ISquareMatrix): position[] {
-            const size = matrix.getSize()
-            const mat = matrix.getCopy()
-            const values: position[] = []
+    private getPositions(matrix: ISquareMatrix, oriented): position[] {
+        const size = matrix.getSize()
+        const values: position[] = []
+        if (oriented) {
             for (let i = 0; i < size; i++) {
                 for (let j = 0; j < size; j++) {
-                    if (mat.get([i, j]) === 0) {
+                    if (matrix.get([i, j]) === 0) {
                         values.push([i, j])
                     }
                 }
             }
-            return values
+        } else {
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < i; j++) {
+                    if (matrix.get([i, j]) === 0) {
+                        values.push([i, j])
+                    }
+                }
+            }
         }
+        return values
+    }
 
-        function setPath(path: IPath, matrix: ISquareMatrix) {
-            const mat = matrix.getCopy()
-            path.getPath().forEach(one => {
-                mat.set(1, [one[0], one[1]])
-            })
-            return mat
-        }
 
-        const readyMatrix = SquareMatrix.setOnesToDiagonal(this.valuesMatrix)
-        const reachableMatrix = Graph.getReachabilityMatrix(readyMatrix)
-        const positions: position[] = getPositions(reachableMatrix)
-        const nullsAmount = reachableMatrix.countNulls()
+    private setPath(path: IPath, matrix: ISquareMatrix, oriented) {
+        const mat = matrix.getCopy()
+        path.getPath().forEach(one => {
+            mat.set(1, [one[0], one[1]])
+            if (!oriented) mat.set(1, [one[1], one[0]])
+        })
+        return mat
+    }
 
+    private calculatePath(nullsAmount: number, positions: position[], oriented) {
         for (let i = 1; i <= nullsAmount; i++) {
             const combinations = bigCombination(positions, i)
             while (true) {
                 const value = combinations.next()
                 if (value) {
                     const fullPath = Path.getPathFromArray(value)
-                    if (Graph.isConnected(setPath(fullPath, this.valuesMatrix))) {
+                    if (Graph.isConnected(this.setPath(fullPath, this.valuesMatrix, oriented))) {
                         return fullPath
                     }
-                } else {
-                    break
-                }
+                } else break
             }
         }
+    }
+
+    getIdsFromPosition(position: position): idPair {
+        return [this.ids[position[0] + 1], this.ids[position[1] + 1]]
+    }
+
+
+    buildPathToMakeConnectedNotOriented(): IPath {
+        const readyMatrix = SquareMatrix.setOnesToDiagonal(this.valuesMatrix)
+        const positions: position[] = this.getPositions(readyMatrix, false)
+        const nullsAmount = readyMatrix.countNulls()
+        return this.calculatePath(nullsAmount, positions, false)
+    }
+
+    buildPathToMakeConnectedOriented(): IPath {
+        const readyMatrix = SquareMatrix.setOnesToDiagonal(this.valuesMatrix)
+        const positions: position[] = this.getPositions(readyMatrix, true)
+        const nullsAmount = readyMatrix.countNulls()
+        return this.calculatePath(nullsAmount, positions, true)
     }
 
     hasEulerCycle(): boolean | undefined {
