@@ -14,11 +14,13 @@ export class InfoController {
     }
 
     updateState() {
-        this.updateLeft(this.networkController.getNetwork())
-        this.updateRight(this.networkController.getNetwork())
+        const network = this.networkController.getNetwork()
+        const graph = new Graph(Graph.getMatrixFromNetwork(network), Graph.getConnectivityFromNetwork(network))
+        this.updateLeft(network, graph)
+        this.updateRight(network, graph)
     }
 
-    updateLeft(network) {
+    updateLeft(network, graph) {
         const nodes = network.body.data.nodes
         let totalNodes = 0
         nodes.forEach(node => {
@@ -28,7 +30,6 @@ export class InfoController {
                 totalNodes++
         })
         const totalEdges = Object.keys(network.body.edges).length
-        const graph = new Graph(Graph.getMatrixFromNetwork(network), Graph.getConnectivityFromNetwork(network))
         const connected = graph.isConnected()
         let hasEulerCycle = graph.hasEulerCycle()
         const type = graph.getType()
@@ -43,7 +44,7 @@ export class InfoController {
             + `Has Euler cycle: ${hasEulerCycle}`
     }
 
-    updateRight(network) {
+    updateRight(network, graph) {
         const selectedNodes = network.getSelectedNodes()
         let rez = `Edit mode: ${network.manipulation.editMode ? 'enabled' : 'disabled'}\n\n`
         if (selectedNodes.length === 1) {
