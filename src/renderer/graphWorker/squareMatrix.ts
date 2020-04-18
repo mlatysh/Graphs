@@ -143,4 +143,16 @@ export const SquareMatrix: ISquareMatrixStatic = class implements ISquareMatrix 
         }
         return true
     }
+
+    countNulls(): number {
+        const size = this.getSize()
+        let counter = 0
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < size; j++) {
+                if (this.get([i, j]) === 0)
+                    counter++
+            }
+        }
+        return counter
+    }
 }

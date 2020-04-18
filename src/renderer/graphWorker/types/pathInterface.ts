@@ -4,6 +4,8 @@ export type path = position[]
 
 export interface IPathInterfaceStatic {
     new(): IPath
+
+    getPathFromArray(array: position[]): IPath
 }
 
 
@@ -17,4 +19,6 @@ export interface IPath {
     clearPath(): void
 
     equals(anotherPath: IPath): boolean
+
+    getCopy(): IPath
 }

@@ -1,6 +1,9 @@
 import {SquareMatrix} from "./squareMatrix";
 import {IGraph, IGraphStatic} from "./types/graphInterface";
 import {ISquareMatrix, position} from "./types/squareMatrixInterface";
+import {IPath} from "./types/pathInterface";
+import {combination} from 'js-combinatorics'
+import {Path} from "./path";
 
 type IExtendedNodeInfo = {
     node: any,
@@ -162,8 +165,6 @@ export const Graph: IGraphStatic = class implements IGraph {
         )
     }
 
-    private
-
     private getIdsFromMatrix(matrix: ISquareMatrix): Array<any> {
         const size = matrix.getSize()
         const ids = []
@@ -207,6 +208,45 @@ export const Graph: IGraphStatic = class implements IGraph {
         return [this.ids[position[0] + 1], this.ids[position[1] + 1]]
     }
 
+    buildPathToMakeConnected(): IPath | boolean {
+
+        const getPositions = (matrix: ISquareMatrix): position[] => {
+            const size = matrix.getSize()
+            const mat = matrix.getCopy()
+            const values: position[] = []
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < size; j++) {
+                    if (mat.get([i, j]) === 0) {
+                        values.push([i, j])
+                    }
+                }
+            }
+            return values
+        }
+
+        const setPath = (path: IPath, matrix: ISquareMatrix) => {
+            const mat = matrix.getCopy()
+            path.getPath().forEach(one => {
+                mat.set(1, [one[0], one[1]])
+            })
+            return mat
+        }
+
+        const readyMatrix = SquareMatrix.setOnesToDiagonal(this.valuesMatrix)
+        const positions: position[] = getPositions(readyMatrix)
+        const nullsAmount = readyMatrix.countNulls()
+
+        for (let i = 1; i <= nullsAmount; i++) {
+            const combinations: [number, number][][] = combination(positions, i).toArray()
+            for (let j = 0; j < combinations.length; j++) {
+                const fullPath = Path.getPathFromArray(combinations[j])
+                if (Graph.isConnected(setPath(fullPath, this.valuesMatrix))) {
+                    return fullPath
+                }
+            }
+        }
+    }
+
     hasEulerCycle(): boolean | undefined {
         if (this.getType() === 'directed' || this.getType() === 'not directed') {
             return this.allVertexesDegreesAreEven &&
@@ -225,5 +265,9 @@ export const Graph: IGraphStatic = class implements IGraph {
 
     getType(): string {
         return this.type;
+    }
+
+    isEmpty(): boolean {
+        return this.valuesMatrix.getSize() === 0
     }
 }

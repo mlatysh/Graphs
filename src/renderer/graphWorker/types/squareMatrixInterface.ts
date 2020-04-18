@@ -28,6 +28,8 @@ export interface ISquareMatrix {
     getCrossSum(index: number): number
 
     isSymmetric(): boolean
+
+    countNulls(): number
 }
 
 

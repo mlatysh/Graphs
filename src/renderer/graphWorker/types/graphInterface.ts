@@ -1,4 +1,5 @@
 import {ISquareMatrix} from "./squareMatrixInterface";
+import {IPath} from "./pathInterface";
 
 export interface IGraphStatic {
     new(matrix: ISquareMatrix, type: string): IGraph
@@ -21,4 +22,8 @@ export interface IGraph {
     hasEulerCycle(): boolean
 
     getType(): string
+
+    buildPathToMakeConnected(): IPath | boolean
+
+    isEmpty(): boolean
 }

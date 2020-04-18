@@ -4,9 +4,17 @@ export class InfoController {
     constructor(networkController) {
         this.leftDOMElement = document.getElementById('info-left')
         this.rightDOMElement = document.getElementById('info-right')
+        this.actionsDOMElement = document.getElementById('actions')
+        this.createControlElements()
         this.updateCallback = this.updateState.bind(this)
         document.addEventListener('keyup', this.updateState.bind(this))
         this.networkController = networkController
+    }
+
+    getGraph() {
+        const network = this.networkController.getNetwork()
+        return new Graph(Graph.getMatrixFromNetwork(network),
+            Graph.getConnectivityFromNetwork(network))
     }
 
     getUpdateCallback() {
@@ -15,9 +23,10 @@ export class InfoController {
 
     updateState() {
         const network = this.networkController.getNetwork()
-        const graph = new Graph(Graph.getMatrixFromNetwork(network), Graph.getConnectivityFromNetwork(network))
+        const graph = this.getGraph()
         this.updateLeft(network, graph)
         this.updateRight(network, graph)
+        this.manageControlElements(graph)
     }
 
     updateLeft(network, graph) {
@@ -59,5 +68,29 @@ export class InfoController {
             rez += `Selected vertex degree: ${amount}`
         }
         this.rightDOMElement.innerText = rez
+
+    }
+
+    createControlElements() {
+        this.controlElements = {}
+        this.controlElements.makeGraphConnectedButton = document.createElement('button')
+        this.controlElements.makeGraphConnectedButton.style.fontSize = '2vw'
+        this.controlElements.makeGraphConnectedButton.style.display = 'none'
+        this.controlElements.makeGraphConnectedButton.innerText = 'Make graph connected'
+        this.actionsDOMElement.appendChild(this.controlElements.makeGraphConnectedButton)
+        this.controlElements.makeGraphConnectedButton
+            .addEventListener('click', this.makeGraphConnectedListener.bind(this))
+    }
+
+    manageControlElements(graph) {
+        if (graph.isConnected())
+            this.controlElements.makeGraphConnectedButton.style.display = 'none'
+        else
+            this.controlElements.makeGraphConnectedButton.style.display = 'block'
+    }
+
+    makeGraphConnectedListener(event) {
+        if (this.getGraph().isEmpty()) return
+        console.log(this.getGraph().buildPathToMakeConnected())
     }
 }
