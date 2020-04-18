@@ -2,7 +2,8 @@ export const MAIN_WINDOW_SETTINGS = {
     minWidth: 800,
     minHeight: 600,
     webPreferences: {
-        nodeIntegration: true
+        nodeIntegration: true,
+        nodeIntegrationInWorker: true
     },
     title: 'Graphs [New File]',
     show: false,

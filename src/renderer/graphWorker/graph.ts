@@ -2,7 +2,7 @@ import {SquareMatrix} from "./squareMatrix";
 import {IGraph, IGraphStatic} from "./types/graphInterface";
 import {ISquareMatrix, position} from "./types/squareMatrixInterface";
 import {IPath} from "./types/pathInterface";
-import {combination} from 'js-combinatorics'
+import {bigCombination} from 'js-combinatorics'
 import {Path} from "./path";
 
 type IExtendedNodeInfo = {
@@ -34,8 +34,8 @@ export const Graph: IGraphStatic = class implements IGraph {
 
     static getReachabilityMatrix(matrix: ISquareMatrix): ISquareMatrix {
         let mat = SquareMatrix.changeValuesToOnes(matrix)
+        mat = SquareMatrix.setOnesToDiagonal(mat)
         const size = mat.getSize()
-
         const copyLineWithAddition = (innerMatrix: ISquareMatrix, indexRowFrom: number, indexRowWhere: number) => {
             for (let i = 0; i < size; i++) {
                 const taken = innerMatrix.get([indexRowFrom, i])
@@ -43,14 +43,15 @@ export const Graph: IGraphStatic = class implements IGraph {
                     innerMatrix.set(1, [indexRowWhere, i])
             }
         }
-        for (let i = 0; i < size; i++) {
-            for (let j = 0; j < size; j++) {
-                if (mat.get([i, j]) === 1) {
-                    copyLineWithAddition(mat, j, i)
+        for (let k = 0; k < size; k++) {
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < size; j++) {
+                    if (mat.get([i, j]) === 1) {
+                        copyLineWithAddition(mat, j, i)
+                    }
                 }
             }
         }
-        mat = SquareMatrix.setOnesToDiagonal(mat)
         return mat
     }
 
@@ -204,13 +205,13 @@ export const Graph: IGraphStatic = class implements IGraph {
         this.allVertexesDegreesAreEven = true
     }
 
-    private getIdsFromPosition(position: position): idPair {
+    getIdsFromPosition(position: position): idPair {
         return [this.ids[position[0] + 1], this.ids[position[1] + 1]]
     }
 
-    buildPathToMakeConnected(): IPath | boolean {
+    buildPathToMakeConnected(): IPath {
 
-        const getPositions = (matrix: ISquareMatrix): position[] => {
+        function getPositions(matrix: ISquareMatrix): position[] {
             const size = matrix.getSize()
             const mat = matrix.getCopy()
             const values: position[] = []
@@ -224,7 +225,7 @@ export const Graph: IGraphStatic = class implements IGraph {
             return values
         }
 
-        const setPath = (path: IPath, matrix: ISquareMatrix) => {
+        function setPath(path: IPath, matrix: ISquareMatrix) {
             const mat = matrix.getCopy()
             path.getPath().forEach(one => {
                 mat.set(1, [one[0], one[1]])
@@ -233,15 +234,21 @@ export const Graph: IGraphStatic = class implements IGraph {
         }
 
         const readyMatrix = SquareMatrix.setOnesToDiagonal(this.valuesMatrix)
-        const positions: position[] = getPositions(readyMatrix)
-        const nullsAmount = readyMatrix.countNulls()
+        const reachableMatrix = Graph.getReachabilityMatrix(readyMatrix)
+        const positions: position[] = getPositions(reachableMatrix)
+        const nullsAmount = reachableMatrix.countNulls()
 
         for (let i = 1; i <= nullsAmount; i++) {
-            const combinations: [number, number][][] = combination(positions, i).toArray()
-            for (let j = 0; j < combinations.length; j++) {
-                const fullPath = Path.getPathFromArray(combinations[j])
-                if (Graph.isConnected(setPath(fullPath, this.valuesMatrix))) {
-                    return fullPath
+            const combinations = bigCombination(positions, i)
+            while (true) {
+                const value = combinations.next()
+                if (value) {
+                    const fullPath = Path.getPathFromArray(value)
+                    if (Graph.isConnected(setPath(fullPath, this.valuesMatrix))) {
+                        return fullPath
+                    }
+                } else {
+                    break
                 }
             }
         }
@@ -269,5 +276,9 @@ export const Graph: IGraphStatic = class implements IGraph {
 
     isEmpty(): boolean {
         return this.valuesMatrix.getSize() === 0
+    }
+
+    getValues(): ISquareMatrix {
+        return this.valuesMatrix
     }
 }

@@ -1,5 +1,6 @@
-import {ISquareMatrix} from "./squareMatrixInterface";
+import {ISquareMatrix, position} from "./squareMatrixInterface";
 import {IPath} from "./pathInterface";
+import {idPair} from "../graph";
 
 export interface IGraphStatic {
     new(matrix: ISquareMatrix, type: string): IGraph
@@ -23,7 +24,11 @@ export interface IGraph {
 
     getType(): string
 
-    buildPathToMakeConnected(): IPath | boolean
+    buildPathToMakeConnected(): IPath
 
     isEmpty(): boolean
+
+    getIdsFromPosition(position: position): idPair
+
+    getValues(): ISquareMatrix
 }

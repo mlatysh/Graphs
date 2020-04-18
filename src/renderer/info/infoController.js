@@ -22,6 +22,7 @@ export class InfoController {
     }
 
     updateState() {
+
         const network = this.networkController.getNetwork()
         const graph = this.getGraph()
         this.updateLeft(network, graph)
@@ -90,7 +91,19 @@ export class InfoController {
     }
 
     makeGraphConnectedListener(event) {
-        if (this.getGraph().isEmpty()) return
-        console.log(this.getGraph().buildPathToMakeConnected())
+        const graph = this.getGraph()
+        if (graph.isEmpty()) return
+        const path = graph.buildPathToMakeConnected()
+        if (path) {
+            path.getPath().forEach(one => {
+                const ids = graph.getIdsFromPosition(one)
+                this.networkController.network.body.data.edges.add(
+                    {
+                        from: ids[0],
+                        to: ids[1]
+                    }
+                )
+            })
+        }
     }
 }
