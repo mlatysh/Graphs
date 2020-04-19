@@ -243,10 +243,8 @@ export const Graph: IGraphStatic = class implements IGraph {
         if (!min) {
             min = 1
         }
-        console.log(min)
         for (let i = min; i <= nullsAmount; i++) {
             const combinations = bigCombination(positions, i)
-            alert(i)
             while (true) {
                 const value = combinations.next()
                 if (value) {
