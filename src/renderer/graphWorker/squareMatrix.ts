@@ -2,7 +2,7 @@ import * as _ from "lodash";
 import {ISquareMatrix, ISquareMatrixStatic, position} from "./types/squareMatrixInterface";
 
 type IPosition = [number, number]
-type Matrix = Array<Array<number>>
+type Matrix = Array<Array<any>>
 
 
 export const SquareMatrix: ISquareMatrixStatic = class implements ISquareMatrix {
@@ -48,11 +48,20 @@ export const SquareMatrix: ISquareMatrixStatic = class implements ISquareMatrix 
 
     static setOnesToDiagonal(matrix: ISquareMatrix): ISquareMatrix {
         const size: number = matrix.getSize()
-        const arr: ISquareMatrix = matrix.getCopy()
+        const mat: ISquareMatrix = matrix.getCopy()
         for (let i = 0; i < size; i++) {
-            arr.set(1, [i, i])
+            mat.set(1, [i, i])
         }
-        return arr
+        return mat
+    }
+
+    static setNullsToDiagonal(matrix: ISquareMatrix): ISquareMatrix {
+        const size: number = matrix.getSize()
+        const mat: ISquareMatrix = matrix.getCopy()
+        for (let i = 0; i < size; i++) {
+            mat.set(0, [i, i])
+        }
+        return mat
     }
 
     static getZeroMatrix(size: number): ISquareMatrix {
@@ -78,6 +87,21 @@ export const SquareMatrix: ISquareMatrixStatic = class implements ISquareMatrix 
         return mat
     }
 
+    static noEmptyRowsOrColumns(matrix: ISquareMatrix): boolean {
+        const size = matrix.getSize()
+        let colSum = 0
+        for (let i = 0; i < size; i++) {
+            if (_.sum(matrix.getLineReferring(i)) === 0)
+                return false
+            colSum = 0
+            for (let j = 0; j < size; j++) {
+                colSum += matrix.get([j, i])
+            }
+            if (colSum === 0) return false
+        }
+        return true
+    }
+
     get(position: IPosition): any {
         try {
             return this.matrix[position[0]][position[1]]
@@ -94,6 +118,14 @@ export const SquareMatrix: ISquareMatrixStatic = class implements ISquareMatrix 
         }
         return true
 
+    }
+
+    getLineReferring(index: number): any[] {
+        return this.matrix[index]
+    }
+
+    toArray(): Matrix {
+        return _.cloneDeep(this.matrix)
     }
 
     getSize(): number {

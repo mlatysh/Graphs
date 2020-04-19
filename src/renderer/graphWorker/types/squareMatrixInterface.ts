@@ -5,6 +5,8 @@ export interface ISquareMatrixStatic {
 
     setOnesToDiagonal(matrix: ISquareMatrix): ISquareMatrix
 
+    setNullsToDiagonal(matrix: ISquareMatrix): ISquareMatrix
+
     removeEmptyCrosses(matrix: ISquareMatrix): ISquareMatrix
 
     getZeroMatrix(size: number): ISquareMatrix
@@ -12,6 +14,8 @@ export interface ISquareMatrixStatic {
     changeValuesToOnes(matrix: ISquareMatrix): ISquareMatrix
 
     fullFillAnotherDiagonal(matrix: ISquareMatrix, symmetric: boolean): ISquareMatrix
+
+    noEmptyRowsOrColumns(matrix: ISquareMatrix): boolean
 }
 
 export interface ISquareMatrix {
@@ -21,7 +25,11 @@ export interface ISquareMatrix {
 
     get(position: position): any
 
+    getLineReferring(index: number): any[]
+
     set(value: any, position: position): boolean
+
+    toArray(): number[][]
 
     remove(position: position): boolean
 

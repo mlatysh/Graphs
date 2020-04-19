@@ -60,12 +60,7 @@ export const Graph: IGraphStatic = class implements IGraph {
         const size = matrix.getSize()
         if (!size) return undefined
         const mat = Graph.getReachabilityMatrix(matrix)
-        for (let i = 0; i < size; i++) {
-            for (let j = 0; j < size; j++) {
-                if (mat.get([i, j]) === 0) return false
-            }
-        }
-        return true
+        return mat.countNulls() === 0;
     }
 
     static getConnectivityFromNetwork(network: any): string {
@@ -240,16 +235,15 @@ export const Graph: IGraphStatic = class implements IGraph {
     }
 
     private calculatePath(min: number, nullsAmount: number, positions: position[], oriented) {
-        if (!min) {
-            min = 1
-        }
         for (let i = min; i <= nullsAmount; i++) {
             const combinations = bigCombination(positions, i)
             while (true) {
                 const value = combinations.next()
                 if (value) {
                     const fullPath = Path.getPathFromArray(value)
-                    if (Graph.isConnected(this.setPath(fullPath, this.valuesMatrix, oriented))) {
+                    const matrixWithPath = this.setPath(fullPath, this.valuesMatrix, oriented)
+                    const tempCheck = SquareMatrix.noEmptyRowsOrColumns(SquareMatrix.setNullsToDiagonal(matrixWithPath))
+                    if (tempCheck && Graph.isConnected(matrixWithPath)) {
                         return fullPath
                     }
                 } else break
