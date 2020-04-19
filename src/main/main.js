@@ -1,5 +1,5 @@
 import {app, BrowserWindow, ipcMain as ipc} from 'electron'
-import {setApplicationMenu} from "./menu/envSetting";
+import {setApplicationMenu, unsetApplicationMenu} from "./menu/envSetting";
 import {FileWorker} from "./fileWorker/fileWorker";
 import {consts as builtinConsts} from "./consts/buitinConsts";
 import {consts as mainActionConsts} from "./consts/mainActionConsts";
@@ -29,6 +29,14 @@ class Main {
         ipc.on(mainActionConsts.OPEN_FILE, this.onOpenFile.bind(this));
         ipc.on(mainActionConsts.CLEAR_SAVE_CURRENT_NETWORK, this.onClearSaveNetwork.bind(this));
         ipc.on(mainActionConsts.NEW_FILE_CREATION, this.onNewFileCreation.bind(this))
+    }
+
+    unsetIpcHandlers() {
+        unsetApplicationMenu()
+    }
+
+    setIpcHandlers() {
+        setApplicationMenu()
     }
 
 
@@ -67,13 +75,15 @@ class Main {
     }
 
     onReady() {
+        ipc.on(mainActionConsts.DISABLE_INTERACTIVITY, this.unsetIpcHandlers.bind(this))
+        ipc.on(mainActionConsts.ENABLE_INTERACTIVITY, this.setIpcHandlers.bind(this))
         this.mainWindow = new BrowserWindow(MAIN_WINDOW_SETTINGS);
         this.menuEventsEmitter = new MenuEventsEmitter(this.mainWindow);
         setApplicationMenu();
         this.mainWindow.on(mainActionConsts.READY_TO_SHOW, () => {
             this.mainWindow.show()
         });
-        this.mainWindow.loadFile(path.resolve(__dirname,'static','index.html'));
+        this.mainWindow.loadFile(path.resolve(__dirname, 'static', 'index.html'));
         this.mainWindow.webContents.openDevTools()
         //DEBUG
     }

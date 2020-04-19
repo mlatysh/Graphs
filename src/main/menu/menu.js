@@ -7,6 +7,12 @@ import {
 } from './menuHandlers'
 
 
+export const emptyMenu = [
+    {
+        label: 'Unavailable'
+    }
+]
+
 export const menu = [
     {
         label: "File",

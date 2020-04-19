@@ -21,6 +21,11 @@ export class RendererEventListener {
             this.onCreateNewActiveNetworkHandler.bind(this))
     }
 
+    removeAllListeners() {
+        this.controller.ipc.removeAllListeners(rendererActionConsts.GET_CURRENT_ACTIVE_NETWORK)
+        this.controller.ipc.removeAllListeners(rendererActionConsts.CHANGE_ACTIVE_NETWORK)
+        this.controller.ipc.removeAllListeners(rendererActionConsts.CREATE_NEW_ACTIVE_NETWORK)
+    }
 
     onGetCurrentActiveNetworkHandler(event, filePath) {
         event.sender.send(mainActionConsts.SAVE_CURRENT_NETWORK,

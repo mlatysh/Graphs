@@ -1,4 +1,6 @@
-import {ISquareMatrix} from "./squareMatrixInterface";
+import {ISquareMatrix, position} from "./squareMatrixInterface";
+import {IPath} from "./pathInterface";
+import {idPair} from "../graph";
 
 export interface IGraphStatic {
     new(matrix: ISquareMatrix, type: string): IGraph
@@ -12,6 +14,8 @@ export interface IGraphStatic {
     getConnectivityFromNetwork(network: any): string
 
     isConnected(matrix: ISquareMatrix): boolean | undefined
+
+    buildPathFromDifference(withPathMatrix: ISquareMatrix, withoutPathMatrix: ISquareMatrix, symmetric: boolean): IPath
 }
 
 
@@ -21,4 +25,14 @@ export interface IGraph {
     hasEulerCycle(): boolean
 
     getType(): string
+
+    buildPathToMakeConnectedOriented(): IPath
+
+    buildPathToMakeConnectedNotOriented(): IPath
+
+    isEmpty(): boolean
+
+    getIdsFromPosition(position: position): idPair
+
+    getValues(): ISquareMatrix
 }
