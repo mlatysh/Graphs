@@ -84,7 +84,7 @@ export class InfoController {
     }
 
     manageControlElements(graph) {
-        if (graph.isConnected() || graph.getType() === 'mixed')
+        if (graph.isConnected() || graph.getType() === 'mixed' || graph.getType() === 'not applicable')
             this.controlElements.makeGraphConnectedButton.style.display = 'none'
         else
             this.controlElements.makeGraphConnectedButton.style.display = 'block'

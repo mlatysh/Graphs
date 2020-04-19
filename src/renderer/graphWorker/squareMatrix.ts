@@ -155,4 +155,31 @@ export const SquareMatrix: ISquareMatrixStatic = class implements ISquareMatrix 
         }
         return counter
     }
+
+    hasNoNulls(): boolean {
+        return this.countNulls() === 0
+    }
+
+    countNotNullsWithoutDiagonal(): number {
+        const size = this.getSize()
+        let counter = 0
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < size; j++) {
+                if (i !== j && this.get([i, j]) !== 0)
+                    counter++
+            }
+        }
+        return counter
+    }
+
+    static fullFillAnotherDiagonal(matrix: ISquareMatrix, symmetric: boolean): ISquareMatrix {
+        const size = matrix.getSize()
+        const mat = matrix.getCopy()
+        for (let i = 0; i < size - 1; i++) {
+            mat.set(1, [i, i + 1])
+            if (symmetric) mat.set(1, [i + 1, i])
+        }
+        if (!symmetric) mat.set(1, [size - 1, 0])
+        return mat
+    }
 }

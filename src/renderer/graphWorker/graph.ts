@@ -51,6 +51,7 @@ export const Graph: IGraphStatic = class implements IGraph {
                     }
                 }
             }
+            if (mat.hasNoNulls()) return mat
         }
         return mat
     }
@@ -78,6 +79,7 @@ export const Graph: IGraphStatic = class implements IGraph {
         if (oriented) state = 'directed'
         if (disoriented) state = 'not directed'
         if (!oriented && !disoriented) state = 'mixed'
+        if (oriented && disoriented) state = 'not applicable'
         return state
     }
 
@@ -228,7 +230,6 @@ export const Graph: IGraphStatic = class implements IGraph {
         return values
     }
 
-
     private setPath(path: IPath, matrix: ISquareMatrix, oriented) {
         const mat = matrix.getCopy()
         path.getPath().forEach(one => {
@@ -238,9 +239,14 @@ export const Graph: IGraphStatic = class implements IGraph {
         return mat
     }
 
-    private calculatePath(nullsAmount: number, positions: position[], oriented) {
-        for (let i = 1; i <= nullsAmount; i++) {
+    private calculatePath(min: number, nullsAmount: number, positions: position[], oriented) {
+        if (!min) {
+            min = 1
+        }
+        console.log(min)
+        for (let i = min; i <= nullsAmount; i++) {
             const combinations = bigCombination(positions, i)
+            alert(i)
             while (true) {
                 const value = combinations.next()
                 if (value) {
@@ -253,6 +259,20 @@ export const Graph: IGraphStatic = class implements IGraph {
         }
     }
 
+    static buildPathFromDifference(withPathMatrix: ISquareMatrix, withoutPathMatrix: ISquareMatrix, symmetric: boolean): IPath {
+        const size = withPathMatrix.getSize()
+        const path = new Path()
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < (symmetric ? i : size); j++) {
+                const position: position = [i, j]
+                if (withPathMatrix.get(position) !== withoutPathMatrix.get(position)) {
+                    path.addWay(position)
+                }
+            }
+        }
+        return path
+    }
+
     getIdsFromPosition(position: position): idPair {
         return [this.ids[position[0] + 1], this.ids[position[1] + 1]]
     }
@@ -260,16 +280,34 @@ export const Graph: IGraphStatic = class implements IGraph {
 
     buildPathToMakeConnectedNotOriented(): IPath {
         const readyMatrix = SquareMatrix.setOnesToDiagonal(this.valuesMatrix)
-        const positions: position[] = this.getPositions(readyMatrix, false)
-        const nullsAmount = readyMatrix.countNulls()
-        return this.calculatePath(nullsAmount, positions, false)
+        const reachabilityMatrix = Graph.getReachabilityMatrix(readyMatrix)
+        const positions: position[] = this.getPositions(reachabilityMatrix, false)
+        const nullsAmount = reachabilityMatrix.countNulls()
+        const size = this.valuesMatrix.getSize()
+        const valuableEdgesAmount = this.valuesMatrix.countNotNullsWithoutDiagonal()
+        const min = size - valuableEdgesAmount / 2
+        if (valuableEdgesAmount === 0) {
+            const extendedMatrix = SquareMatrix.fullFillAnotherDiagonal
+            (readyMatrix, true)
+            return Graph.buildPathFromDifference(extendedMatrix, readyMatrix, true)
+        }
+        return this.calculatePath(min, nullsAmount, positions, false)
     }
 
     buildPathToMakeConnectedOriented(): IPath {
         const readyMatrix = SquareMatrix.setOnesToDiagonal(this.valuesMatrix)
-        const positions: position[] = this.getPositions(readyMatrix, true)
-        const nullsAmount = readyMatrix.countNulls()
-        return this.calculatePath(nullsAmount, positions, true)
+        const reachabilityMatrix = Graph.getReachabilityMatrix(readyMatrix)
+        const positions: position[] = this.getPositions(reachabilityMatrix, true)
+        const nullsAmount = reachabilityMatrix.countNulls()
+        const size = this.valuesMatrix.getSize()
+        const valuableEdgesAmount = this.valuesMatrix.countNotNullsWithoutDiagonal()
+        const min = size - valuableEdgesAmount
+        if (valuableEdgesAmount === 0) {
+            const extendedMatrix = SquareMatrix.fullFillAnotherDiagonal
+            (readyMatrix, false)
+            return Graph.buildPathFromDifference(extendedMatrix, readyMatrix, false)
+        }
+        return this.calculatePath(min, nullsAmount, positions, true)
     }
 
     hasEulerCycle(): boolean | undefined {

@@ -14,6 +14,8 @@ export interface IGraphStatic {
     getConnectivityFromNetwork(network: any): string
 
     isConnected(matrix: ISquareMatrix): boolean | undefined
+
+    buildPathFromDifference(withPathMatrix: ISquareMatrix, withoutPathMatrix: ISquareMatrix, symmetric: boolean): IPath
 }
 
 

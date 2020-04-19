@@ -10,6 +10,8 @@ export interface ISquareMatrixStatic {
     getZeroMatrix(size: number): ISquareMatrix
 
     changeValuesToOnes(matrix: ISquareMatrix): ISquareMatrix
+
+    fullFillAnotherDiagonal(matrix: ISquareMatrix, symmetric: boolean): ISquareMatrix
 }
 
 export interface ISquareMatrix {
@@ -30,6 +32,11 @@ export interface ISquareMatrix {
     isSymmetric(): boolean
 
     countNulls(): number
+
+    hasNoNulls(): boolean
+
+    countNotNullsWithoutDiagonal(): number
+
 }
 
 
