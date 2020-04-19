@@ -3,7 +3,7 @@ export const opts = {
     length: 38, // The length of each line
     width: 17, // The line thickness
     radius: 45, // The radius of the inner circle
-    scale: 1, // Scales overall size of the spinner
+    scale: 0.5, // Scales overall size of the spinner
     corners: 1, // Corner roundness (0..1)
     color: 'black', // CSS color or array of colors
     fadeColor: 'transparent', // CSS color or array of colors

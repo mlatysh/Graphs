@@ -11,13 +11,17 @@ export class InfoController {
         this.rightDOMElement = document.getElementById('info-right')
         this.actionsDOMElement = document.getElementById('actions')
         this.worker = new Worker(path.resolve(__dirname, 'genius.js'))
+        this.updaters = {
+            updateLeft: this.updateLeft.bind(this),
+            updateRight: this.updateRight.bind(this),
+            control: this.manageControlElements.bind(this)
+        }
         this.spinner = new Spinner(opts)
         this.createControlElements()
         this.updateCallback = this.updateState.bind(this)
         document.addEventListener('keyup', this.updateState.bind(this))
         this.networkController = networkController
         this.setWorkerReaction()
-
     }
 
     getGraph() {
@@ -34,8 +38,12 @@ export class InfoController {
         const network = this.networkController.getNetwork()
         const graph = this.getGraph()
         this.updateLeft(network, graph)
-        this.updateRight(network, graph)
+        this.updateRight(network)
         this.manageControlElements(graph)
+    }
+
+    emptyFunction() {
+
     }
 
     updateLeft(network, graph) {
@@ -55,14 +63,13 @@ export class InfoController {
         if (hasEulerCycle === false) hasEulerCycle = 'no'
         if (hasEulerCycle === undefined) hasEulerCycle = 'not applicable'
 
-
         this.leftDOMElement.innerText = `Nodes amount: ${totalNodes}\nEdges amount: ${totalEdges}\n\n`
             + `Type: ${type}\n`
             + `Connected: ${connected ? 'yes' : 'no'}\n`
             + `Has Euler cycle: ${hasEulerCycle}`
     }
 
-    updateRight(network, graph) {
+    updateRight(network) {
         const selectedNodes = network.getSelectedNodes()
         let rez = `Edit mode: ${network.manipulation.editMode ? 'enabled' : 'disabled'}\n\n`
         if (selectedNodes.length === 1) {
@@ -77,7 +84,6 @@ export class InfoController {
             rez += `Selected vertex degree: ${amount}`
         }
         this.rightDOMElement.innerText = rez
-
     }
 
     createControlElements() {
@@ -133,6 +139,7 @@ export class InfoController {
                 }
             }
             this.spinner.stop()
+            this.setUpdaters()
         }.bind(this)
     }
 
@@ -142,7 +149,35 @@ export class InfoController {
         if (graph.isEmpty()) return
         const matrix = Graph.getMatrixFromNetwork(network)
         this.spinner.spin(document.getElementById('network'))
+        this.emptyUpdaters()
         this.worker.postMessage({type: graph.getType(), matrix})
+    }
+
+    emptyUpdaters() {
+        this.networkController.disableInteractivity()
+        this.networkController
+            .documentEventListener
+            .removeEventListeners(this.networkController
+                .documentEventListener
+                .eventListeners)
+        this.networkController.rendererEventListener.removeAllListeners()
+        this.controlElements.makeGraphConnectedButton.style.display = 'none'
+        this.updateRight = this.emptyFunction
+        this.updateLeft = this.emptyFunction
+        this.manageControlElements = this.emptyFunction
+    }
+
+    setUpdaters() {
+        this.networkController.enableInteractivity()
+        this.updateRight = this.updaters.updateRight
+        this.updateLeft = this.updaters.updateLeft
+        this.manageControlElements = this.updaters.control
+        this.networkController
+            .documentEventListener
+            .addEventListeners(this.networkController
+                .documentEventListener
+                .eventListeners)
+        this.networkController.rendererEventListener.setRendererEventListeners()
     }
 
 }

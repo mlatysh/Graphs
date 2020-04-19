@@ -25,4 +25,10 @@ export class MenuEventsEmitter {
 
         ipc.on(mainActionConsts.MENU_HANDLERS_REQUESTS.NEW_FILE_CREATION_REQUEST, () => this.send(rendererConsts.CREATE_NEW_ACTIVE_NETWORK))
     }
+
+    unsetMenuHandlers() {
+        ipc.removeAllListeners(mainActionConsts.MENU_HANDLERS_REQUESTS.SAVE_CURRENT_NETWORK_REQUEST)
+        ipc.removeAllListeners(mainActionConsts.MENU_HANDLERS_REQUESTS.OPEN_FILE_REQUEST)
+        ipc.removeAllListeners(mainActionConsts.MENU_HANDLERS_REQUESTS.NEW_FILE_CREATION_REQUEST)
+    }
 }

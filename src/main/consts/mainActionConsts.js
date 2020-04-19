@@ -9,5 +9,7 @@ export const consts = {
     SAVE_CURRENT_NETWORK: 'save-current-network',
     OPEN_FILE: 'open-file',
     CLEAR_SAVE_CURRENT_NETWORK: 'clear-save-current-network',
-    NEW_FILE_CREATION: 'new-file-creation'
+    NEW_FILE_CREATION: 'new-file-creation',
+    DISABLE_INTERACTIVITY: 'disable-interactivity',
+    ENABLE_INTERACTIVITY: 'enable-interactivity'
 };

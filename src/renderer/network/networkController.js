@@ -6,6 +6,7 @@ import {ipcRenderer as ipc} from 'electron';
 import {OPTIONS} from "./networkInitOptions";
 import {DocumentEventListener} from "./eventListeners/documentEventListener";
 import {EventInitializer} from "./eventListeners/eventInitializers";
+import {consts as mainActionConsts} from "../../main/consts/mainActionConsts";
 
 export class NetworkController {
     constructor(networkCreationObject) {
@@ -60,5 +61,13 @@ export class NetworkController {
 
     getNetwork() {
         return this.network
+    }
+
+    disableInteractivity() {
+        this.ipc.send(mainActionConsts.DISABLE_INTERACTIVITY)
+    }
+
+    enableInteractivity() {
+        this.ipc.send(mainActionConsts.ENABLE_INTERACTIVITY)
     }
 }
