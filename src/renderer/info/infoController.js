@@ -100,6 +100,7 @@ export class InfoController {
         this.controlElements.findDistanceBetweenTwoNodes = document.createElement('button')
         this.controlElements.findDistanceBetweenTwoNodes.style.fontSize = '2vw'
         this.controlElements.findDistanceBetweenTwoNodes.style.display = 'inline'
+        this.controlElements.findDistanceBetweenTwoNodes.style.marginLeft = '10px'
         this.controlElements.findDistanceBetweenTwoNodes.innerText = 'Find distance between two nodes'
         this.actionsDOMElement.appendChild(this.controlElements.findDistanceBetweenTwoNodes)
         this.controlElements.findDistanceBetweenTwoNodes
@@ -125,7 +126,7 @@ export class InfoController {
         if (graph.isConnected() || graph.getType() === 'mixed' || graph.getType() === 'not applicable')
             this.controlElements.makeGraphConnectedButton.style.display = 'none'
         else
-            this.controlElements.makeGraphConnectedButton.style.display = 'block'
+            this.controlElements.makeGraphConnectedButton.style.display = 'inline'
     }
 
     setWorkerReaction() {
@@ -195,6 +196,7 @@ export class InfoController {
                 .eventListeners)
         this.networkController.rendererEventListener.removeAllListeners()
         this.controlElements.makeGraphConnectedButton.style.display = 'none'
+        this.controlElements.findDistanceBetweenTwoNodes.style.display = 'none'
         this.updateRight = this.emptyFunction
         this.updateLeft = this.emptyFunction
         this.manageControlElements = this.emptyFunction
@@ -204,6 +206,7 @@ export class InfoController {
         this.networkController.enableInteractivity()
         this.updateRight = this.updaters.updateRight
         this.updateLeft = this.updaters.updateLeft
+        this.controlElements.findDistanceBetweenTwoNodes.style.display = 'inline'
         this.manageControlElements = this.updaters.control
         this.networkController
             .documentEventListener
