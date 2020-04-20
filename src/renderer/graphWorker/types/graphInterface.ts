@@ -35,4 +35,8 @@ export interface IGraph {
     getIdsFromPosition(position: position): idPair
 
     getValues(): ISquareMatrix
+
+    getPositionFromIds(id1: any, id2: any): position
+
+    findDistanceBetweenTwoNodes(nodeIdFrom: any, nodeIdTo: any): number | undefined
 }
