@@ -283,7 +283,7 @@ export const Graph: IGraphStatic = class implements IGraph {
             (readyMatrix, true)
             return Graph.buildPathFromDifference(extendedMatrix, readyMatrix, true)
         }
-        return this.calculatePath(min, nullsAmount, positions, false)
+        return this.calculatePath(min > 0 ? min : 1, nullsAmount, positions, false)
     }
 
     buildPathToMakeConnectedOriented(): IPath {
@@ -299,7 +299,7 @@ export const Graph: IGraphStatic = class implements IGraph {
             (readyMatrix, false)
             return Graph.buildPathFromDifference(extendedMatrix, readyMatrix, false)
         }
-        return this.calculatePath(min, nullsAmount, positions, true)
+        return this.calculatePath(min > 0 ? min : 1, nullsAmount, positions, true)
     }
 
     hasEulerCycle(): boolean | undefined {
