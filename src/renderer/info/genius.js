@@ -9,7 +9,6 @@ onmessage = function (message) {
     if (type === 'directed') {
         const path = graphObject.buildPathToMakeConnectedOriented()
         postMessage({path})
-
     } else if (type === 'not directed') {
         const path = graphObject.buildPathToMakeConnectedNotOriented()
         postMessage({path})
