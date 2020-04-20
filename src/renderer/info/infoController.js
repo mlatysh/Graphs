@@ -140,12 +140,14 @@ export class InfoController {
             }
             this.spinner.stop()
             this.setUpdaters()
+            this.updateState()
         }.bind(this)
 
         this.worker.onerror = function (error) {
             alert(error.message)
             this.spinner.stop()
             this.setUpdaters()
+            this.updateState()
         }.bind(this)
     }
 
