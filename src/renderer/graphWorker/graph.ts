@@ -225,6 +225,29 @@ export const Graph: IGraphStatic = class implements IGraph {
         return values
     }
 
+    private getOnesPositions(matrix: ISquareMatrix, oriented: boolean = true): position[] {
+        const size = matrix.getSize()
+        const values: position[] = []
+        if (oriented) {
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < size; j++) {
+                    if (matrix.get([i, j]) === 1) {
+                        values.push([i, j])
+                    }
+                }
+            }
+        } else {
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < i; j++) {
+                    if (matrix.get([i, j]) === 1) {
+                        values.push([i, j])
+                    }
+                }
+            }
+        }
+        return values
+    }
+
     private setPath(path: IPath, matrix: ISquareMatrix, oriented) {
         const mat = matrix.getCopy()
         path.getPath().forEach(one => {
@@ -277,7 +300,7 @@ export const Graph: IGraphStatic = class implements IGraph {
         const nullsAmount = reachabilityMatrix.countNulls()
         const size = this.valuesMatrix.getSize()
         const valuableEdgesAmount = this.valuesMatrix.countNotNullsWithoutDiagonal()
-        const min = size - valuableEdgesAmount / 2
+        const min = size - valuableEdgesAmount
         if (valuableEdgesAmount === 0) {
             const extendedMatrix = SquareMatrix.fullFillAnotherDiagonal
             (readyMatrix, true)
@@ -300,6 +323,51 @@ export const Graph: IGraphStatic = class implements IGraph {
             return Graph.buildPathFromDifference(extendedMatrix, readyMatrix, false)
         }
         return this.calculatePath(min > 0 ? min : 1, nullsAmount, positions, true)
+    }
+
+    findDistanceBetweenTwoNodes(nodeIdFrom, nodeIdTo): number | undefined {
+
+        function multMatrix(A, B) {
+            const rowsA = A.length,
+                rowsB = B.length,
+                colsB = B[0].length,
+                C = [];
+
+            for (let i = 0; i < rowsA; i++) {
+                C[i] = new Array(colsB);
+            }
+
+            for (let k = 0; k < colsB; k++) {
+                for (let i = 0; i < rowsA; i++) {
+                    let temp = 0;
+                    for (let j = 0; j < rowsB; j++) {
+                        temp += A[i][j] * B[j][k];
+                    }
+                    C[i][k] = temp;
+                }
+            }
+            return C;
+        }
+
+        function matrixPow(n, A) {
+            if (n == 1) return A;
+            else return multMatrix(A, matrixPow(n - 1, A));
+        }
+
+        const reachabilityMatrix = Graph.getReachabilityMatrix(this.getValues())
+        const lineFromIndex = this.ids.indexOf(nodeIdFrom) - 1
+        const columnIndexTo = this.ids.indexOf(nodeIdTo) - 1
+        if (reachabilityMatrix.get([lineFromIndex, columnIndexTo]) < 1) return undefined
+        const size = reachabilityMatrix.getSize()
+        for (let i = 1; i < size; i++) {
+            const rez = matrixPow(i, this.valuesMatrix.toArray())
+            if (rez[lineFromIndex][columnIndexTo] !== 0)
+                return i
+        }
+    }
+
+    getPositionFromIds(id1, id2): position {
+        return [this.ids.indexOf(id1) - 1, this.ids.indexOf(id2) - 1]
     }
 
     hasEulerCycle(): boolean | undefined {

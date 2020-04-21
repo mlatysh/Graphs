@@ -8,9 +8,9 @@ onmessage = function (message) {
     const graphObject = new Graph(matrixObject, type)
     if (type === 'directed') {
         const path = graphObject.buildPathToMakeConnectedOriented()
-        postMessage({path})
+        postMessage({path, type})
     } else if (type === 'not directed') {
         const path = graphObject.buildPathToMakeConnectedNotOriented()
-        postMessage({path})
+        postMessage({path, type})
     }
 }

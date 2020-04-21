@@ -5,6 +5,7 @@ export const MAIN_WINDOW_SETTINGS = {
         nodeIntegration: true,
         nodeIntegrationInWorker: true
     },
+    fullscreenable: false,
     title: 'Graphs [New File]',
     show: false,
     webSecurity: false
