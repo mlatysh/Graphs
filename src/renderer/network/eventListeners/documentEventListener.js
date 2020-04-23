@@ -1,6 +1,10 @@
 import {COLORS} from '../consts/colors'
 import {PromptController} from "./promptController";
 import {DIALOG_OPTIONS} from "../consts/dialogOptions";
+import {remote} from 'electron';
+
+const {Menu, MenuItem} = remote
+
 
 export class DocumentEventListener {
     constructor(parent) {
