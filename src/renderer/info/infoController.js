@@ -11,6 +11,7 @@ export class InfoController {
         this.rightDOMElement = document.getElementById('info-right')
         this.actionsDOMElement = document.getElementById('actions')
         this.worker = new Worker(path.resolve(__dirname, 'genius.js'))
+        this.connectionWorker = new Worker(path.resolve(__dirname, 'anotherGenius.js'))
         this.updaters = {
             updateLeft: this.updateLeft.bind(this),
             updateRight: this.updateRight.bind(this),
@@ -22,6 +23,7 @@ export class InfoController {
         document.addEventListener('keyup', this.updateState.bind(this))
         this.networkController = networkController
         this.setWorkerReaction()
+        this.setConnectorReaction()
     }
 
     getGraph() {
@@ -90,7 +92,7 @@ export class InfoController {
         this.controlElements = {}
 
         this.controlElements.makeGraphConnectedButton = document.createElement('button')
-        this.controlElements.makeGraphConnectedButton.style.fontSize = '2vw'
+        this.controlElements.makeGraphConnectedButton.style.fontSize = '100%'
         this.controlElements.makeGraphConnectedButton.style.display = 'none'
         this.controlElements.makeGraphConnectedButton.innerText = 'Make graph connected'
         this.actionsDOMElement.appendChild(this.controlElements.makeGraphConnectedButton)
@@ -98,14 +100,44 @@ export class InfoController {
             .addEventListener('click', this.makeGraphConnectedListener.bind(this))
 
         this.controlElements.findDistanceBetweenTwoNodes = document.createElement('button')
-        this.controlElements.findDistanceBetweenTwoNodes.style.fontSize = '2vw'
+        this.controlElements.findDistanceBetweenTwoNodes.style.fontSize = '100%'
         this.controlElements.findDistanceBetweenTwoNodes.style.display = 'inline'
         this.controlElements.findDistanceBetweenTwoNodes.style.marginLeft = '10px'
         this.controlElements.findDistanceBetweenTwoNodes.innerText = 'Find distance between two nodes'
         this.actionsDOMElement.appendChild(this.controlElements.findDistanceBetweenTwoNodes)
         this.controlElements.findDistanceBetweenTwoNodes
             .addEventListener('click', this.findDistanceBetweenTwoNodesListener.bind(this))
+
+        this.controlElements.findAllPathsBetweenTwoNodes = document.createElement('button')
+        this.controlElements.findAllPathsBetweenTwoNodes.style.fontSize = '100%'
+        this.controlElements.findAllPathsBetweenTwoNodes.style.display = 'inline'
+        this.controlElements.findAllPathsBetweenTwoNodes.style.marginLeft = '10px'
+        this.controlElements.findAllPathsBetweenTwoNodes.innerText = 'Find all paths between two nodes'
+        this.actionsDOMElement.appendChild(this.controlElements.findAllPathsBetweenTwoNodes)
+        this.controlElements.findAllPathsBetweenTwoNodes
+            .addEventListener('click', this.findAllPathsBetweenTwoNodesListener.bind(this))
     }
+
+    findAllPathsBetweenTwoNodesListener() {
+        alert('Pay attention that first selected node is going to be "from" node!')
+        const selection = this.networkController.getNetwork().getSelection()
+        if (selection.nodes.length && selection.edges.length) {
+            alert('Select only two nodes!')
+            return
+        }
+        if (selection.nodes.length !== 2) {
+            alert('Select exactly two nodes!')
+            return
+        }
+        if (this.getGraph().getType() === 'directed' || this.getGraph().getType() === 'not directed') {
+            if (this.getGraph().isEmpty()) return;
+            const matrix = Graph.getMatrixFromNetwork(this.networkController.getNetwork())
+            this.spinner.spin(document.getElementById('network'))
+            this.emptyUpdaters()
+            this.connectionWorker.postMessage({type: this.getGraph().getType(), matrix, selection})
+        } else alert("Graph connectivity is not defined!")
+    }
+
 
     findDistanceBetweenTwoNodesListener() {
         alert('Pay attention that first selected node is going to be "from" node!')
@@ -127,6 +159,45 @@ export class InfoController {
             this.controlElements.makeGraphConnectedButton.style.display = 'none'
         else
             this.controlElements.makeGraphConnectedButton.style.display = 'inline'
+    }
+
+    setConnectorReaction() {
+        this.connectionWorker.onmessage = function (event) {
+            this.spinner.stop()
+            const data = event.data;
+            if (data.length !== 0) {
+                let final = "Paths:\n\n";
+                const data = event.data
+                data.forEach(path => {
+                    path.forEach(node => {
+                        const label = this.networkController.getNetwork().body.nodes[node].options.label
+                        final += label + ' -> '
+                    })
+                    final = final.slice(0, -4)
+                    final += '\n\n'
+                })
+                final += 'The smallest path:\n\n'
+                let smallest = 0;
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i].length < smallest) smallest = i
+                }
+                data[smallest].forEach(element => {
+                    const label = this.networkController.getNetwork().body.nodes[element].options.label
+                    final += label + ' -> '
+                })
+                final = final.slice(0, -4)
+                alert(final)
+            }
+            this.setUpdaters()
+            this.updateState()
+        }.bind(this)
+
+        this.connectionWorker.onerror = function (error) {
+            alert(error.message)
+            this.spinner.stop()
+            this.setUpdaters()
+            this.updateState()
+        }.bind(this)
     }
 
     setWorkerReaction() {
@@ -197,6 +268,8 @@ export class InfoController {
         this.networkController.rendererEventListener.removeAllListeners()
         this.controlElements.makeGraphConnectedButton.style.display = 'none'
         this.controlElements.findDistanceBetweenTwoNodes.style.display = 'none'
+        this.controlElements.findAllPathsBetweenTwoNodes.style.display = 'none'
+
         this.updateRight = this.emptyFunction
         this.updateLeft = this.emptyFunction
         this.manageControlElements = this.emptyFunction
@@ -207,6 +280,8 @@ export class InfoController {
         this.updateRight = this.updaters.updateRight
         this.updateLeft = this.updaters.updateLeft
         this.controlElements.findDistanceBetweenTwoNodes.style.display = 'inline'
+        this.controlElements.findAllPathsBetweenTwoNodes.style.display = 'inline'
+
         this.manageControlElements = this.updaters.control
         this.networkController
             .documentEventListener
