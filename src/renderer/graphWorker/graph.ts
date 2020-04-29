@@ -292,10 +292,9 @@ export const Graph: IGraphStatic = class implements IGraph {
         position.push(this.ids.indexOf(vertexIdFrom) - 1)
         position.push(this.ids.indexOf(vertexIdTo) - 1)
         const oriented = this.type === 'directed'
-        const positions = this.getOnesPositions(this.valuesMatrix, oriented)
+        const positions = this.getMoreThanNullsPositions(this.valuesMatrix, true)
         const paths = []
         const size = positions.length;
-
         for (let i = 1; i <= size; i++) {
             const combinations = permutation(positions, i)
             combinations.forEach(item => {
@@ -371,6 +370,29 @@ export const Graph: IGraphStatic = class implements IGraph {
             for (let i = 0; i < size; i++) {
                 for (let j = 0; j < i; j++) {
                     if (matrix.get([i, j]) === 0) {
+                        values.push([i, j])
+                    }
+                }
+            }
+        }
+        return values
+    }
+
+    private getMoreThanNullsPositions(matrix: ISquareMatrix, oriented: boolean = true) {
+        const size = matrix.getSize()
+        const values: position[] = []
+        if (oriented) {
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < size; j++) {
+                    if (matrix.get([i, j]) > 0) {
+                        values.push([i, j])
+                    }
+                }
+            }
+        } else {
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < i; j++) {
+                    if (matrix.get([i, j]) > 0) {
                         values.push([i, j])
                     }
                 }

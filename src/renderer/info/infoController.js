@@ -11,6 +11,7 @@ export class InfoController {
         this.rightDOMElement = document.getElementById('info-right')
         this.actionsDOMElement = document.getElementById('actions')
         this.worker = new Worker(path.resolve(__dirname, 'genius.js'))
+        this.connectionWorker = new Worker(path.resolve(__dirname, 'anotherGenius.js'))
         this.updaters = {
             updateLeft: this.updateLeft.bind(this),
             updateRight: this.updateRight.bind(this),
@@ -22,6 +23,7 @@ export class InfoController {
         document.addEventListener('keyup', this.updateState.bind(this))
         this.networkController = networkController
         this.setWorkerReaction()
+        this.setConnectorReaction()
     }
 
     getGraph() {
@@ -129,8 +131,13 @@ export class InfoController {
             alert('Select exactly two nodes!')
             return
         }
-        const paths = this.getGraph().getAllPathsBetweenVertexes(selection.nodes[0], selection.nodes[1])
-        console.log(paths)
+        if (this.getGraph().getType() === 'directed' || this.getGraph().getType() === 'not directed') {
+            if (this.getGraph().isEmpty()) return
+            const matrix = Graph.getMatrixFromNetwork(this.networkController.getNetwork())
+            this.spinner.spin(document.getElementById('network'))
+            this.emptyUpdaters()
+            this.connectionWorker.postMessage({type: this.getGraph().getType(), matrix, selection})
+        } else alert("Graph connectivity is not defined!")
     }
 
 
@@ -154,6 +161,44 @@ export class InfoController {
             this.controlElements.makeGraphConnectedButton.style.display = 'none'
         else
             this.controlElements.makeGraphConnectedButton.style.display = 'inline'
+    }
+
+    setConnectorReaction() {
+        this.connectionWorker.onmessage = function (event) {
+            const graph = this.getGraph()
+            const network = this.networkController.getNetwork()
+            this.spinner.stop()
+            let final = "Paths:\n\n";
+            const data = event.data
+            data.forEach(path => {
+                path.forEach(node => {
+                    const label = this.networkController.getNetwork().body.nodes[node].options.label
+                    final += label + ' -> '
+                })
+                final = final.slice(0, -4)
+                final += '\n\n'
+            })
+            final += 'The smallest path:\n\n'
+            let smallest = 0;
+            for (let i = 0; i < data.length; i++) {
+                if (data[i].length < smallest) smallest = i
+            }
+            data[smallest].forEach(element => {
+                const label = this.networkController.getNetwork().body.nodes[element].options.label
+                final += label + ' -> '
+            })
+            final = final.slice(0, -4)
+            alert(final)
+            this.setUpdaters()
+            this.updateState()
+        }.bind(this)
+
+        this.worker.onerror = function (error) {
+            alert(error.message)
+            this.spinner.stop()
+            this.setUpdaters()
+            this.updateState()
+        }.bind(this)
     }
 
     setWorkerReaction() {
