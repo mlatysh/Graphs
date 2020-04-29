@@ -116,8 +116,6 @@ export class InfoController {
         this.actionsDOMElement.appendChild(this.controlElements.findAllPathsBetweenTwoNodes)
         this.controlElements.findAllPathsBetweenTwoNodes
             .addEventListener('click', this.findAllPathsBetweenTwoNodesListener.bind(this))
-
-
     }
 
     findAllPathsBetweenTwoNodesListener() {
@@ -132,7 +130,7 @@ export class InfoController {
             return
         }
         if (this.getGraph().getType() === 'directed' || this.getGraph().getType() === 'not directed') {
-            if (this.getGraph().isEmpty()) return
+            if (this.getGraph().isEmpty()) return;
             const matrix = Graph.getMatrixFromNetwork(this.networkController.getNetwork())
             this.spinner.spin(document.getElementById('network'))
             this.emptyUpdaters()
@@ -165,35 +163,36 @@ export class InfoController {
 
     setConnectorReaction() {
         this.connectionWorker.onmessage = function (event) {
-            const graph = this.getGraph()
-            const network = this.networkController.getNetwork()
             this.spinner.stop()
-            let final = "Paths:\n\n";
-            const data = event.data
-            data.forEach(path => {
-                path.forEach(node => {
-                    const label = this.networkController.getNetwork().body.nodes[node].options.label
+            const data = event.data;
+            if (data.length !== 0) {
+                let final = "Paths:\n\n";
+                const data = event.data
+                data.forEach(path => {
+                    path.forEach(node => {
+                        const label = this.networkController.getNetwork().body.nodes[node].options.label
+                        final += label + ' -> '
+                    })
+                    final = final.slice(0, -4)
+                    final += '\n\n'
+                })
+                final += 'The smallest path:\n\n'
+                let smallest = 0;
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i].length < smallest) smallest = i
+                }
+                data[smallest].forEach(element => {
+                    const label = this.networkController.getNetwork().body.nodes[element].options.label
                     final += label + ' -> '
                 })
                 final = final.slice(0, -4)
-                final += '\n\n'
-            })
-            final += 'The smallest path:\n\n'
-            let smallest = 0;
-            for (let i = 0; i < data.length; i++) {
-                if (data[i].length < smallest) smallest = i
+                alert(final)
             }
-            data[smallest].forEach(element => {
-                const label = this.networkController.getNetwork().body.nodes[element].options.label
-                final += label + ' -> '
-            })
-            final = final.slice(0, -4)
-            alert(final)
             this.setUpdaters()
             this.updateState()
         }.bind(this)
 
-        this.worker.onerror = function (error) {
+        this.connectionWorker.onerror = function (error) {
             alert(error.message)
             this.spinner.stop()
             this.setUpdaters()
@@ -269,6 +268,8 @@ export class InfoController {
         this.networkController.rendererEventListener.removeAllListeners()
         this.controlElements.makeGraphConnectedButton.style.display = 'none'
         this.controlElements.findDistanceBetweenTwoNodes.style.display = 'none'
+        this.controlElements.findAllPathsBetweenTwoNodes.style.display = 'none'
+
         this.updateRight = this.emptyFunction
         this.updateLeft = this.emptyFunction
         this.manageControlElements = this.emptyFunction
@@ -279,6 +280,8 @@ export class InfoController {
         this.updateRight = this.updaters.updateRight
         this.updateLeft = this.updaters.updateLeft
         this.controlElements.findDistanceBetweenTwoNodes.style.display = 'inline'
+        this.controlElements.findAllPathsBetweenTwoNodes.style.display = 'inline'
+
         this.manageControlElements = this.updaters.control
         this.networkController
             .documentEventListener

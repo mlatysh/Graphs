@@ -1,8 +1,6 @@
 import {Graph} from "../graphWorker/graph";
 import {SquareMatrix} from "../graphWorker/squareMatrix";
 
-// {type: this.getGraph().getType(), matrix, selection}
-
 onmessage = function (message) {
     const type = message.data.type
     const matrix = message.data.matrix
