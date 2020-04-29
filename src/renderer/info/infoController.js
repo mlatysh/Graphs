@@ -90,7 +90,7 @@ export class InfoController {
         this.controlElements = {}
 
         this.controlElements.makeGraphConnectedButton = document.createElement('button')
-        this.controlElements.makeGraphConnectedButton.style.fontSize = '2vw'
+        this.controlElements.makeGraphConnectedButton.style.fontSize = '100%'
         this.controlElements.makeGraphConnectedButton.style.display = 'none'
         this.controlElements.makeGraphConnectedButton.innerText = 'Make graph connected'
         this.actionsDOMElement.appendChild(this.controlElements.makeGraphConnectedButton)
@@ -98,14 +98,41 @@ export class InfoController {
             .addEventListener('click', this.makeGraphConnectedListener.bind(this))
 
         this.controlElements.findDistanceBetweenTwoNodes = document.createElement('button')
-        this.controlElements.findDistanceBetweenTwoNodes.style.fontSize = '2vw'
+        this.controlElements.findDistanceBetweenTwoNodes.style.fontSize = '100%'
         this.controlElements.findDistanceBetweenTwoNodes.style.display = 'inline'
         this.controlElements.findDistanceBetweenTwoNodes.style.marginLeft = '10px'
         this.controlElements.findDistanceBetweenTwoNodes.innerText = 'Find distance between two nodes'
         this.actionsDOMElement.appendChild(this.controlElements.findDistanceBetweenTwoNodes)
         this.controlElements.findDistanceBetweenTwoNodes
             .addEventListener('click', this.findDistanceBetweenTwoNodesListener.bind(this))
+
+        this.controlElements.findAllPathsBetweenTwoNodes = document.createElement('button')
+        this.controlElements.findAllPathsBetweenTwoNodes.style.fontSize = '100%'
+        this.controlElements.findAllPathsBetweenTwoNodes.style.display = 'inline'
+        this.controlElements.findAllPathsBetweenTwoNodes.style.marginLeft = '10px'
+        this.controlElements.findAllPathsBetweenTwoNodes.innerText = 'Find all paths between two nodes'
+        this.actionsDOMElement.appendChild(this.controlElements.findAllPathsBetweenTwoNodes)
+        this.controlElements.findAllPathsBetweenTwoNodes
+            .addEventListener('click', this.findAllPathsBetweenTwoNodesListener.bind(this))
+
+
     }
+
+    findAllPathsBetweenTwoNodesListener() {
+        alert('Pay attention that first selected node is going to be "from" node!')
+        const selection = this.networkController.getNetwork().getSelection()
+        if (selection.nodes.length && selection.edges.length) {
+            alert('Select only two nodes!')
+            return
+        }
+        if (selection.nodes.length !== 2) {
+            alert('Select exactly two nodes!')
+            return
+        }
+        const paths = this.getGraph().getAllPathsBetweenVertexes(selection.nodes[0], selection.nodes[1])
+        console.log(paths)
+    }
+
 
     findDistanceBetweenTwoNodesListener() {
         alert('Pay attention that first selected node is going to be "from" node!')

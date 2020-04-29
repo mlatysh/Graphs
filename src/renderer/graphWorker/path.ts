@@ -18,6 +18,17 @@ export const Path: IPathInterfaceStatic = class implements IPath {
         return value
     }
 
+    static isValidPath(path: IPath): boolean {
+        const way = path.getPath()
+        const size = way.length
+        let prevValue = way[0][1];
+        for (let i = 1; i < size; i++) {
+            if (way[i][0] !== prevValue) return false
+            prevValue = way[i][1]
+        }
+        return true;
+    }
+
     addWay(position: position): void {
         this.path.push(_.cloneDeep(position))
     }

@@ -6,6 +6,8 @@ export interface IPathInterfaceStatic {
     new(): IPath
 
     getPathFromArray(array: position[]): IPath
+
+    isValidPath(path: IPath): boolean
 }
 
 

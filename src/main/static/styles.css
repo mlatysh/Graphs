@@ -6,8 +6,8 @@
     left: 0;
 }
 #info-left {
-    font-size: 2vw;
-    font-family :"Courier New", Courier, monospace;
+    font-size: 100%;
+    font-family: "Courier New", Courier, monospace;
     position: relative;
     z-index: 2;
     pointer-events: none;
@@ -15,7 +15,7 @@
     text-align: left;
 }
 #info-right {
-    font-size: 2vw;
+    font-size: 100%;
     font-family: "Courier New", Courier, monospace;
     position: relative;
     z-index: 2;
@@ -27,9 +27,10 @@
 #actions {
     position: absolute;
     left: 2%;
-    right: 2%;
+    /*right: 2%;*/
     bottom: 2%;
     z-index: 2;
+    font-size: 100%;
 }
 
 @keyframes spinner-line-fade-more {

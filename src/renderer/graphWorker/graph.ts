@@ -2,7 +2,7 @@ import {SquareMatrix} from "./squareMatrix";
 import {IGraph, IGraphStatic} from "./types/graphInterface";
 import {ISquareMatrix, position} from "./types/squareMatrixInterface";
 import {IPath} from "./types/pathInterface";
-import {bigCombination} from 'js-combinatorics'
+import {bigCombination, permutation} from 'js-combinatorics'
 import {Path} from "./path";
 
 type IExtendedNodeInfo = {
@@ -163,117 +163,6 @@ export const Graph: IGraphStatic = class implements IGraph {
         )
     }
 
-    private getIdsFromMatrix(matrix: ISquareMatrix): Array<any> {
-        const size = matrix.getSize()
-        const ids = []
-        for (let i = 0; i < size; i++) {
-            ids.push(matrix.get([i, 0]))
-        }
-        return ids
-    }
-
-    private getMatrixWithoutIds(matrix: ISquareMatrix): ISquareMatrix {
-        const size = matrix.getSize()
-        const mat = matrix.getCopy()
-        for (let i = 0; i < size; i++) {
-            mat.remove([i, 0])
-        }
-        mat.removeRow(0)
-        return mat
-    }
-
-    private calcAllVertexesDegreesAreEven(): void {
-        const size = this.valuesMatrix.getSize()
-        let sum = 0
-        for (let i = 0; i < size; i++) {
-            if (this.type === 'directed')
-                sum += this.valuesMatrix.getCrossSum(i)
-            if (this.type === 'not directed')
-                sum += this.valuesMatrix.getCrossSum(i) / 2
-            if (this.type === 'mixed')
-                return;
-            const diagonalValue = this.valuesMatrix.get([i, i])
-            if (diagonalValue) sum += diagonalValue
-            if (sum % 2 !== 0) {
-                this.allVertexesDegreesAreEven = false
-                return
-            }
-        }
-        this.allVertexesDegreesAreEven = true
-    }
-
-    private getPositions(matrix: ISquareMatrix, oriented): position[] {
-        const size = matrix.getSize()
-        const values: position[] = []
-        if (oriented) {
-            for (let i = 0; i < size; i++) {
-                for (let j = 0; j < size; j++) {
-                    if (matrix.get([i, j]) === 0) {
-                        values.push([i, j])
-                    }
-                }
-            }
-        } else {
-            for (let i = 0; i < size; i++) {
-                for (let j = 0; j < i; j++) {
-                    if (matrix.get([i, j]) === 0) {
-                        values.push([i, j])
-                    }
-                }
-            }
-        }
-        return values
-    }
-
-    private getOnesPositions(matrix: ISquareMatrix, oriented: boolean = true): position[] {
-        const size = matrix.getSize()
-        const values: position[] = []
-        if (oriented) {
-            for (let i = 0; i < size; i++) {
-                for (let j = 0; j < size; j++) {
-                    if (matrix.get([i, j]) === 1) {
-                        values.push([i, j])
-                    }
-                }
-            }
-        } else {
-            for (let i = 0; i < size; i++) {
-                for (let j = 0; j < i; j++) {
-                    if (matrix.get([i, j]) === 1) {
-                        values.push([i, j])
-                    }
-                }
-            }
-        }
-        return values
-    }
-
-    private setPath(path: IPath, matrix: ISquareMatrix, oriented) {
-        const mat = matrix.getCopy()
-        path.getPath().forEach(one => {
-            mat.set(1, [one[0], one[1]])
-            if (!oriented) mat.set(1, [one[1], one[0]])
-        })
-        return mat
-    }
-
-    private calculatePath(min: number, nullsAmount: number, positions: position[], oriented) {
-        for (let i = min; i <= nullsAmount; i++) {
-            const combinations = bigCombination(positions, i)
-            while (true) {
-                const value = combinations.next()
-                if (value) {
-                    const fullPath = Path.getPathFromArray(value)
-                    const matrixWithPath = this.setPath(fullPath, this.valuesMatrix, oriented)
-                    const tempCheck = SquareMatrix.noEmptyRowsOrColumns(SquareMatrix.setNullsToDiagonal(matrixWithPath))
-                    if (tempCheck && Graph.isConnected(matrixWithPath)) {
-                        return fullPath
-                    }
-                } else break
-            }
-        }
-    }
-
     static buildPathFromDifference(withPathMatrix: ISquareMatrix, withoutPathMatrix: ISquareMatrix, symmetric: boolean): IPath {
         const size = withPathMatrix.getSize()
         const path = new Path()
@@ -291,7 +180,6 @@ export const Graph: IGraphStatic = class implements IGraph {
     getIdsFromPosition(position: position): idPair {
         return [this.ids[position[0] + 1], this.ids[position[1] + 1]]
     }
-
 
     buildPathToMakeConnectedNotOriented(): IPath {
         const readyMatrix = SquareMatrix.setOnesToDiagonal(this.valuesMatrix)
@@ -396,5 +284,147 @@ export const Graph: IGraphStatic = class implements IGraph {
 
     getValues(): ISquareMatrix {
         return this.valuesMatrix
+    }
+
+    getAllPathsBetweenVertexes(vertexIdFrom: any, vertexIdTo: any): IPath[] | undefined {
+        if (vertexIdTo === vertexIdFrom) return undefined;
+        const position = [];
+        position.push(this.ids.indexOf(vertexIdFrom) - 1)
+        position.push(this.ids.indexOf(vertexIdTo) - 1)
+        const oriented = this.type === 'directed'
+        const positions = this.getOnesPositions(this.valuesMatrix, oriented)
+        const paths = []
+        const size = positions.length;
+
+        for (let i = 1; i <= size; i++) {
+            const combinations = permutation(positions, i)
+            combinations.forEach(item => {
+                if ((item[0][0] === position[0] && item[item.length - 1][1] === position[1])
+                    && Path.isValidPath(Path.getPathFromArray(item))) {
+                    paths.push(item)
+                }
+            })
+        }
+        for (let i = 0; i < paths.length; i++) {
+            const path = paths[i]
+            const vertexPath = []
+            vertexPath.push(vertexIdFrom)
+            for (let j = 0; j < path.length; j++) {
+                vertexPath.push(this.getIdsFromPosition(path[j])[1])
+            }
+            paths[i] = vertexPath
+        }
+        return paths;
+    }
+
+    private getIdsFromMatrix(matrix: ISquareMatrix): Array<any> {
+        const size = matrix.getSize()
+        const ids = []
+        for (let i = 0; i < size; i++) {
+            ids.push(matrix.get([i, 0]))
+        }
+        return ids
+    }
+
+    private getMatrixWithoutIds(matrix: ISquareMatrix): ISquareMatrix {
+        const size = matrix.getSize()
+        const mat = matrix.getCopy()
+        for (let i = 0; i < size; i++) {
+            mat.remove([i, 0])
+        }
+        mat.removeRow(0)
+        return mat
+    }
+
+    private calcAllVertexesDegreesAreEven(): void {
+        const size = this.valuesMatrix.getSize()
+        let sum = 0
+        for (let i = 0; i < size; i++) {
+            if (this.type === 'directed')
+                sum += this.valuesMatrix.getCrossSum(i)
+            if (this.type === 'not directed')
+                sum += this.valuesMatrix.getCrossSum(i) / 2
+            if (this.type === 'mixed')
+                return;
+            const diagonalValue = this.valuesMatrix.get([i, i])
+            if (diagonalValue) sum += diagonalValue
+            if (sum % 2 !== 0) {
+                this.allVertexesDegreesAreEven = false
+                return
+            }
+        }
+        this.allVertexesDegreesAreEven = true
+    }
+
+    private getPositions(matrix: ISquareMatrix, oriented: boolean = true): position[] {
+        const size = matrix.getSize()
+        const values: position[] = []
+        if (oriented) {
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < size; j++) {
+                    if (matrix.get([i, j]) === 0) {
+                        values.push([i, j])
+                    }
+                }
+            }
+        } else {
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < i; j++) {
+                    if (matrix.get([i, j]) === 0) {
+                        values.push([i, j])
+                    }
+                }
+            }
+        }
+        return values
+    }
+
+    private getOnesPositions(matrix: ISquareMatrix, oriented: boolean = true): position[] {
+        const size = matrix.getSize()
+        const values: position[] = []
+        if (oriented) {
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < size; j++) {
+                    if (matrix.get([i, j]) === 1) {
+                        values.push([i, j])
+                    }
+                }
+            }
+        } else {
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < i; j++) {
+                    if (matrix.get([i, j]) === 1) {
+                        values.push([i, j])
+                    }
+                }
+            }
+        }
+        return values
+    }
+
+    private setPath(path: IPath, matrix: ISquareMatrix, oriented) {
+        const mat = matrix.getCopy()
+        path.getPath().forEach(one => {
+            mat.set(1, [one[0], one[1]])
+            if (!oriented) mat.set(1, [one[1], one[0]])
+        })
+        return mat
+    }
+
+    private calculatePath(min: number, nullsAmount: number, positions: position[], oriented) {
+        for (let i = min; i <= nullsAmount; i++) {
+            const combinations = bigCombination(positions, i)
+            while (true) {
+                const value = combinations.next()
+                if (value) {
+                    const fullPath = Path.getPathFromArray(value)
+                    const matrixWithPath = this.setPath(fullPath, this.valuesMatrix, oriented)
+                    const tempCheck = SquareMatrix.noEmptyRowsOrColumns(SquareMatrix.setNullsToDiagonal(matrixWithPath))
+                    if (tempCheck && Graph.isConnected(matrixWithPath)) {
+                        return fullPath
+                    }
+                } else break
+            }
+        }
     }
 }
