@@ -5,7 +5,7 @@ Graphs is a graph editor created on JS, TypeScript and Electron!
 [vis-network](https://github.com/visjs/vis-network) performs visualization and interaction.
 ### Launch:
 ```sh
-git clone https://github.com/BBCQX/Graphs
+git clone https://github.com/dissman/Graphs
 cd Graphs
 yarn && yarn start
 ```
