@@ -7,7 +7,7 @@
     "@types/js-combinatorics": "^0.5.31",
     "electron-prompt": "^1.5.1",
     "js-combinatorics": "^0.5.5",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "visjs-network": "^4.24.11"
   },
   "scripts": {
